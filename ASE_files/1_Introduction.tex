@@ -1,0 +1,33 @@
+\section{Introduction}
+\label{sec:intro}
+Automated specification mining or model inference \cite{lo2011mining} is the process of automatically reverse engineering a model of an existing software system. Behavioral models (e.g., state machines) are typically inferred from a running system by abstracting the execution traces. The inferred models are useful artifacts in many use cases where the actual behavior (abstracted as the inferred model) of the system is needed for analysis, such as debugging \cite{hybriddebugging, shang2013assisting, jafar2019interactive}, testing \cite{Walkinshaw2018TestingBlackBox, ModelBasedTesting, Papadopoulos2015, dallmeier2011automatically}, anomalous behavior detection \cite{valdes2000adaptive}, and requirements engineering \cite{damas2005generating}. 
+
+Inferring a behavior model of a system in a black-box manner is particularly interesting. In many real-world applications, the large-scale system is built by integrating many off-the-shelf libraries that are only available as binaries (no source code access). Thus, from a system's point of view, knowing the exact behavior of the system including all the interactions between black-box units are needed for most run-time analysis. 
+
+Most current behavioral model inference techniques are dynamic analysis methods (usually are more accurate than static analysis for run-time behavior inference) that require source code instrumentation to collect execution traces \cite{lo2011mining}. These methods are usually helpful in unit-level analysis where the instrumentation is not expensive and access to the code is allowed for the unit under study. However, in the system-level, thorough instrumentation is more expensive (not limited to one unit) and might not be even possible for some units (black-box libraries). Therefore, for use cases such as system-level anomaly detection, testing, and debugging a black-box behavior model inference that works on readily available input/outputs of the system is crucial. 
+
+%. Most existing techniques are white-box and require access to source code either for the static analysis or instrumentation (collecting execution traces) in the case dynamic analysis. However access to source code is not always available for all libraries and component in the software) for black-box systems, which are the focus of this paper, depending on static analysis, which requires analysis of the source code, does not work. Dynamic approaches require executing the system and collecting an execution trace. These traces can include many different data, depending on their availability and use. Therefore, for a black-box model inference, the only information that is available is the input/output data.
+
+In this paper, we propose a dynamic analysis method to detect the internal state and the state changes in a black-box software system using deep learning. We collected the numerical values of the inputs and outputs of the system, in regular time intervals to create a multivariate time-series. A hybrid deep learning model (including convolution and recurrent layers) was then trained on these time-series to predict the state of the system at each point in time. The deep learning model automatically performs feature extraction making it way more effective and flexible compared to traditional methods. In addition, we do not make any assumption about statistical properties of the data which makes it applicable to a wide range of subjects.   
+
+We applied and evaluated this method on an auto-pilot software (AutoPilot) used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner 
+(called PARTNER from now on due to the double-blind restrictions).
+\begin{anonsuppress}
+Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV auto-pilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years. 
+\end{anonsuppress}
+We evaluated the method from two perspectives: how well the model can detect the point in time when a state change happens? (RQ1: Change Point Detection (CPD)), and how accurately it can predict which state the system is in, during the execution? (RQ2: State Classification). 
+
+
+
+Comparing our approach with state-of-the-art alternatives, the results show that our approach performs better in both change point and state detection. We observed 88.00\% to 102.20\% improvement in the F1 score of our CPD, compared to traditional CPD techniques. In addition, we saw a 7.35\% to 16.83\% improvement in the F1 score of our state detection, compared to traditional classification algorithms on a sliding window, over the data.
+
+
+The contributions of this paper can be summarised as:
+\begin{itemize}
+    \item Introducing the first (to the best of our knowledge) deep learning architecture to infer behavior models from black-box software systems.
+    \item Empirically evaluating the model and achieving very high accuracy compared to baselines using a real-world and large-scale case study on a UAV auto-pilot system developed by our industry partner.
+\end{itemize}
+
+Note that we have made all our source code, models, and execution scripts available online\footnote{https://github.com/anonymous-author-ase/hybrid-net}, however, due to confidentiality, we can not make our dataset public. 
+
+The rest of this paper is organized as follows: In section~\ref{sec:motivation} we explain further how and in which contexts this research can be beneficial. Then in section~\ref{sec:background} we briefly explain some background material this work is based on. In section~\ref{sec:approach}, we explain how our proposed model is designed. The way it was evaluated and the results are explained in section~\ref{sec:experiment}. Finally, related work reviewed in section~\ref{sec:related_work}, and some final remarks about the future work are made in section~\ref{sec:summary}.
