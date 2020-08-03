@@ -135,30 +135,30 @@
 % titlepage.tex just makes the titlepage; it's in its own file so you
 % can typeset it alone using includeonly.
 
-\include{titlepage}
+\include{1_titlepage}
 
 % frontmatter.tex contains the abstract, preface, acknowledgments, and
 % the commands to produce the table of contents, list of tables, etc.
 
-\include{frontmatter}
+\include{2_frontmatter}
 
 % The main matter of the thesis contains the actual content, separated
 % into chapters.
 
 \mainmatter
 
-\include{chapter1}
+\include{3_chapter1}
 
-\include{chapter2}
+\include{4_chapter2}
 
-\include{chapter3}
+\include{5_chapter3}
 
 % The back matter includes commands to produce endnotes, index,
 % glossary, bibiliography, and the like.
 
 \backmatter
 
-\include{backmatter}
+\include{6_backmatter}
 
 % The appendix contains material that would clutter up the main text,
 % such as program code, survey instruments, or interview transcripts.
@@ -166,6 +166,6 @@
 
 \appendix
 
-\include{appendix}
+\include{7_appendix}
 
 \end{document}

@@ -4,7 +4,7 @@ In this section, we describe our proposed deep learning approach for the black-b
 \subsection{The Model Architecture}
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{Sections/GeneralConvolutionalNet.pdf}
+    \includegraphics[width=\textwidth]{ASE_files/GeneralConvolutionalNet.pdf}
     \caption{The input and output signals of the black-box system are captured as a multivariate time series; they are processed in a deep neural network that consists of 3 sections: convolutional, recurrent, and dense (fully connected) to predict the system's internal state and its changes over time.}
     \label{fig:general_net}
 \end{figure*}
@@ -73,7 +73,7 @@ The mask tells the model where the tail starts so the model can ignore all the z
 \begin{split}
     \hat{O} {}&{}= \langle \hat{o}_i \in S \rangle^L_{i=1} = \mathcal{F}\left(\left[ {\delta(V_1)}^\intercal \: {\delta(V_2)}^\intercal \; \ldots \; {\delta(V_n)}^\intercal \right],m\right) \\
     m {}&{}= \delta(\vec{\mathds{1}}_l) \quad\text{i.e.}\quad \langle {m}_j \rangle^l_{j=1} = 1\:, \: \langle {m}_j \rangle^L_{j=l+1} = 0
-    % \delta(V_i) {}&{}= \left[V_i \quad \vec{0}_{L-l}\right]
+    \delta(V_i) {}&{}= \left[V_i \quad \vec{0}_{L-l}\right]
 \end{split}
 \end{equation}
 Here $l$ denotes the length of the input before padding. It is equal to $l_k$ for the $k$th training data ($T_k$).
@@ -105,7 +105,7 @@ Same compromise was made in the second section of the model (Recurrent layers), 
 We used Adam optimizer \cite{kingma2014adam} that could converge in 60-80 epochs, i.e. validation accuracy plateaued. The full architecture can be seen in figure~\ref{fig:model_arch}.
 \begin{figure*}
     \centering
-    \includegraphics[width=\linewidth]{Sections/Convolutional_Net.pdf}
+    \includegraphics[width=\linewidth]{ASE_files/Convolutional_Net.pdf}
     \caption{Model architecture in a nutshell. Tandem convolutional layers with increasing kernel size fed into two sequence-to-sequence recurrent layers with 128 GRU cells each, which is then fed into dense layers to output the predicted system state, as a list of one-hot encoded states. $\hat{O}$ will be the result of applying argmax operation on the last layer's output. $L=18000,\: N_s=25$}
     \label{fig:model_arch}
 \end{figure*}

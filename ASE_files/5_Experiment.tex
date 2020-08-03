@@ -95,8 +95,8 @@ Out of the 948 flight logs, we omitted 60 that were either too short or too long
 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{Sections/test_lengths.png}
-    \Description[Number of tests histogram]{A histogram chart maxing on numbers less than 2,000 and over 17,500}
+    \includegraphics[width=\columnwidth]{ASE_files/test_lengths.png}
+    % \Description[Number of tests histogram]{A histogram chart maxing on numbers less than 2,000 and over 17,500}
     \caption{Distribution of flight log lengths for the $N=888$ logs that were kept in the dataset ($200 \leq l_k \leq 20,000$)}
     \label{fig:test_lengths}
 \end{figure}
@@ -130,6 +130,7 @@ In this section, we present the results of the experiments and answer the two re
 \begin{table*}
 \caption{Change point detection precision, recall, and F1-score calculated for the baseline methods using three values of tolerance ($\tau$) for multiple configurations.}
 \label{tab:rq1-results}
+% TODO: change it to one of those large sidewaysa tables
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccccccccc}
 \toprule
@@ -249,8 +250,8 @@ Our model, which requires less than half as many CPUs and 70\% as much memory co
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\linewidth]{Sections/test_0.png}
-    \Description[States in time diagram]{A figure that color-codes the true and predicted states}
+    \includegraphics[width=\linewidth]{ASE_files/test_0.png}
+    % \Description[States in time diagram]{A figure that color-codes the true and predicted states}
     \caption{Evaluation of the model on 30 random test data. Each graph shows the states in one run of the system. The colors show the states. The top-half of each plot depicts model's prediction of the system states ($\hat{O}$) and the bottom-half shows the true labels($O$). Since the output is one-hot encoded, the item with the most probability is used as the predicted label at each point in time. X-axis is the time axis. Only the first 600 samples (2 minute of simulation) are shown to improve legibility.}
     \label{fig:test_0}
 \end{figure*}
