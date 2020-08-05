@@ -10,11 +10,7 @@ Most current behavioral model inference techniques are dynamic analysis methods 
 
 In this paper, we propose a dynamic analysis method to detect the internal state and the state changes in a black-box software system using deep learning. We collected the numerical values of the inputs and outputs of the system, in regular time intervals to create a multivariate time-series. A hybrid deep learning model (including convolution and recurrent layers) was then trained on these time-series to predict the state of the system at each point in time. The deep learning model automatically performs feature extraction making it way more effective and flexible compared to traditional methods. In addition, we do not make any assumption about statistical properties of the data which makes it applicable to a wide range of subjects.   
 
-We applied and evaluated this method on an auto-pilot software (AutoPilot) used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner 
-(called PARTNER from now on due to the double-blind restrictions).
-\begin{anonsuppress}
-Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV auto-pilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years. 
-\end{anonsuppress}
+We applied and evaluated this method on an auto-pilot software (AutoPilot) used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner, Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV auto-pilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years. 
 We evaluated the method from two perspectives: how well the model can detect the point in time when a state change happens? (RQ1: Change Point Detection (CPD)), and how accurately it can predict which state the system is in, during the execution? (RQ2: State Classification). 
 
 
@@ -28,6 +24,6 @@ The contributions of this paper can be summarised as:
     \item Empirically evaluating the model and achieving very high accuracy compared to baselines using a real-world and large-scale case study on a UAV auto-pilot system developed by our industry partner.
 \end{itemize}
 
-Note that we have made all our source code, models, and execution scripts available online\footnote{https://github.com/anonymous-author-ase/hybrid-net}, however, due to confidentiality, we can not make our dataset public. 
+Note that we have made all our source code, models, and execution scripts available online\footnote{https://github.com/sea-lab/hybrid-net}, however, due to confidentiality, we can not make our dataset public. 
 
 The rest of this paper is organized as follows: In section~\ref{sec:motivation} we explain further how and in which contexts this research can be beneficial. Then in section~\ref{sec:background} we briefly explain some background material this work is based on. In section~\ref{sec:approach}, we explain how our proposed model is designed. The way it was evaluated and the results are explained in section~\ref{sec:experiment}. Finally, related work reviewed in section~\ref{sec:related_work}, and some final remarks about the future work are made in section~\ref{sec:summary}.

@@ -5,27 +5,84 @@
 % multiple appendices, use \chapter and a descriptive title,
 % e.g., \chapter{Questionnaires}
 
-\chapter*{Appendix}\label{appendix}
+\chapter{Appendix~A: Pprz tester documentations}\label{appendixa}
 
-% \chapter* doesn't include it in the TOC, so we have to do that by
-% hand.  If you have multiple appendices, use \chapter instead and
-% remove the following line. 
+UML Diagrams and tables for the developed tools: flight data recorder, automated test generator, and automated test executor.
+\begin{table}[]
+    \centering
+\begin{longtable}{llp{.49\columnwidth}}
+\hline
+\textbf{Message Name }   & \textbf{Sent By }    & \textbf{Use}                                                                     \\ \hline
+\endhead
+%
+\hline
+\endfoot
+%
+\endlastfoot
+%
+PPRZ\_MODE &
+  Aircraft &
+  Pprz Tester listens to this message to find out when the auto pilot software is booted up and is ready for flight \\
+NAVIGATION &
+  Aircraft &
+  Contains the current active flight plan block as well as number of full circles the aircraft has completed among other data \\
+COMMANDS        & Aircraft    & Contains commands from the auto pilot to the servos (the outputs)       \\
+FLIGHT\_PARAMS  & Aircraft    & Contains most of the sensor readings and required aircraft parameters   \\
+ENGINE\_STATUS  & Aircraft    & Contains engine RPM and throttle among other parameters                 \\
+CIRCLE\_STATUS &
+  Aircraft &
+  Contains detailed information about aircraft status while it is in circling mode. Overlaps with NAVIGATION to some extent \\
+WAYPOINT\_MOVED & Server      & Sent in case any waypoints are relocated                                \\
+MOVE\_WAYPOINT  & Pprz Tester & To update waypoint locations                                            \\
+NEW\_AIRCRAFT &
+  Server &
+  Event of a new aircraft coming online in the network. It does not necessarily mean that it is ready for flight, should listen for PPRZ\_MODE as well \\
+AIRCRAFTS\_REQ  & Pprz Tester & Request to get the list of active aircraft                              \\
+AIRCRAFTS       & Server      & Response to the above request                                           \\
+CONFIG\_REQ     & Pprz Tester & Request for an aircraft's configs                                       \\
+CONFIG &
+  Server &
+  Response to the above request containing  its name, flight plan, DL settings, air frame parameters, etc. \\
+DL\_SETTING     & Pprz Tester & Update a DL setting value. It is used to launch the aircraft in the air \\
+JUMP\_TO\_BLOCK & Pprz Tester & Commands the aircraft to change active block to another block defined in the flight plan  \\ \hline
+\end{longtable}
+\caption{Subset of all available messages in Paparazzi that are used in pprz tester tool}
+\label{tab:pprz_messages}
+\end{table}
 
-\addcontentsline{toc}{chapter}{Appendix}
+\begin{table}[]
+    \centering
+\begin{longtable}{lp{.63\columnwidth}}
+\hline
+\textbf{Argument}   & \textbf{Description}\\ \hline
+\endhead
+%
+\hline
+\endfoot
+%
+\endlastfoot
+--agent-name          &  Specify unique agent name on ivy bus \\
+-p, --paparazzi-home  &  Directory in which Paparazzi source code is cloned in \\
+-l, --log             &  Log file directory \\
+--log-format          &  The format to store and compress logs in, can be hd5 or csv \\
+-b,--build            &  Build the aircraft before launching the simulation \\
+--gcs                 &  Open GCS window \\
+--no-sim              &  Does not launch the simulator \\
+--prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by way point (circle) or both. \\
+--fuzz-wps            &  Way points to fuzz locations of. Use * to fuzz all \\
+--wp-fuzz-bounds-lat  &  Minimum and maximum latitude (south-north) to fuzz way point locations in \\
+--wp-fuzz-bounds-lon  &  Minimum and maximum longitude (east-west) to fuzz way point locations in \\
+--wp-fuzz-bounds-alt  &  The boundaries inside which way point altitudes are fuzzed \\
+-w,--wp-location      &  Fix one or more way points locations (overrides fuzzing) \\
+airframe              &  The aircraft to simulate \\
+plan                  &  Plan name to run as a python module in \verb|pprz_tester.generated_plans| \\
+-Dname=value          &  Optional plan arguments. They will be passed to \verb|get_items| as keyword arguments. \\ \hline
+\end{longtable}
+\caption{Test runner command line arguments}
+\label{tab:test_runner_commandline_args}
+\end{table}
 
-An appendix is a way to include important information that would
-otherwise clutter up your thesis. It should be included when there is
-additional relevant information that won't fit in the body of your
-thesis. Any Appendix must also be mentioned in the body of your thesis
-(e.g., ``For a full list of interview questions used, please see the
-\hyperref[appendix]{Appendix}''). If your thesis only has one appendix, it
-must be titled ``Appendix.'' If your thesis has more than one appendix,
-add alphabetized letters, starting with ``Appendix~A.'' The following
-are examples of things you might include in appendices:
-\begin{enumerate}
-  \item Copyright permissions with signatures removed
-  \item Additional details of methodology and/or data
-  \item Diagrams of equipment that you developed
-  \item Digital files and/or artwork digital models
-  \item Blank copies of questionnaires or surveys used in your research
-\end{enumerate}
+\chapter{Appendix~B: Copyright permissions}\label{appendixb}
+Copyright permissions for the included manuscript(s).
+
+% TODO

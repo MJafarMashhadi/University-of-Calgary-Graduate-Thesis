@@ -67,7 +67,7 @@ The window sizes were chosen as same as the sizes of convolutional layers' kerne
 We used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''. For ``maximum number of features'' we tried no limits, $\sqrt{10w}$, and $\log_2{10w}$. To find best ``maximum depth'' we first tried having no upper bound and observed how deep the tree grows; then we tried multiple numbers less than the maximum, until a drop in performance was observed. 
 
 \subsection{Dataset and the Data Collection Process}
-We ran 948 existing test cases from our PARTNER's test repository using a software simulator\footnote{It is developed by THE PARTNER COMPANY and provides an accurate simulation of the aerodynamic forces on the aircraft, the physical environment irregularities (e.g. unexpected wind gusts), and noises in sensor readings} and collected the logged flight data, over time. The test cases are system-level tests. Each test case includes a flight scenario for various supported aircraft. A flight scenario goes through different phases in a flight such as ``take off'', ``climb'', ``cruise'', ``hitting way points'', and ``landing''.
+We ran 948 existing test cases from MicroPilot's test repository using a software simulator\footnote{It is developed by MicroPilot and provides an accurate simulation of the aerodynamic forces on the aircraft, the physical environment irregularities (e.g. unexpected wind gusts), and noises in sensor readings} and collected the logged flight data, over time. The test cases are system-level tests. Each test case includes a flight scenario for various supported aircraft. A flight scenario goes through different phases in a flight such as ``take off'', ``climb'', ``cruise'', ``hitting way points'', and ``landing''.
 We sampled input and output values (listed in Table~\ref{tab:in_outs}) at 5 Hz rate, which is the rate that AutoPilot reads the sensor values and performs the calculations required to update its output values at.
 % The AutoPilot inputs and outputs, we collect in this study, are listed in Table~\ref{tab:in_outs}.
 \begin{table}
@@ -97,7 +97,7 @@ Out of the 948 flight logs, we omitted 60 that were either too short or too long
     \centering
     \includegraphics[width=\columnwidth]{ASE_files/test_lengths.png}
     % \Description[Number of tests histogram]{A histogram chart maxing on numbers less than 2,000 and over 17,500}
-    \caption{Distribution of flight log lengths for the $N=888$ logs that were kept in the dataset ($200 \leq l_k \leq 20,000$)}
+    \caption{Distribution of flight log lengths for the $N=888$ (out of the original 948 available logs) logs that were kept in the dataset ($200 \leq l_k \leq 20,000$)}
     \label{fig:test_lengths}
 \end{figure}
 
@@ -130,7 +130,7 @@ In this section, we present the results of the experiments and answer the two re
 \begin{table*}
 \caption{Change point detection precision, recall, and F1-score calculated for the baseline methods using three values of tolerance ($\tau$) for multiple configurations.}
 \label{tab:rq1-results}
-% TODO: change it to one of those large sidewaysa tables
+% TODO: change it to one of those large sideways tables \begin{landscape} \usepackage{lscape}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccccccccc}
 \toprule
@@ -266,7 +266,7 @@ We assume that during the data collection, sampling happens in regular intervals
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 
-In terms of construct validity, we are using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, we have used multiple margins and reported all results. In terms of internal validity threats, we reduced the threat by not implementing the CPD baselines by ourselves and rather reusing existing libraries. In terms of conclusion validity threats, we have used many (888) real test cases from our PARTNER test repository and provided a proper train-validation-test split for training, tuning, and evaluation. Finally, in terms of external validity threats, our study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. We plan to extend this work with more case studies from other domains, to increase its generalizability. 
+In terms of construct validity, we are using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, we have used multiple margins and reported all results. In terms of internal validity threats, we reduced the threat by not implementing the CPD baselines by ourselves and rather reusing existing libraries. In terms of conclusion validity threats, we have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. Finally, in terms of external validity threats, our study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. We plan to extend this work with more case studies from other domains, to increase its generalizability. 
 
 
  
