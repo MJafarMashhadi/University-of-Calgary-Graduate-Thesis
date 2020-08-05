@@ -2,19 +2,6 @@
 % This file contains CHAPTER TWO
 
 \chapter{Data Collection and Fuzzy Test Generation for Auto Pilots}
-
-% 
-% points:
-% - Need telemtery data from aircraft
-% - There is a way in MP to get the data
-% - There are 900+ system tests available in MP
-% - No system tests in Paparazzi
-% - 
-% 
-% 
-% 
-
-
 \section{Introduction}
 A typical model inference pipeline starts with running existing tests in the software under study to collect required data. \cite{Papadopoulos2015} There are several aspects to be considered, what kind of data are needed, how are they going to be collected, and how are they going to be used in model creation which depends on what kind of model we are looking to have. 
 
@@ -27,7 +14,7 @@ In this study the goal is to infer a state model of the system under study as a 
 
 
 A common theme in almost all model inference algorithms developed in the past two decades is that they use the data collected as the system functions in the wild. They either run existing test cases or instrument and inspect the system being used in production. 
-This is to have a diverse collection of data that is also meaningful and representative of the actual system behaviour in common usecases.
+This is to have a diverse collection of data that is also meaningful and representative of the actual system behaviour in common use cases.
 
 Depending on the system under study and the type of data required, this might be an excellent way of collecting the data or might be infeasible in terms of scalability. \cite{mashhadi2019empirical} 
 In this study in particular there is an amalgam of both ends of the spectrum. As mentioned earlier, it is done on two auto pilot systems, Micro Pilot and Paparazzi. \cite{hattenberger2014using}
@@ -84,7 +71,7 @@ In the beginning it starts with listening for \verb|NEW_AIRCRAFT| message to get
 Each ``Aircraft'' object in the makes a number of requests back and forth with other components in the system (server, data link, and the auto pilot process) to gather required information about that aircraft, including its flight plan. This class along with ``Aircraft Parameters'' and ``Aircraft Commands'' provide a unified programmatic API for monitoring and controlling the aircraft. 
 
 I implemented observer pattern \cite{gamma1995design} in ``Aircraft Parameters'' to enable other components (such as flight data recorder and automated test executor) to listen for changes in the aircraft state and respond accordingly in a event-driven manner. 
-After creation of an ``Aircraft'' object, while it is initializing itself in the background, several observers are created and attached to it. A ``Record Flight'' instance is one of them. It observes new \verb|FLIGHT_PARAM| messages as well as changes in `throttle', 'flight time', and `commands.values' parameters. This class stores and aligns these parameters in a pandas data frame which is stored on disk periodically. The data can be stored in a human-readable CSV file or as a compressed HD5 binary. Some data normalization and unit conversions (such as meters to feet) also happen before saving in order to make the generated data similar to MicroPilot's.
+After creation of an ``Aircraft'' object, while it is initializing itself in the background, several observers are created and attached to it. A ``Record Flight'' instance is one of them. It observes new \verb|FLIGHT_PARAM| messages as well as changes in `throttle', `flight time', and `commands.values' parameters. This class stores and aligns these parameters in a pandas data frame which is stored on disk periodically. The data can be stored in a human-readable CSV file or as a compressed HD5 binary. Some data normalization and unit conversions (such as meters to feet) also happen before saving in order to make the generated data similar to MicroPilot's.
 
 Supplementary UML diagrams are provided in \hyperref[appendixa]{Appendix~A}.
 
