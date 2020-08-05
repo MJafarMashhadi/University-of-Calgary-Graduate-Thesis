@@ -1,0 +1,110 @@
+@startuml
+title Flight Data Recorder Class diagram
+
+package aircraft_manager <<Frame>> {
+    class AircraftManager {
+      +aircraft_list : Dict[Int, Aircraft]
+      +ivy : IvyMessagesInterface
+      +waypoints : List[WaypointLocation]
+      +prep_mode : List[str]
+      +plan : str
+      +plan_args : Dict[str, str]
+      +log_dir : str
+      +log_file_format : str
+      -start_time : str
+
+      +AircraftManager(agent_name : str, start_ivy : bool, plan : str, \nplan_args : Dict[str, str], waypoints : List[WaypointLocation], \nprep_mode : List[str], log_dir : str, log_file_format : str)
+      +start()
+      +add_aircraft_if_new(ac_id : Int, kwargs : Dict)
+      +load_plan(ac : Aircraft) : Iterable[PlanItem]
+      -_plan_generator() : Generator[PlanItem]
+      -_get_log_file_name(ac : Aircraft): str
+      +create_aircraft(ac_id : Int, kwargs : Dict) : Aircraft
+      +new_aircraft_callback(ac_id : Int, msg : PprzMessage)
+      +request_aircraft_list()
+      +suicide()
+    }
+}
+package aircraft <<Frame>> {
+    class Aircraft {
+        -_ivy : IvyMessagesInterface
+        +id : int
+        +flight_plan_uri : str
+        +airframe_settings_uri : str
+        +name : str
+        +flight_plan_blocks : Dict[str, Int]
+        +flight_plan_waypoints : Dict[str, Int]
+        +setting_items : Dict[str, Dict[str, str]]
+        -_observers : Dict[List[Observer]]
+        -_params : AircraftParameters
+        +params : AircraftParameters
+        -_ac : AircraftCommands
+        +commands : AircraftCommands
+
+        +Aircraft(ivy_link : IvyMessagesInterface, ac_id : Int, \nauto_request_config : bool)
+        +observe(property_name : str, callback : Callable): Void
+        +look_away(property_name : str, callback : Callable): Void
+        +Void request_config()
+        +str find_block_name(block_id : Int)
+        +set_values_callback(ac_id : Int, msg : PprzMessage)
+        -_notify_all(name : str, old_value : Any, new_value : Any)
+    }
+
+    class AircraftParameters {
+        +ac : Aircraft
+        +values : Dict[str, Dict[str, Any]]
+
+        # AircraftParameters(ac : Aircraft)
+        +__getattr__(name : str) : Any
+        +__setattr__(key : str, value : Any)
+    }
+
+    class AircraftCommands {
+        -_ac : Aircraft
+
+        +jump_to_block(block_name_or_id : Union[str, Int])
+        +takeoff()
+        +launch()
+        +change_target_altitude(new_altitude : float)
+        -_send(message: PprzMessage)
+        -_send_setting_update(setting_name : str, setting_value : Any)
+    }
+
+    Aircraft "1" *-- "1" AircraftCommands
+    Aircraft "1" *-- "1" AircraftParameters
+}
+
+package observer <<Frame>> {
+    class Observer {
+        -ac : Aircraft
+
+        +Observer(ac : Aircraft)
+        +__call__(property_name : str, old_value, new_value)
+        +notify(property_name : str, old_value, new_value)
+    }
+
+}
+
+package flight_recorder <<Frame>> {
+    class RecordFlight {
+        {static} LOGGING_FORMATS : \nDict[str, Tuple[str, str, Dict[str, Any]]]
+        +history : Dict[str, List]
+        +ready : bool
+        -_df : DataFrame
+        +log_dir : str
+        +log_file_name : Union[str, Callable[[], str]
+        +log_file_format : str
+        -_log_file_addr : str
+        + history_df : DataFrame
+
+        +RecordFlight(ac : Aircraft, log_dir:str, \nlog_file_name:str, log_file_format:str)
+        +save_history()
+    }
+    Observer <|-- RecordFlight
+}
+
+
+AircraftManager "1" o-up- "many" Aircraft
+Aircraft "many" o-right- "many" Observer
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+title Flight Plan Items Class diagram
+
+package flight_plan.items <<Frame>> {
+    class PlanItem {
+        #matcher: Optional[Callable]
+        #actor: Optional[Callable]
+        +PlanItem(matcher: Optional[Callable], actor: Optional[Callable])
+        +match(ac : Aircraft, property_name: str, old_value, new_value) : bool
+        +act(ac : Aircraft, property_name: str, old_value, new_value) : bool
+
+    }
+    class WaitAny {
+        +WaitAny(items:List[PlanItem])
+    }
+    class WaitAll {
+        +WaitAll(items:List[PlanItem])
+    }
+    class WaitForState {
+        +WaitForState(state_id_or_name)
+    }
+    class WaitForSpeed {
+        +WaitForSpeed(target_speed:float, tolerance:float)
+    }
+    class JumpToBlock {
+        +JumpToBlock(state_id_or_name)
+    }
+    class WaitForCircles {
+        +WaitForCircles(n_circles:int)
+    }
+    class WaitClimb {
+        +WaitClimb(tolerance:float)
+    }
+    class WaitForSeconds {
+        +WaitForSeconds(length:float)
+    }
+    class StopTest {
+
+    }
+    class SendMessage {
+        +SendMessage(message_builder: Union[Callable, PprzMessage]
+    }
+
+    WaitAny -d-|> PlanItem
+    WaitAll -d-|> PlanItem
+
+    WaitForState -up-|> PlanItem
+    WaitForSpeed -up-|> PlanItem
+    SendMessage -u-|> PlanItem
+
+    WaitClimb -r-|> PlanItem
+    WaitForSeconds -d-|> PlanItem
+    JumpToBlock -d-|> PlanItem
+
+    WaitForCircles -l-|> PlanItem
+    StopTest -l-|> PlanItem
+}
+@enduml

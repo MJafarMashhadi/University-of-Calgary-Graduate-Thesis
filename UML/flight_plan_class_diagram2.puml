@@ -1,0 +1,64 @@
+@startuml
+title Flight Plan Executor Class diagram
+
+package aircraft_manager <<Frame>> {
+class AircraftManager {
+}
+}
+package aircraft <<Frame>> {
+class Aircraft {
+}
+}
+package observer <<Frame>> {
+class Observer {
+}
+}
+
+AircraftManager "1" o-r- "*" Aircraft
+Aircraft "*" o-r- "*" Observer
+
+together {
+    class AircraftManager
+    class Aircraft
+    class Observer
+}
+
+package flight_plan <<Frame>> {
+    package generation_helper <<Frame>> {
+        class _generation_helper {
+            {static} wait_for_mode2: List[PlanItem]
+            {static} takeoff_and_launch : List[PlanItem]
+            {static} move_waypoints(waypoint_data: \nDict[Union[str, int], WaypointLocation]) \n: List[PlanItem]
+            {static} prepare_new_waypoint_locations\n(flight_plan_waypoints : Dict, waypoints:Dict):
+        }
+
+        class FlightPlanPerformingObserver {
+            -_plan : Generator
+            -_next_item : PlanItem
+            +FlightPlanPerformingObserver(ac : Aircraft,\nplan_generator : Generator)
+        }
+        Observer <|-- FlightPlanPerformingObserver
+        _generation_helper ..u FlightPlanPerformingObserver
+    }
+    package waypoint <<Frame>> {
+        class _waypoint {
+            {static} VALID_RANGE_LAT
+            {static} VALID_RANGE_LON
+            {static} VALID_RANGE_ALT
+            {static} get_rand_lat() : float
+            {static} get_rand_lon() : float
+            {static} get_rand_alt() : float
+            {static} get_rand_waypoint() : WaypointLocation
+        }
+
+        class WaypointLocation extends namedtuple {
+            +lat : float
+            +long : float
+            +alt : float
+        }
+        _waypoint .. WaypointLocation
+    }
+    _generation_helper .l. WaypointLocation
+}
+
+@enduml

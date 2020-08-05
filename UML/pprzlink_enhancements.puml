@@ -1,0 +1,48 @@
+@startuml
+title PprzLink Enhancements Class Diagram
+
+package pprzlink_enhancements <<Frame>> {
+    package message <<Frame>> {
+        class MessageBuilder {
+            -_class_name : str
+            -_message_name : str
+            -_payload : Dict[str, Any]
+            +MessageBuidler(class_name: str, \nmessage_name: str, kwargs: Dict)
+            +p(payload_name: str, payload_value: Any) : MessageBuilder
+            +class_name(class_name: str) : MessageBuilder
+            +message_name(message_name: str) : MessageBuilder
+            +build() : PprzMessage
+        }
+    }
+    Package ivy_subscribe <<Frame>>{
+        class IvySubscribe{
+            +ivy_link : IvyMessagesInterface
+            +message_types : List[]
+            +subscription_ids : List
+            +function_name : str
+
+            +IvySubscribe(ivy_link: IvyMessagesInterface,\n
+                 message_types: Optional[List[Union[Tuple[str, str], str]]])
+            +__call__(f: Callable) : Callable
+            +unsubscribe(ids: List[int])
+            +wrap_callback(f: Callable): Callable
+            +wrap_direct_call(f: Callable): Callable
+            -_subscribe_to_all(f: Callable)
+            -_subscribe(f: Callable)
+        } 
+        class DisallowDirectCallsMixin {
+        
+        }
+        class OneTimeSubsMixin {
+        
+        }
+        class IvySubscribeOnce extends OneTimeSubsMixin, IvySubscribe {
+         
+        }
+        class IvyNoDirectCallsSubscribe extends DisallowDirectCallsMixin, IvySubscribe {
+        
+        }
+    }
+}
+
+@enduml
