@@ -11,7 +11,7 @@ UML Diagrams and tables for the developed tools: flight data recorder, automated
 \begin{table}[]
     \centering
 \begin{longtable}{llp{.49\columnwidth}}
-\hline
+\toprule
 \textbf{Message Name }   & \textbf{Sent By }    & \textbf{Use}                                                                     \\ \hline
 \endhead
 %
@@ -44,7 +44,7 @@ CONFIG &
   Server &
   Response to the above request containing  its name, flight plan, DL settings, air frame parameters, etc. \\
 DL\_SETTING     & Pprz Tester & Update a DL setting value. It is used to launch the aircraft in the air \\
-JUMP\_TO\_BLOCK & Pprz Tester & Commands the aircraft to change active block to another block defined in the flight plan  \\ \hline
+JUMP\_TO\_BLOCK & Pprz Tester & Commands the aircraft to change active block to another block defined in the flight plan  \\ \bottomrule
 \end{longtable}
 \caption{Subset of all available messages in Paparazzi that are used in pprz tester tool}
 \label{tab:pprz_messages}
@@ -53,7 +53,7 @@ JUMP\_TO\_BLOCK & Pprz Tester & Commands the aircraft to change active block to 
 \begin{table}[]
     \centering
 \begin{longtable}{lp{.63\columnwidth}}
-\hline
+\toprule
 \textbf{Argument}   & \textbf{Description}\\ \hline
 \endhead
 %
@@ -61,26 +61,55 @@ JUMP\_TO\_BLOCK & Pprz Tester & Commands the aircraft to change active block to 
 \endfoot
 %
 \endlastfoot
+airframe              &  The aircraft to simulate \\
+plan                  &  Plan name to run as a python module in \verb|pprz_tester.generated_plans| \\
 --agent-name          &  Specify unique agent name on ivy bus \\
--p, --paparazzi-home  &  Directory in which Paparazzi source code is cloned in \\
 -l, --log             &  Log file directory \\
---log-format          &  The format to store and compress logs in, can be hd5 or csv \\
+--log-format          &  The format to store and compress logs in, can be hd5 or csv \\ \hline
+-p, --paparazzi-home  &  Directory in which Paparazzi source code is cloned in \\
 -b,--build            &  Build the aircraft before launching the simulation \\
 --gcs                 &  Open GCS window \\
 --no-sim              &  Does not launch the simulator \\
---prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by way point (circle) or both. \\
+--prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by way point (circle) or both. \\ \hline
 --fuzz-wps            &  Way points to fuzz locations of. Use * to fuzz all \\
 --wp-fuzz-bounds-lat  &  Minimum and maximum latitude (south-north) to fuzz way point locations in \\
 --wp-fuzz-bounds-lon  &  Minimum and maximum longitude (east-west) to fuzz way point locations in \\
 --wp-fuzz-bounds-alt  &  The boundaries inside which way point altitudes are fuzzed \\
--w,--wp-location      &  Fix one or more way points locations (overrides fuzzing) \\
-airframe              &  The aircraft to simulate \\
-plan                  &  Plan name to run as a python module in \verb|pprz_tester.generated_plans| \\
--Dname=value          &  Optional plan arguments. They will be passed to \verb|get_items| as keyword arguments. \\ \hline
+-w,--wp-location      &  Fix one or more way points locations (overrides fuzzing) \\ \hline
+-Dname=value          &  Optional plan arguments. They will be passed to \verb|get_items| as keyword arguments. \\ \bottomrule
 \end{longtable}
 \caption{Test runner command line arguments}
 \label{tab:test_runner_commandline_args}
 \end{table}
+
+
+\begin{table}[]
+    \centering
+\begin{longtable}{lp{.63\columnwidth}}
+\toprule
+\textbf{Argument}   & \textbf{Description}\\ \hline
+\endhead
+%
+\hline
+\endfoot
+%
+\endlastfoot
+airframe              &  The aircraft to generate tests for \\
+output                &  Output file name or the directory to output the generated plans \\
+-i, --include         &  Flight plan blocks to include in the generated plans \\
+-x, --exclude         &  Flight plan blocks to exclude from the generated plans \\ 
+-l, --length          &  Number of flight plan blocks to include. \\ \hline
+-p, --paparazzi-home  &  \multirow{6}{*}{Shared with test runner in Table~\ref{tab:test_runner_commandline_args}}\\
+--fuzz-wps            &   \\
+--wp-fuzz-bounds-lat  &   \\
+--wp-fuzz-bounds-lon  &   \\
+--wp-fuzz-bounds-alt  &   \\
+-w,--wp-location      &   \\ \bottomrule
+\end{longtable}
+\caption{Test runner command line arguments}
+\label{tab:test_generator_commandline_args}
+\end{table}
+
 
 \begin{landscape}
 \begin{figure}[!h]

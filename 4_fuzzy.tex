@@ -99,19 +99,40 @@ The core test plan runner is implemented as an observer class that observes mult
 
 Test plans should be importable from \verb|pprz_tester.generated_plans| module. The structure is simple and clearly defined so that they can easily be handcrafted (like the example above) or generated using the test generator component.
 
-The test runner is tailored specifically for paparazzi in several ways. First, it uses standard paparazzi environment variables such as \verb|$PAPARAZZI_HOME|. If it is not set, the user can use \verb|-p /path/to/paprazzi| command line argument to set this value, and if that is not set too, a default value will be used. Second, it can build the auto pilot if \verb|--build| argument is set so the user does not have to build it manually in Paprazzi center. Third, if \verb|--gcs| argument is set, the ground control station window will be opened (See Figure~\ref{fig:paparazzi_gcs}). It provides a real-time map that visualizes the aircraft path, way point locations, wind direction and velocity, and several other parameters of the aircraft such as their airspeed and altitude. And last, \verb|--no-sim| argument tells tester to not launch the simulator. Its use case can be when a physical auto pilot is being used (similar to MicroPilot's HWIL mode), or when for any reason the user chooses to run the simulator manually. 
+The test runner is tailored specifically for paparazzi in several ways. First, it uses standard paparazzi environment variables such as \verb|$PAPARAZZI_HOME|. If it is not set, the user can use \verb|-p /path/to/paprazzi| command line argument to set this value, and if that is not set too, a default value will be used. Second, it can build the auto pilot if \verb|--build| argument is set so the user does not have to build it manually in Paprazzi center. Third, if \verb|--gcs| argument is set, the ground control station window will be opened (See Figure~\ref{fig:paparazzi_gcs}). It provides a real-time map that visualizes the aircraft path, waypoint locations, wind direction and velocity, and several other parameters of the aircraft such as their airspeed and altitude. And last, \verb|--no-sim| argument tells tester to not launch the simulator. Its use case can be when a physical auto pilot is being used (similar to MicroPilot's HWIL mode), or when for any reason the user chooses to run the simulator manually. 
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{4_files/GCS.png}
-    \caption{A snapshot of ground control station software (GCS), visualizing the map, way points, the aircraft, its flight history, the flight path, as well as its state and some telemetry data. The plan that it is following is one of the automatically generated test scenarios.}
+    \caption{A snapshot of ground control station software (GCS), visualizing the map, waypoints (blue diamonds), the aircraft, its flight history (blue), the intended flight path (green), as well as its state (bottom in green) and some telemetry data (top left). The plan that it is following is one of the automatically generated test scenarios.}
     \label{fig:paparazzi_gcs}
 \end{figure}
 
-Test runner can move way points as well. The user can fix any number of way points at specified locations, providing their latitude longitude and altitudes. It can also randomize their location inside a cube. Boundaries of that cube (i.e. east-west, north-south, and floor-ceiling) are customizable through provided command line arguments.
+Test runner can move waypoints as well. The user can fix any number of waypoints at specified locations, providing their latitude longitude and altitudes. It can also randomize their location inside a cube. Boundaries of that cube (i.e. east-west, north-south, and floor-ceiling) are customizable through provided command line arguments.
 
 The comprehensive list of command line arguments is included in Table~\ref{tab:test_runner_commandline_args} in \hyperref[appendixa]{Appendix~A}.
 
 
 \subsection{Automated Test Generator}
-This component 
+The test generator component is a fuzz test generator specifically designed for Paparazzi. An auto pilot has plenty of parameters to change. Many of them need to remain unchanged. For example, changing aerodynamic and physical parameters of an air frame will make it behave incorrectly or even crash. A naïve fuzzing algorithm might be tempted to only change these parameters to optimize a metric of `bug's per test. To comply with the constraints in input format and range and optimize test scenario diversity without having to have thousands of tests, I opted for developing a specialized automated test generator. 
+
+This test generator is completely compatible with Paparazzi and designed with specific needs of an auto pilot in mind. It begins with loading and parsing the example flight plan that comes with Paparazzi. It defines multiple actions (control blocks) available to a fixed wing aircraft. Two important components in the flight plan that are used are the waypoint names and locations, and available blocks. A test scenario is generated by taking the initial flight plan and fuzzing three parameters about it:
+\begin{enumerate}
+    \item Waypoint locations
+    \item Sequence of actions 
+    \item Action timing
+\end{enumerate}
+
+The test generator can be configured to fuzz all or some of them. I generated about 200 tests with fuzzing the last two. Please not that the sequence of actions can have any length between 1 and the number of possible actions. Also for each sequence, $n!$ different permutations can be made that will result in very different outcomes. 
+
+The output is a python module that contains a subclass of \verb|PlanBase|, as expected by the automated test executor. These two work together seamlessly and the user can just use them in a plug-and-play manner without touching the code. Though, the generated code is designed to be effortlessly understandable and easily editable it even has some auto generated comments in the code.
+
+The full table of command line arguments that test generator accepts is presented in Table~\ref{tab:test_generator_commandline_args} in \hyperref[appendixa]{Appendix~A}. To provide an example, the following command generates tests of length (number of actions) 2 for `Microjet' aircraft and writes it to the file \verb|l2.py| in the specified directory. It fuzzes the location (latitude, longitude, and altitude) of waypoint `S2' in the default cube, just overriding the altitude bounds in 200 to 220 meters, while the coordinates of `S1' are fixed. The initialization and landing stages which must be excluded from the test scenario are also specified. 
+\begin{lstlisting}[language=bash]
+gen_test.py --exclude "Wait GPS" "Geo init" "Holding 
+point" Takeoff Standby "Land Right AF-TD" "Land Left 
+AF-TD" land final flare --fuzz-wps S2 \
+--wp-fuzz-bounds-alt 200 220 -w S1 43.4659053 1.27 300 \
+--length 2 Microjet pprz_tester/generated_plans/l2.py
+\end{lstlisting}
+Some of the available actions and all the waypoints in this flight plan can be seen in Figure~\ref{fig:paparazzi_gcs}.
