@@ -1,7 +1,4 @@
-% Sample University of Calgary Thesis
-% This file contains CHAPTER TWO
-
-\chapter{Data Collection and Fuzzy Test Generation for Auto Pilots}
+\chapter{Data Collection and Fuzzy Test Generation for Auto Pilots}\label{chapter:fuzz_tester}
 \section{Introduction}
 A typical model inference pipeline starts with running existing tests in the software under study to collect required data. \cite{Papadopoulos2015} There are several aspects to be considered, what kind of data are needed, how are they going to be collected, and how are they going to be used in model creation which depends on what kind of model we are looking to have. 
 
@@ -34,7 +31,7 @@ Please note that although it is more convenient to capture the values in this wa
 \subsubsection{Test Scenarios}
 MicroPilot has a repository of more than 900 system tests which can be run in a realistic simulator. The auto pilot can be used in SWIL and HWIL modes \cite{melmoth2019true}, software in the loop and hardware in the loop respectively. We used SWIL mode as it provides what we need without any of the overheads associated with HWIL mode. 
 
-\subsection{Paparazzi}
+\subsection{Paparazzi}\label{sec:paparazzi_data_collection}
 
 \subsubsection{Instrumentation}
 Paparazzi provides a rich and flexible API that can be configured to record several different parameters in flight. The aircraft periodically sends data back to the ground station over a wireless link using a protocol called Paparazzi link. Paparazzi link is built over Ivy, a message bus protocol that uses UDP. In simulations, the modem and wireless communications are no longer needed, instead the auto pilot runs as a separate process and mimics a wireless channel over the local network. (See Figure~\ref{fig:paparazzi_comm_agents})
