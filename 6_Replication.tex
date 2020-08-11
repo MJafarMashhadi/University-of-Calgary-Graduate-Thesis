@@ -1,2 +1,37 @@
-
 \chapter{Replication and Extension}
+
+\section{Introduction}
+
+In the previous chapter, we have seen the reults of applying my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to confirm the results and idea furthermore a second study on a similar software is quite helpful. In the second case study in addition to confirming that the technique is applicable on other software, I could improve on some aspects of the previous manuscript.
+
+% TODO: a summary of the results
+
+\section{The Case Study Subject}
+
+I chose paparazzi auto pilot as an open-source alternative to MicroPilot's auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane. A comparison about how paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
+In addition to that, after doing a preliminary study, I found out that paparazzi has a more starightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
+Furthermore, paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in airframes and sensors for an accurate and close to the reality simulation. 
+
+
+\section{Objectives}
+\subsection{RQ 1) Can the results be replicated with regards to state change point detection?}
+
+\subsection{RQ 2) Can the results be replicated with regards to state detection?}
+
+\subsection{RQ 3) How will hyperparameter tuning affect the results?}
+
+
+\section{Process}
+\subsection{Data Collection}
+The process of collecting the data has already been explained in chapter~\ref{chapter:fuzz_tester} in detail. However, let us have a quick recapitulation:
+Unlike MicroPilot, ardupilot did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
+The result was N % TODO: set this
+test data.
+After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These preprocessing steps include normalizing some values as well as metric to imperial unit conversions.
+
+
+\subsection{Hyperparameter Tuning}
+
+
+\section{Results}
+
