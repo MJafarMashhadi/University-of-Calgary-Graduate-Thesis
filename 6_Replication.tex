@@ -20,11 +20,11 @@ I used the same configurations in the previous study.
 To evaluate them, I used the same precision, recall, and F1 score (with a margin of tolerance) as the previous study which are defined in section~\ref{sec:CPD_metrics}.
 
 \subsection{RQ 2) Can the results be replicated with regards to state detection?}
-I fed the data to a number of classical machine learning algorithms as baselines. The problem setting is a multiclass classification, though with paparazzi the number of classes are smaller. 
+I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with paparazzi the number of classes are smaller. 
 There are 20 possibe states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
 \subsection{RQ 3) How will hyper-parameter tuning affect the results?}
-In previous study the hyper-paramters of the neural network model were tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameteres such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication I opted for existing automated ways for finding better hyper paramters.
+In previous study the hyper-parameters of the neural network model were tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameters such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication I opted for existing automated ways for finding better hyper-parameters.
 
 
 \section{Experiment}
@@ -35,12 +35,54 @@ The result was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These pre-processing steps include normalizing some values as well as metric to imperial unit conversions.
 
 
-\subsection{RQ 1) CPD baselines}
+\subsection{CPD baselines (RQ 1)}
 Similar to the MicroPilot study, I fed the data from Paparazzi to several CPD baselines implemented in ``ruptures'' library.
-Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``pelt''\cite{killick2012optimal} CPD method as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
+Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``Pelt'' CPD method \cite{killick2012optimal} as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
 
-\subsection{Hyper-parameter Tuning}
+\subsection{Classification algorithms (RQ 2)}
+I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MicroPilot's case, with the only difference being having no depth limit. So, I ran overall $3\times6=24$ different settings for classic learning algorithms. 
+
+\subsection{Hyper-parameter Tuning (RQ 3)}
 
 
 \section{Results}
+\subsection{CPD baselines (RQ 1)}
 
+
+\subsection{Classification algorithms (RQ 2)}
+In table~\ref{tab:rq2-1-results-replicate} the comparative results of the aforementioned algorithms with my method is presented. 
+To compare with the original study, we can see that in all but two settings limiting the maximum number of features did not help improve the model. Another similar observation is that the scores do not vary very much with changing the window size, and decision trees almost universally outperform linear classifiers.
+The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% which was 32-39\% in the original study, for decision trees it is in 67-68\% here and it was 73-77\% in the original study. 
+
+% TODO: add my results too
+
+\begin{table}
+\caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, we only show the results of the best performing model in each group.}
+\label{tab:rq2-1-results-replicate}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llcccc}
+\toprule
+\textbf{w} &
+  \multicolumn{1}{c}{\textbf{Classifier}} &
+  \multicolumn{1}{c}{\textbf{Max Features}} &
+  \multicolumn{1}{c}{\textbf{Precision}} &
+  \multicolumn{1}{c}{\textbf{Recall}} &
+  \multicolumn{1}{c}{\textbf{F1}} \\ \midrule
+ 3 &  Ridge &            - &      44.82\% &   14.45\% & 21.85\% \\
+ 3 & Decision Tree & $\sqrt{10w}$ &      61.88\% &   73.56\% & 67.22\% \\ \midrule
+ 5 &  Ridge &            - &      46.62\% &   15.10\% & 22.81\% \\
+ 5 & Decision Tree &            - &      64.28\% &   73.00\% & 68.36\% \\ \midrule
+10 &  Ridge &            - &      47.59\% &   16.29\% & 24.27\% \\
+10 & Decision Tree &            - &\textbf{65.06\%}& 73.36\% &\textbf{68.96\%}\\ \midrule
+15 &  Ridge &            - &      44.41\% &   17.33\% & 24.93\% \\
+15 & Decision Tree &            - &      63.53\% &   74.68\%& 68.65\% \\ \midrule
+20 &  Ridge &            - &      57.97\% &   19.10\% & 28.74\% \\
+20 & Decision Tree &            - &      64.72\% &   73.36\% & 68.77\% \\ \midrule
+25 &  Ridge &            - &      62.13\% &   19.66\% & 29.87\% \\
+25 & Decision Tree & $\sqrt{10w}$ &      61.17\% &\textbf{75.18}\% & 67.45\% \\ \midrule
+   & \multicolumn{2}{l}{Proposed Method} & \textbf{xx.xx\%} & \textbf{xx.xx\%} & \textbf{xx.xx\%} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+\subsection{Hyper-parameter Tuning (RQ 3)}
