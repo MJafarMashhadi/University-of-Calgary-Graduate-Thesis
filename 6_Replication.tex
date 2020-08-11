@@ -7,33 +7,37 @@ In the previous chapter, we have seen the results of applying my proposed model 
 % TODO: a summary of the results
 
 \section{The Case Study Subject}
-
 I chose paparazzi auto pilot as an open-source alternative to MicroPilot's auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane. A comparison about how paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
 In addition to that, after doing a preliminary study, I found out that paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
 Furthermore, paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
 
 
 \section{Objectives}
-\subsection{RQ 1) Can the results be replicated with regards to state change point detection?}
-Similar to the MicroPilot study, I fed the data from Paparazzi to several CPD baselines implemented in ``ruptures'' library.
-Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``pelt''\cite{killick2012optimal} CPD method as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
-
+\subsection{RQ 1) Can the results be replicated with regards to state change point detection (CPD)?}
+I ran 42 different combinations of settings for CPD algorithms in ``ruptures'' library \cite{Truong2018ChangePointSurvey}. 
+There are 7 cost functions, 3 search methods (1 exact and 2 approximate), and 3 penalty values (100, 500, and 1000).
+I used the same configurations in the previous study. 
+To evaluate them, I used the same precision, recall, and F1 score (with a margin of tolerance) as the previous study which are defined in section~\ref{sec:CPD_metrics}.
 
 \subsection{RQ 2) Can the results be replicated with regards to state detection?}
-
-
+I fed the data to a number of classical machine learning algorithms as baselines. The problem setting is a multiclass classification, though with paparazzi the number of classes are smaller. 
+There are 20 possibe states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
 \subsection{RQ 3) How will hyper-parameter tuning affect the results?}
 In previous study the hyper-paramters of the neural network model were tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameteres such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication I opted for existing automated ways for finding better hyper paramters.
 
 
-\section{Process}
+\section{Experiment}
 \subsection{Data Collection}
 The process of collecting the data has already been explained in chapter~\ref{chapter:fuzz_tester} in detail. However, let us have a quick recapitulation:
 Unlike MicroPilot, Paparazzi did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. My tool can automatically generate system tests, run them in a simulator (or on hardware\footnote{Although I have not tested running tests on a hardware (HWIL) to confirm, but having implemented the protocol it potentially is capable of doing so}), and also collect required telemetry data from the aircraft. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
 The result was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These pre-processing steps include normalizing some values as well as metric to imperial unit conversions.
 
+
+\subsection{RQ 1) CPD baselines}
+Similar to the MicroPilot study, I fed the data from Paparazzi to several CPD baselines implemented in ``ruptures'' library.
+Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``pelt''\cite{killick2012optimal} CPD method as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
 
 \subsection{Hyper-parameter Tuning}
 
