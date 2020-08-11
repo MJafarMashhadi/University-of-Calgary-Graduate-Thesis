@@ -83,36 +83,6 @@
 \usepackage{lscape}
 
 
-% Now we put in the information for the thesis title page.
-
-% Full Name
-
-\author{Mohammad Jafar Mashhadi Ebrahim}
-
-% Full Title
-
-\title{An Important Contribution to the Literature}
-
-% Official name of the degree
-
-\degree{Master of Science}
-
-% The name of the graduate program (not the department!)
-
-\prog{Graduate Program in Electrical Engineering}
-
-% The month (for the final version: when you file, not when you defended)
-
-\monthname{August}
-
-% The year
-
-\thesisyear{2020}
-
-% Tell hyperref to put author and title into the PDF metadata
-
-\hypersetup{pdfinfo={Title={\thetitle},Author={\theauthor}}}
-
 % If you want memoir to produce endnotes, turn them on here
 
 \makepagenote
@@ -157,12 +127,14 @@
 
 \include{5_ASE}
 
+\include{6_Replication}
+
 % The back matter includes commands to produce endnotes, index,
 % glossary, bibiliography, and the like.
 
 \backmatter
 
-\include{6_backmatter}
+\include{7_backmatter}
 
 % The appendix contains material that would clutter up the main text,
 % such as program code, survey instruments, or interview transcripts.
@@ -170,6 +142,6 @@
 
 \appendix
 
-\include{7_appendix}
+\include{8_appendix}
 
 \end{document}
