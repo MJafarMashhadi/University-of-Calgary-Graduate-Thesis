@@ -25,8 +25,7 @@ Furthermore, paparazzi supports multiple flight dynamic model (FDM) simulators. 
 \subsection{Data Collection}
 The process of collecting the data has already been explained in chapter~\ref{chapter:fuzz_tester} in detail. However, let us have a quick recapitulation:
 Unlike MicroPilot, ardupilot did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
-The result was N % TODO: set this
-test data.
+The result was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These preprocessing steps include normalizing some values as well as metric to imperial unit conversions.
 
 
