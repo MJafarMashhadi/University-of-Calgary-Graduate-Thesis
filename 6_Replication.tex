@@ -15,10 +15,16 @@ Furthermore, paparazzi supports multiple flight dynamic model (FDM) simulators. 
 
 \section{Objectives}
 \subsection{RQ 1) Can the results be replicated with regards to state change point detection?}
+Similar to the MicroPilot study, I fed the data from Paparazzi to several CPD baselines implemented in ``ruptures'' library.
+Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``pelt''\cite{killick2012optimal} CPD method as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
+
 
 \subsection{RQ 2) Can the results be replicated with regards to state detection?}
 
-\subsection{RQ 3) How will hyperparameter tuning affect the results?}
+
+
+\subsection{RQ 3) How will hyper-parameter tuning affect the results?}
+In previous study the hyper-paramters of the neural network model were tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameteres such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication I opted for existing automated ways for finding better hyper paramters.
 
 
 \section{Process}
@@ -29,7 +35,7 @@ The result was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These pre-processing steps include normalizing some values as well as metric to imperial unit conversions.
 
 
-\subsection{Hyperparameter Tuning}
+\subsection{Hyper-parameter Tuning}
 
 
 \section{Results}
