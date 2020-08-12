@@ -30,7 +30,7 @@ In previous study the hyper-parameters of the neural network model were tuned ma
 \section{Experiment}
 \subsection{Data Collection}
 The process of collecting the data has already been explained in chapter~\ref{chapter:fuzz_tester} in detail. However, let us have a quick recapitulation:
-Unlike MicroPilot, Paparazzi did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. My tool can automatically generate system tests, run them in a simulator (or on hardware\footnote{Although I have not tested running tests on a hardware (HWIL) to confirm, but having implemented the protocol it potentially is capable of doing so}), and also collect required telemetry data from the aircraft. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
+Unlike MicroPilot, Paparazzi did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. My tool can automatically generate system tests, run them in a simulator (or on hardware\footnote{Although I have not tested running tests on a hardware (HWIL, see section~\ref{sec:mp_test_scenarios}) to confirm, but having implemented the protocol it potentially is capable of doing so}), and also collect required telemetry data from the aircraft. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
 The result was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These pre-processing steps include normalizing some values as well as metric to imperial unit conversions.
 
@@ -40,14 +40,60 @@ Similar to the MicroPilot study, I fed the data from Paparazzi to several CPD ba
 Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``Pelt'' CPD method \cite{killick2012optimal} as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
 
 \subsection{Classification algorithms (RQ 2)}
-I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MicroPilot's case, with the only difference being having no depth limit. So, I ran overall $3\times6=24$ different settings for classic learning algorithms. 
+I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MicroPilot's case, with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms. 
 
 \subsection{Hyper-parameter Tuning (RQ 3)}
-
+% TODO
 
 \section{Results}
 \subsection{CPD baselines (RQ 1)}
 
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccccccc}
+\toprule
+  \textbf{Cost Function} &
+  \textbf{Search Method} &
+  \textbf{Penalty} &
+  \textbf{Prec.} &
+  \textbf{Recall} &
+  \textbf{F1} &
+  \textbf{Prec.} &
+  \textbf{Recall} &
+  \textbf{F1} &
+  \textbf{Prec.} &
+  \textbf{Recall} &
+  \textbf{F1} \\
+                                                  &              &   & \multicolumn{3}{c}{$\tau=1$s} & \multicolumn{3}{c}{$\tau=3$s} & \multicolumn{3}{c}{$\tau=5$s} \\  \toprule
+\multirow{3}{*}{\textbf{Autoregressive Model}}
+    & bottomup & 500  &       13.65\% &    14.13\% & 18.89\% &        39.73\% &     36.40\% & 36.14\% &        57.11\% &     53.20\% & 50.04\% \\
+    & exact & 500  &       13.56\% &    13.85\% & 19.03\% &        39.67\% &     36.17\% & 36.03\% &        56.97\% &     52.89\% & 49.83\% \\
+    & window & 100  &       15.97\% &     7.59\% & 13.54\% &        45.47\% &     20.40\% & 29.56\% &        64.16\% &     30.76\% & 41.20\% \\ \midrule
+\multirow{3}{*}{\textbf{Least Absolute Deviation}}
+    & window & 100  &       24.50\% &    15.92\% & 19.85\% &        56.39\% &     37.24\% & 44.53\% &        68.94\% &     48.20\% & 56.23\% \\
+    & exact & 1000 &       26.74\% &    34.08\% & 29.92\% &        60.77\% &     77.32\% & 67.74\% &        74.73\% &     93.16\% & 82.61\% \\
+    & bottomup & 1000 &       26.66\% &    34.99\% & 30.35\% &        60.11\% &     78.14\% & 67.61\% &        72.85\% &     92.94\% & 81.30\% \\ \midrule
+\multirow{3}{*}{\textbf{Least Squared Deviation}}
+    & window & 1000 &       25.01\% &    16.14\% & 20.26\% &        54.58\% &     35.77\% & 42.96\% &        68.73\% &     48.11\% & 56.18\% \\
+    & exact & 1000 &       21.28\% &    80.04\% & 33.49\% &        51.05\% &     99.58\% & 67.20\% &        65.36\% &     99.97\% & 78.76\% \\
+    & bottomup & 1000 &       21.30\% &    81.24\% & 33.62\% &        50.98\% &     99.50\% & 67.12\% &        65.24\% &     99.97\% & 78.66\% \\ \midrule
+\multirow{3}{*}{\textbf{Linear Model Change}}
+    & bottomup & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
+    & window & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
+    & exact & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\ \midrule
+\multirow{3}{*}{\textbf{Gaussian Process Change}}
+    & window & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
+    & exact & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
+    & bottomup & 100  &       12.42\% &   100.00\% & 22.03\% &        33.15\% &    100.00\% & 49.55\% &        49.04\% &    100.00\% & 65.47\% \\ \midrule
+\multirow{2}{*}{\textbf{Rank-based Cost Function}}
+    & exact & 100  &       21.11\% &    31.85\% & 25.51\% &        52.29\% &     74.63\% & 61.13\% &        65.88\% &     89.30\% & 75.46\% \\
+    & bottomup & 100  &       20.55\% &    31.84\% & 25.17\% &        49.97\% &     73.22\% & 59.04\% &        64.57\% &     89.35\% & 74.61\% \\ \midrule
+\multirow{3}{*}{\textbf{Kernelized Mean Change}} 
+    & bottomup & 100  &       15.66\% &     1.90\% &  9.45\% &        44.23\% &      5.36\% & 12.95\% &        62.37\% &      7.48\% & 15.66\% \\
+    & exact & 100  &       14.07\% &     1.64\% &  9.77\% &        42.06\% &      4.74\% & 12.59\% &        60.92\% &      6.67\% & 14.56\% \\
+    & window & 100  &        8.31\% &     0.61\% &  9.97\% &        29.38\% &      2.02\% & 10.60\% &        53.34\% &      3.39\% & 10.79\% \\
+\bottomrule
+\end{tabular}%
+}
 
 \subsection{Classification algorithms (RQ 2)}
 In table~\ref{tab:rq2-1-results-replicate} the comparative results of the aforementioned algorithms with my method is presented. 
@@ -86,3 +132,4 @@ The scores themselves are just around the same values as well: Ridge classifier 
 }
 \end{table}
 \subsection{Hyper-parameter Tuning (RQ 3)}
+% TODO
