@@ -4,7 +4,10 @@
 
 In the previous chapter, we have seen the results of applying my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to confirm the results and idea furthermore a second study on a similar software is quite helpful. In the second case study in addition to confirming that the technique is applicable on other software, I could improve on some aspects of the previous manuscript.
 
-% TODO: a summary of the results
+I could replicate the relative differences in performance of different CPD methods. The same goes with classic machine learning classifiers: a linear classifier with regularization and a decision tree classifier. 
+Also, I confirmed that a similar neural network architecture can be trained to infer states of Paparazzi as well.
+In addition to replicating these, I created an automated hyper parameter tuning pipeline to get a better performance out of the neural network model. 
+% TODO: a summary of the results, tuning + comparing results with baselines
 
 \section{The Case Study Subject}
 I chose paparazzi auto pilot as an open-source alternative to MicroPilot's auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane. A comparison about how paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
@@ -43,7 +46,17 @@ Fortunately, with smaller data set size (in comparison to MicroPilot's), it was 
 I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MicroPilot's case, with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms. 
 
 \subsection{Hyper-parameter Tuning (RQ 3)}
-% TODO
+I created a model creation and evaluation pipeline that takes hyper parameters as the input and outputs the model performance scores on test data as its output. The hyper parameters that I searched over are:
+\begin{itemize}
+    \item Number of GRU cells in the recurrent section: between 32 and 256
+    \item Number of convolutional filters in each layer: between 16 to 64
+    \item The size of convolution kernels and the number of convolutional layers: between 3 to 5 layers with increasing kernel size
+    \item The learning rate of Adam optimizer: from $1\times 10^{-4}$ to $3\times10^{-3}$
+\end{itemize}
+Please refer to figure~\ref{fig:model_arch} for a recap on these hyper parameters. 
+I performed an exhaustive grid search over these parameters, using Tensor Board for keeping track of the metrics and finding the right balance.
+
+Tensor Board is a monitoring tool made for TesnorFlow \cite{tensorflow2015-whitepaper} that provides great insight for better training TensorFlow models.
 
 \section{Results}
 \subsection{CPD baselines (RQ 1)}
