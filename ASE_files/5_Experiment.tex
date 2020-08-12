@@ -127,11 +127,11 @@ The baseline models could not fit on that machine, so two nodes on Compute Canad
 \subsection{Results} \label{sec:results}
 In this section, we present the results of the experiments and answer the two research questions. 
 \subsubsection{RQ1 Results: CPD Performance}
-\begin{table*}
+\begin{sidewaystable} 
+% \begin{table*}
 \caption{Change point detection precision, recall, and F1-score calculated for the baseline methods using three values of tolerance ($\tau$) for multiple configurations.}
 \label{tab:rq1-results}
-% TODO: change it to one of those large sideways tables \begin{landscape} \usepackage{lscape}
-\resizebox{\textwidth}{!}{%
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{llcccccccccc}
 \toprule
   \textbf{Cost Function} &
@@ -165,7 +165,8 @@ In this section, we present the results of the experiments and answer the two re
                                                    
 \end{tabular}%
 }
-\end{table*}
+% \end{table*}
+\end{sidewaystable}
 
 Table~\ref{tab:rq1-results} shows the results of running CPD algorithms for various configurations (as described in \ref{sec:CPD_baseline}). For each search method and cost function pair only one of the penalty values which resulted in the highest F1 scores for all $\tau$ values is reported. 
 
