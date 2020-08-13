@@ -3,7 +3,7 @@ The goals of this study is to evaluate the proposed method in terms of change po
 
 \subsection{RQ 1) How does my proposed technique perform in detecting the state changes?}
 The goal of this RQ is to see how close the predicted state-change times are to the real state-change times.  In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
-To answer this question, we compare the performance of our proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
+To answer this question, we compare the performance of my proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
 
 
 \subsection{RQ 2) How well does my proposed technique predict the internal state of the system?}
@@ -42,7 +42,7 @@ I performed an exhaustive grid search over these parameters, using Tensor Board 
 Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-whitepaper} that provides great insight for better training TensorFlow models.
 
 
-Note that in our empirical study to evaluate our approach, we use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All we provide here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though we use the source code to label the training set, we still look at the test set as a black-box and don't leak any information.
+Note that in the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All we provide here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though we use the source code to label the training set, we still look at the test set as a black-box and don't leak any information.
 
 \section{Evaluation Metrics}
 \subsection{CPD Performance Metrics (RQs 1,3, and 5)} \label{sec:CPD_metrics}
@@ -81,7 +81,7 @@ We used `ruptures' library developed by authors of a recent CPD survey study \ci
 As mentioned earlier two main elements of a CPD algorithm in their survey are the search method and the cost function.
 
 I used Pelt \cite{killick2012optimal} as the most efficient exact search method. As examples of approximate search methods, we applied bottom-up segmentation and window-based methods using a default window size of 100 \cite{keogh2001online}.
-However, after trying to run Pelt algorithm \hl{on MicroPilot's data}, we realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so we only use the bottom-up and the window-based segmentation methods, as our CPD baselines in RQ1.
+However, after trying to run Pelt algorithm \hl{on MicroPilot's data}, we realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so we only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
 \hl{Fortunately, for RQ 3 with smaller data set size of Papaarazzi, it was feasible (though still quite time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.}
 
 For the cost function, I tried ``Least Absolute Deviation'', ``Least Squared Deviation'', ``Gaussian Process Change'', ``Kernelized Mean Change'', ``Linear Model Change'', ``Rank-based Cost Function'', and ``Auto-regressive model change'' as defined in the library. Their parameters were left as default.
@@ -89,7 +89,7 @@ To optimize the number of change points a penalty value (linearly proportionate 
 
 \subsection{Multi-class classification baselines (RQs 2 and 4)}
 We used a sliding window of width $w$ over the 10 time-series values and then flattened it to make a vector of size $10w$ as the features. For the labels, we used one-hot encoded state of the system.
-The window sizes were chosen as same as the sizes of convolutional layers' kernel sizes (3, 5, 10, 15, 20), to make the baselines better comparable with our method. 
+The window sizes were chosen as same as the sizes of convolutional layers' kernel sizes (3, 5, 10, 15, 20), to make the baselines better comparable with my method. 
 We used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''. For ``maximum number of features'' we tried no limits, $\sqrt{10w}$, and $\log_2{10w}$. To find best ``maximum depth'' we first tried having no upper bound and observed how deep the tree grows; then we tried multiple numbers less than the maximum, until a drop in performance was observed. 
 
 \hl{In RQ4, pretty similar to RQ2,} I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MP's case (RQ2), with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any, as will be seen in the RQ2's answer later on), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms to answer RQ4. 

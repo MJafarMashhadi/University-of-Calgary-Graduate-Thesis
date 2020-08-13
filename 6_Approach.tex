@@ -1,5 +1,5 @@
 \chapter{Hybrid Neural Network for State Inference} \label{sec:approach}
-In this section, we describe our proposed deep learning approach for the black-box state inference task, in details. 
+In this section, we describe my proposed deep learning approach for the black-box state inference task, in details. 
 
 \section{The Model Architecture}
 \begin{figure*}
@@ -9,15 +9,19 @@ In this section, we describe our proposed deep learning approach for the black-b
     \label{fig:general_net}
 \end{figure*}
 
-The goal of this study is to infer the states of a running software system, over time. Given that our assumption is we don't have access to the source code (or part of it), we only leverage the values of inputs and outputs of the system, over time. As can be seen in figure~\ref{fig:general_net}, we capture all the inputs and outputs of the system as a time series and then process it in a DNN. The architecture of our proposed model is a hybrid DNN which is inspired by models proposed in the field of Human Activity Recognition (HAR). This task is quite similar to the subject of this thesis in the sense that they both take in a multivariate time series-data (from sensor readings) and output the state of the system that generated those readings (see section~\ref{sec:related_work_har} for more details on HAR papers). This DNN is made of three parts in sequence: 1) Convolutional, 2) Recurrent, and 3) Fully connected layers. This architecture addresses the aforementioned traditional methods' challenges; each part serves a different purpose in this process, as follows.
+The goal of this study is to infer the states of a running software system, over time. Given that my assumption is we don't have access to the source code (or part of it), I only leverage the values of inputs and outputs of the system, over time. 
+As can be seen in figure~\ref{fig:general_net}, I capture all the inputs and outputs of the system as a time series and then process it in a DNN. 
+The architecture of my proposed model is a hybrid DNN which is inspired by models proposed in the field of Human Activity Recognition (HAR). This task is quite similar to the subject of this thesis in the sense that they both take in a multivariate time series-data (from sensor readings) and output the state of the system that generated those readings (see section~\ref{sec:related_work_har} for more details on HAR papers). 
+This DNN is made of three parts in sequence: 1) Convolutional, 2) Recurrent, and 3) Fully connected layers. This architecture addresses the aforementioned traditional methods' challenges; each part serves a different purpose in this process, as follows.
 
 
 Convolutions, being more generalized than simple sliding windows, can discover patterns and features in the signals, both in temporal and in spatial (how signals affect each other) dimensions \cite{wang2017time}. 
 The convolutional layers' flexibility allows them to learn some typical preprocessing operations. For example a moving average or a discrete derivative can be learned as simple convolutional filters. They also help the model to be more resilient to varying time delays between noticing a deviation in input signals and the reaction that will appear in the output signals. Applying convolutional layers in sequence has been shown to result in each layer learning more complex features than the previous layers \cite{zeiler2014visualizing}.
 The number of layers, filters, and the kernel size are hyper-parameters that should be selected based on the size of data and the complexity of the system being modeled.
-Using a sequence of convolutions with a) increasing number of filters and the same kernel size, b) same number of filters and increasing kernel size, and c) decreasing filters with increasing kernel sizes are all different approaches that have been used in the literature by well-known architectures such as VGG and U-net \cite{simonyan2014very, ronneberger2015u}. We will discuss more details of our CNN layers in Section~\ref{sec:architecture_detail}.
+Using a sequence of convolutions with a) increasing number of filters and the same kernel size, b) same number of filters and increasing kernel size, and c) decreasing filters with increasing kernel sizes are all different approaches that have been used in the literature by well-known architectures such as VGG and U-net \cite{simonyan2014very, ronneberger2015u}. 
+I will discuss more details of CNN layers in my approach in Section~\ref{sec:architecture_detail}.
 
-Convolutions are quite powerful in discovering local features. To capture long-term features, recurrent layers which learn sequences of data are leveraged. For example, in our case, they can learn that ``accelerate'' and ``take off'' states only happen in the start of the states sequence, and each ``take off'' state is usually followed by a ``climb'' state. The type of recurrent cell to use (LSTM, GRU, etc.), how many cells to unravel in the layer, and the number of layers are also hyper-parameters that need to be tuned depending on the size and complexity of system under study.
+Convolutions are quite powerful in discovering local features. To capture long-term features, recurrent layers which learn sequences of data are leveraged. For example, in my case, they can learn that ``accelerate'' and ``take off'' states only happen in the start of the states sequence, and each ``take off'' state is usually followed by a ``climb'' state. The type of recurrent cell to use (LSTM, GRU, etc.), how many cells to unravel in the layer, and the number of layers are also hyper-parameters that need to be tuned depending on the size and complexity of the system under study.
 
 Finally, one or more dense (fully connected) layers in the end are a common way of reducing the dimensions to match expected output dimensions. 
 If there are only two states, the last layer can have a sigmoid activation function and be of shape $L$ (the length of the input), otherwise, to match the one-hot encoding of labels, an output of shape $L\times N_s$ with softmax activation along the second axis ($N_s$) is required ($N_s$ being the number of possible states).
@@ -43,12 +47,12 @@ The input/output values of the black-box system create a multivariate time-serie
     |{V_1}_k|=|{V_2}_k|=\ldots=|{V_n}_k|=l_k 
 \end{equation}
 
-Note that, as figure~\ref{fig:general_net} shows, we take both inputs and outputs as part of the time-series data to be fed as input into our deep learning models. This is to make sure we can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from our case study, if the outputs are not taken into account 
+Note that, as figure~\ref{fig:general_net} shows, we take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models. This is to make sure we can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account 
 % the ``acceleration'' state before ``takeoff'' and the breaking state after landing
 a mid-flight ``descend'' state and the ``approach'' state right before landing
 are indistinguishable, using the sensor readings (inputs) alone. 
 
-Having such a time-series, the only remaining pieces from a training set are the labels. Unlike the input/output values (the features in the data set) the labels are not usually given. Our method to infer the labels is a supervised approach. Thus, we need the domain expert to manually label each individual time stamp with a state name/ID. In practice, what they would do is to identify the approximate time that a state change happens and assign the new state to one of the previous states labels or define a new label for this new state.
+Having such a time-series, the only remaining pieces from a training set are the labels. Unlike the input/output values (the features in the data set) the labels are not usually given. My method to infer the labels is a supervised approach. Thus, we need the domain expert to manually label each individual time stamp with a state name/ID. In practice, what they would do is to identify the approximate time that a state change happens and assign the new state to one of the previous states labels or define a new label for this new state.
 Thus we encode the states information over time as a set of tuples in the form of $(t_s, s)$ where $t_s$ denotes the timestamp where the system entered state $s$. We show the set of all possible states with $S$ ($s \in S$) and define $N_s$ as the cardinality of this set. 
 \begin{equation}\label{eq:change_point}\begin{split}
     CP_k {}&{}= \big\{ (t_{s_1}, s_1), (t_{s_2}, s_2), \ldots, (t_{s_l}, s_l) \big\}\:,\; s_i \in S \\

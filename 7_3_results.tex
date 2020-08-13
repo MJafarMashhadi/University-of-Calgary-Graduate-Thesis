@@ -48,7 +48,7 @@ Table~\ref{tab:rq1-results} shows the results of running CPD algorithms for vari
 The first observation from the results is that as values of $\tau$ increases the scores get better. This was expected, since larger values relax the constraints on which detected change points are considered as a true positive. Another observation is that the bottom-up segmentation consistently outperforms the window-based segmentation method. We can also see that the linear cost function beats all the other ones, in terms of precision. The Gaussian cost function achieves much higher recall values costing it a huge loss in precision. It means this cost function results in detecting numerous change points spread across the time axis, so there is a good chance of having at least one change point predicted close to each true change point (hence the high recall), but also there are a lot of false positives, which leads to a low precision. 
 
 \begin{table}
-\caption{Change point detection precision, recall, and F1-score calculated, on the test data, for our proposed model, using three values of tolerance ($\tau$) compared with the respective $\tau$'s best F1 score among baseline methods}
+\caption{Change point detection precision, recall, and F1-score calculated, on the test data, for the proposed model, using three values of tolerance ($\tau$) compared with the respective $\tau$'s best F1 score among baseline methods}
 \label{tab:rq1-2-results}
 % begin{tabular}{cccc}
 \begin{tabularx}{\columnwidth}{cXXXX}
@@ -65,15 +65,16 @@ The first observation from the results is that as values of $\tau$ increases the
 %\end{tabular}
 \end{table}
 
-Measuring the same metrics on how our model performs on the test data shows better scores, almost twice the F1 score of the best performing baseline (see Table~\ref{tab:rq1-2-results}). Please note that unlike machine learning algorithms (such as ours), CPD algorithms do not have a separate training and testing phases. This fact works in their favor (by using the entire dataset for prediction and not just the training set), but still our model outperforms them.
+Measuring the same metrics on how the proposed model performs on the test data shows better scores, almost twice the F1 score of the best performing baseline (see Table~\ref{tab:rq1-2-results}). 
+Please note that unlike machine learning algorithms (such as ours), CPD algorithms do not have a separate training and testing phases. This fact works in their favor (by using the entire dataset for prediction and not just the training set), but still my model outperforms them.
 
 %Although measuring the time it takes to detect change points was not one of the comparison metrics it would not hurt to note that
 In terms of execution cost, running all 42 different settings of CPD algorithms on the whole dataset took a bit over 12 hours in the cloud using 16 CPUs and 64GB of main memory. The deep learning model on the other hand takes about an hour to train (which only needs to be done once), on a smaller machine (see section~\ref{sec:machines_config}). It made predictions on the whole dataset in less than a minute.
 %$(/)-1=
-So to answer RQ1, our method has shown $(66.18/32.73)-1=102.20\%$ improvement in F1 score with $\tau=1s$, $(78.06/41.52)-1=88.00\%$ with $\tau=3s$, and $(85.42/44.46)-1=92.13\%$ with $\tau=5s$; almost doubling the score compared to the baselines. 
+So to answer RQ1, my method has shown $(66.18/32.73)-1=102.20\%$ improvement in F1 score with $\tau=1s$, $(78.06/41.52)-1=88.00\%$ with $\tau=3s$, and $(85.42/44.46)-1=92.13\%$ with $\tau=5s$; almost doubling the score compared to the baselines. 
 
 \begin{rqanswer}
-Our model, which requires less memory compared to traditional CPD algorithms, improved their best performance by up to 102\%, measured by F1 score, in less execution time.
+The proposed model, which requires less memory compared to traditional CPD algorithms, improved their best performance by up to 102\%, measured by F1 score, in less execution time.
 \end{rqanswer}
 
 \subsection{RQ2 Results: Multi-class Classification Performance}
@@ -102,25 +103,25 @@ To answer RQ2, we first compare different configurations of the baseline methods
 15 & DT    & -   & $\sqrt{10w}$ & 69.06\% & 80.76\% & 74.45\% \\ \midrule
 20 & Ridge & -   & -          & \textbf{80.38\%} & 26.50\% & 39.86\% \\
 20 & DT    & 175 & $\sqrt{10w}$ & 73.21\% & 82.16\% & \textbf{77.42\%} \\  \midrule
-   & \multicolumn{3}{l}{Our Proposed Method} & \textbf{86.29\%} & \textbf{95.04\%} & \textbf{90.45\%} \\
+   & \multicolumn{3}{l}{My Proposed Method} & \textbf{86.29\%} & \textbf{95.04\%} & \textbf{90.45\%} \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-Comparing the baseline methods with our proposed method (the last row) in Table~\ref{tab:rq2-1-results} shows that our model outperforms all baselines. Comparing it with the model with the best F1-score shows a $(86.29/73.21)-1=17.87\%$ improvement in precision as well as a $(95.04/82.16)-1=15.68\%$ improvement in recall that means $(90.45/77.42)-1=16.83\%$ overall improvement in F1-score. 
+Comparing the baseline methods with my proposed method (the last row) in Table~\ref{tab:rq2-1-results} shows that my model outperforms all baselines. Comparing it with the model with the best F1-score shows a $(86.29/73.21)-1=17.87\%$ improvement in precision as well as a $(95.04/82.16)-1=15.68\%$ improvement in recall that means $(90.45/77.42)-1=16.83\%$ overall improvement in F1-score. 
 
-To have a feeling of how good our predictions are in practice, Figure~\ref{fig:test_0} shows the output of our model side by side with the ground truth. The horizontal axis shows sample ID (time) and the states are color coded. As it is seen, our algorithm performs better when the state changes are farther apart. Also there are some state changes that happen quite briefly which are not detected. That is not to a great surprise since it takes some time for state changes to be reflected in the outputs and those might not have got any chance.
+To have a feeling of how good my predictions are in practice, Figure~\ref{fig:test_0} shows the output of my model side by side with the ground truth. The horizontal axis shows sample ID (time) and the states are color coded. As it is seen, this algorithm performs better when the state changes are farther apart. Also there are some state changes that happen quite briefly which are not detected. That is not to a great surprise since it takes some time for state changes to be reflected in the outputs and those might not have got any chance.
 
 
 The classical models only see one window of the data at a time, convolutional layers on the other hand are more generalized and flexible since each filter in each layer is comparable to a sliding window. As we saw in Table~\ref{tab:rq2-1-results}, a larger window size means a higher performance. However, it gets significantly more difficult to train a model with large window sizes. In addition, convolutions can automatically learn preprocessing steps that could be beneficial such as a moving average. Each convolutional filter can learn a linear combination of its inputs. So when the convolutional layers are stacked on each other, with non-linear activation functions in between, the hypothesis space they can learn becomes quite large, probably much larger than most of the classical ML algorithms here. Also, they are still quite efficient (more efficient than baselines) due to parameter sharing and their high parallelizability.
 
 The fact that the performance improves as the window size increases indicates the positive effect of being able to see longer-term relations in detecting the system's state. Recurrent cells (such as GRU) can capture long-term dependencies (that do not necessarily fall into one window) and learn sequences. This is one of the major differences between an RNN model and others, such as decision trees, which do not have such a notion of a ``long-term memory'' as LSTM/GRU neural networks do. All a decision tree could see is the values in a sliding window.
 
-In terms of the training complexity (time and memory), our method is superior as well. That can largely be attributed to the use of deep learning. In baseline models, as the window size $w$ grows the training and evaluation complexity grows, up to a point that they ran out of memory -- consuming all the 47GB of main memory and swap area. This forced us to train them in the cloud. Meanwhile, as mentioned earlier, the deep learning model could be trained on a 8GB GPU in roughly an hour. (see section \ref{sec:machines_config} for the machines' specs). Also, the decision tree training was not parallelized using only one core of the CPU, while virtually all deep learning models can be heavily parallelized on a GPU/TPU. %All the reported scores for both the baseline models and our model are computed on previously unseen test data. 
+In terms of the training complexity (time and memory), this method is superior as well. That can largely be attributed to the use of deep learning. In baseline models, as the window size $w$ grows the training and evaluation complexity grows, up to a point that they ran out of memory -- consuming all the 47GB of main memory and swap area. This forced us to train them in the cloud. Meanwhile, as mentioned earlier, the deep learning model could be trained on a 8GB GPU in roughly an hour. (see section \ref{sec:machines_config} for the machines' specs). Also, the decision tree training was not parallelized using only one core of the CPU, while virtually all deep learning models can be heavily parallelized on a GPU/TPU. %All the reported scores for both the baseline models and my model are computed on previously unseen test data. 
 
 \begin{rqanswer}
-Our model, which requires less than half as many CPUs and 70\% as much memory compared to the best performing classical ML model, improved their best performance by up to 17\%, measured by F1 score, in less execution time.
+The proposed model, which requires less than half as many CPUs and 70\% as much memory compared to the best performing classical ML model, improved their best performance by up to 17\%, measured by F1 score, in less execution time.
 \end{rqanswer}
 
 
@@ -300,11 +301,11 @@ The result of this tuning was a model with fewer convolutional layers and smalle
 
 
 \section{Limitations and Threats to Validity} \label{sec:threats_to_validity}
-One of the limitations of our approach is that it might miss an input-output invariant correlation. It can happen when the input remains constant or it changes too little to reveal its relation with certain outputs. 
-%In addition, as mentioned before, our approach relies on changes in signals. 
-We assume that during the data collection, sampling happens in regular intervals; our approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.
+One of the limitations of this approach is that it might miss an input-output invariant correlation. It can happen when the input remains constant or it changes too little to reveal its relation with certain outputs. 
+%In addition, as mentioned before, my approach relies on changes in signals. 
+We assume that during the data collection, sampling happens in regular intervals; this approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 
-In terms of construct validity, we are using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, we have used multiple margins and reported all results. In terms of internal validity threats, we reduced the threat by not implementing the CPD baselines by ourselves and rather reusing existing libraries. In terms of conclusion validity threats, we have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, our study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. We plan to extend this work with more case studies from other domains, to increase its generalizability.}
+In terms of construct validity, we are using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, we have used multiple margins and reported all results. In terms of internal validity threats, we reduced the threat by not implementing the CPD baselines by ourselves and rather reusing existing libraries. In terms of conclusion validity threats, we have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, this study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. We plan to extend this work with more case studies from other domains, to increase its generalizability.}
 
