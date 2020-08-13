@@ -184,7 +184,7 @@ They say a picture is worth a thousand words\footnote{missing citation}, to bett
 I used Tensor Board to visualize and compare the effects of different hyper-parameters on the model's performance. First, for a sanity check, I visualized 4 metrics, precision and recall in detecting change points with a small tolerance of $\tau=1s$, and precision and recall in estimating the internal state. A healthy linear and positive correlation is visible between all pairs of these metrics, it means that trying to improve one usually will not come at the expense of others. 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{6_files/prec_recall_matrix_tuning.png}
+    \includegraphics[width=\columnwidth]{6_files/prec_recall_matrix_tuning_white_background.png}
     \caption{Matrix of scatter plots comparing precision and recall of the deep learning model on test data.}
     \label{fig:precision_recall_matrix}
 \end{figure}
@@ -204,7 +204,7 @@ The new search space was all the combinations of these hyper-parameters:
 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{6_files/refined_prec_recall.png}
+    \includegraphics[width=\columnwidth]{6_files/refined_prec_recall_white_background.png}
     \caption{Parallel coordinates view showing the effects of select hyper-parameters on the performance measures.}
     \label{fig:precision_recall_parallel_coordinates}
 \end{figure}

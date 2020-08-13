@@ -74,12 +74,19 @@
 \usepackage[round]{natbib}
 \bibliographystyle{plainnat}
 
+
+% copied from ase, remove if problematic
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{dsfont}
+
+
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{tcolorbox}
 \usepackage{longtable}
 \usepackage{listings}
-\usepackage{xcolor}
 \usepackage{lscape}
 \usepackage{rotating}
 
@@ -122,7 +129,7 @@
 
 \mainmatter
 
-\include{3_chapter1}
+\include{3_intro}
 
 \include{4_fuzzy}
 
@@ -130,19 +137,23 @@
 
 \include{6_Replication}
 
+\include{7_conclusion}
+
 % The back matter includes commands to produce endnotes, index,
 % glossary, bibiliography, and the like.
 
 \backmatter
 
-\include{7_backmatter}
+\include{8_backmatter}
 
 % The appendix contains material that would clutter up the main text,
 % such as program code, survey instruments, or interview transcripts.
 % Remove it if you don't have an appendix.
 
-\appendix
+\appendices
+% \setcounter{figure}{0}
+% \renewcommand\thefigure{\Alph{chapter}.\arabic{figure}}
 
-\include{8_appendix}
+\include{9_appendix}
 
 \end{document}
