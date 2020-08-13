@@ -138,7 +138,8 @@ In table~\ref{tab:rq2-1-results-replicate} the comparative results of the aforem
 To compare with the original study, we can see that in all but two settings limiting the maximum number of features did not help improve the model. Another similar observation is that the scores do not vary very much with changing the window size, and decision trees almost universally outperform linear classifiers.
 The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% which was 32-39\% in the original study, for decision trees it is in 67-68\% here and it was 73-77\% in the original study. 
 
-% TODO: add my results too
+The deep learning model's performance measures (on validation data) can be found in the last row of the table. 
+You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in the original study was 16.83\%. This, again confirms the reproducability of the results from 
 
 \begin{table}
 \caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, we only show the results of the best performing model in each group.}
@@ -163,12 +164,21 @@ The scores themselves are just around the same values as well: Ridge classifier 
 20 &  Ridge &            - &      57.97\% &   19.10\% & 28.74\% \\
 20 & Decision Tree &            - &      64.72\% &   73.36\% & 68.77\% \\ \midrule
 25 &  Ridge &            - &      62.13\% &   19.66\% & 29.87\% \\
-25 & Decision Tree & $\sqrt{10w}$ &      61.17\% &\textbf{75.18}\% & 67.45\% \\ \midrule
-   & \multicolumn{2}{l}{Proposed Method} & \textbf{xx.xx\%} & \textbf{xx.xx\%} & \textbf{xx.xx\%} \\
+25 & Decision Tree & $\sqrt{10w}$ &      61.17\% &\textbf{75.18}\% & 67.45\% \\ \midrule \midrule
+   & \multicolumn{2}{l}{Proposed Method} & \textbf{71.13\%} & \textbf{88.69\%} & \textbf{81.92\%} \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
+
+They say a picture is worth a thousand words\footnote{missing citation}, to better see the predictions of the deep learning model compared to the ground truth, see figure~\ref{fig:paparazzi_predictions}. 
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{6_files/states_chart.png}
+    \caption{The states are color coded and each rectangle shows one test, only the first 1000 samples (200 seconds) are shown for more clarity. The same as figure~\ref{fig:test_0} in the previous chapter, the top half of each rectangle shows the model's output and the bottom half shows the true labels.}
+    \label{fig:paparazzi_predictions}
+\end{figure}
+
 \subsection{Hyper-parameter Tuning (RQ 3)}
 I used Tensor Board to visualize and compare the effects of different hyper-parameters on the model's performance. First, for a sanity check, I visualized 4 metrics, precision and recall in detecting change points with a small tolerance of $\tau=1s$, and precision and recall in estimating the internal state. A healthy linear and positive correlation is visible between all pairs of these metrics, it means that trying to improve one usually will not come at the expense of others. 
 \begin{figure}
