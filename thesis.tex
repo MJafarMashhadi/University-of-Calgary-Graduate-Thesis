@@ -90,6 +90,13 @@
 \usepackage{lscape}
 \usepackage{rotating}
 
+\usepackage{soul} % Only for draft, provideds \hl
+
+\newtcolorbox{rqanswer}{%
+    colback=gray!30,
+    colframe=gray!45,
+}
+
 
 % If you want memoir to produce endnotes, turn them on here
 
@@ -130,11 +137,17 @@
 \mainmatter
 
 
-\include{4_fuzzy}
+\input{3_Introduction}
+\input{4_Motivation}
+\input{5_Background}
+\input{6_Approach}
+\input{7_Experiment}
+\input{8_Conclusion}
 
-\include{5_ASE}
 
-\include{6_Replication}
+% \include{4_fuzzy}
+
+% \include{6_Replication}
 
 \include{7_conclusion}
 
@@ -142,8 +155,8 @@
 % glossary, bibiliography, and the like.
 
 \backmatter
-
-\include{8_backmatter}
+% \printpagenotes
+\bibliography{thesis}
 
 % The appendix contains material that would clutter up the main text,
 % such as program code, survey instruments, or interview transcripts.

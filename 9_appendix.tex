@@ -5,7 +5,7 @@
 % multiple appendices, use \chapter and a descriptive title,
 % e.g., \chapter{Questionnaires}
 
-\chapter{Appendix~A: Pprz tester documentations}\label{appendixa}
+\chapter{Appendix~A: PprzTester documentations}\label{appendixa}
 
 UML Diagrams and tables for the developed tools: flight data recorder, automated test generator, and automated test executor.
 \begin{table}
@@ -22,7 +22,7 @@ UML Diagrams and tables for the developed tools: flight data recorder, automated
 %
 PPRZ\_MODE &
   Aircraft &
-  Pprz Tester listens to this message to find out when the auto pilot software is booted up and is ready for flight. It also contains the state of active PID loops that is used to determine the internal state of the auto pilot. \\
+  PprzTester listens to this message to find out when the auto pilot software is booted up and is ready for flight. It also contains the state of active PID loops that is used to determine the internal state of the auto pilot. \\
 NAVIGATION &
   Aircraft &
   Contains the current active flight plan block as well as number of full circles the aircraft has completed among other data \\
@@ -33,20 +33,20 @@ CIRCLE\_STATUS &
   Aircraft &
   Contains detailed information about aircraft status while it is in circling mode. Overlaps with NAVIGATION to some extent \\
 WAYPOINT\_MOVED & Server      & Sent in case any waypoints are relocated                                \\
-MOVE\_WAYPOINT  & Pprz Tester & To update waypoint locations                                            \\
+MOVE\_WAYPOINT  & PprzTester & To update waypoint locations                                            \\
 NEW\_AIRCRAFT &
   Server &
   Event of a new aircraft coming online in the network. It does not necessarily mean that it is ready for flight, should listen for PPRZ\_MODE as well \\
-AIRCRAFTS\_REQ  & Pprz Tester & Request to get the list of active aircraft                              \\
+AIRCRAFTS\_REQ  & PprzTester & Request to get the list of active aircraft                              \\
 AIRCRAFTS       & Server      & Response to the above request                                           \\
-CONFIG\_REQ     & Pprz Tester & Request for an aircraft's configs                                       \\
+CONFIG\_REQ     & PprzTester & Request for an aircraft's configs                                       \\
 CONFIG &
   Server &
   Response to the above request containing  its name, flight plan, DL settings, air frame parameters, etc. \\
-DL\_SETTING     & Pprz Tester & Update a DL setting value. It is used to launch the aircraft in the air \\
-JUMP\_TO\_BLOCK & Pprz Tester & Commands the aircraft to change active block to another block defined in the flight plan  \\ \bottomrule
+DL\_SETTING     & PprzTester & Update a DL setting value. It is used to launch the aircraft in the air \\
+JUMP\_TO\_BLOCK & PprzTester & Commands the aircraft to change active block to another block defined in the flight plan  \\ \bottomrule
 \end{longtable}
-\caption{Subset of all available messages in Paparazzi that are used in pprz tester tool}
+\caption{Subset of all available messages in Paparazzi that are used in PprzTester tool}
 \label{tab:pprz_messages}
 \end{table}
 

@@ -1,0 +1,99 @@
+
+\section{The Study Objectives}
+The goals of this study is to evaluate our proposed method in terms of change point detection and state inference, in comparison to traditional techniques in this domain.  Therefore, our research questions are as follows:
+
+\subsection{RQ 1) How does our proposed technique perform in detecting the state changes?}
+The goal of this RQ is to see how close the predicted state-change times are to the real state-change times.  In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
+To answer this question, we compare the performance of our proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
+
+
+\subsection{RQ 2) How well does our proposed technique predict the internal state of the system?}
+In RQ1, we are only interested in detecting the time a state-change happens (binary classification), but here in RQ2, we extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).  
+%We need to evaluate how similar is our model's prediction about the internal state of the system at each time $t$ to the actual state.
+Therefore, to answer this RQ, we change the labels from a Boolean (changed/not changed) to the actual collected labels. 
+
+\subsection{RQ 3) Can the results be replicated with regards to state change point detection (RQ1) on Paparazzi auto pilot?}
+\hl{In the first two research question, I evaluate my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to confirm the results and idea furthermore, a replication on a similar software is quite helpful. 
+In this RQ and the next one I want to explore how my method performs on Paparazzi, an open source equivalent to MP\footnote{MicroPilot}'s auto pilot.}
+
+% I chose Paparazzi auto pilot as an open source alternative to MP's auto-pilot for replication. 
+Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
+A comparison about how Paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
+In addition to that, after doing a preliminary study, I found out that Paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
+Furthermore, Paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
+
+
+
+\subsection{RQ 4) Can the results of internal state prediction task (RQ2) be replicated on Paparazzi auto pilot?}
+\hl{I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi the number of classes are smaller. 
+There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.}
+
+\subsection{RQ 5) How will hyper-parameter tuning affect the results?}
+\hl{In RQs 1 and 2 the hyper-parameters of the neural network model are tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameters such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication (RQs 3 and 4) I opted for existing automated ways for finding better hyper-parameters.}
+
+I created a model creation and evaluation pipeline that takes hyper-parameters as the input and outputs the model performance scores on test data as its output. The hyper-parameters that I searched over are:
+\begin{itemize}
+    \item Number of GRU cells in the recurrent section: between 32 and 256
+    \item Number of convolutional filters in each layer: between 16 to 64
+    \item The size of convolution kernels and the number of convolutional layers: between 3 to 5 layers with increasing kernel size
+    \item The learning rate of Adam optimizer: from $1\times 10^{-4}$ to $3\times10^{-3}$
+\end{itemize}
+Please refer to figure~\ref{fig:model_arch} for a recap on these hyper-parameters. 
+I performed an exhaustive grid search over these parameters, using Tensor Board for keeping track of the metrics and finding the right balance.
+Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-whitepaper} that provides great insight for better training TensorFlow models.
+
+
+Note that in our empirical study to evaluate our approach, we use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All we provide here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though we use the source code to label the training set, we still look at the test set as a black-box and don't leak any information.
+
+\section{Evaluation Metrics}
+\subsection{CPD Performance Metrics (RQs 1,3, and 5)} \label{sec:CPD_metrics}
+%In CPD-natured tasks 
+Given that in RQ1 there is an inherent class imbalance (there are far more points where a change has \textit{not} happened compared to points with a state-change positive label), we avoid using accuracy and report both precision and recall. %, so the sheer number of true negatives makes metrics such as accuracy almost useless. A trivial model can always output 0 (no change) and have an accuracy of 99\% on a input of length 1000 with 10 true change points.To address this problem, metrics such as precision and recall that do not account for true negatives are used in the literature \cite{Truong2018ChangePointSurvey, Lee2018TimeSeriesSegmentation}.
+However, the original precision/recall metrics require some modifications due to the difficulty of predicting the exact time stamp that a state-change happened. To handle this, similar to related work \cite{Truong2018ChangePointSurvey}, we use a tolerance margin $\tau$. If a detected state-change ($\in\hat{CP}_k$) is within $\pm\tau$ of a true change ($\in{CP}_k$) , we call the prediction a True Positive, otherwise it is a False Positive. Similar adjustment to definition is applied for True Negative and False Negative. 
+Formally speaking, we define predicted change points for $k$-th sample as:
+\begin{equation} \label{eq:cp_hat}
+\hat{CP}_k = \big\{(t, \hat{o}_t)\: |\: \hat{o}_t \neq \hat{o}_{t-1} \big\}
+\end{equation}
+Please note that in \eqref{eq:cp_hat}, $\hat{o}_t$ refers to $t$-th element of output vector $\hat{O}$, as previously defined in \eqref{eq:model_as_function}. Based on that the confusion matrix elements are calculated as:
+\begin{equation} \label{eq:metrics}
+\begin{split}
+TP ={}&{}\Big|\big\{ (\hat{t}, \hat{s}_t) \in \hat{CP}_k \;\big|\; \exists\: (t, s_t) \in CP_k \;\text{s.t.}\; |t - \hat{t}| < \tau\big\}\Big| \\
+FP ={}&{}\Big|\big\{ (\hat{t}, \hat{s}_t) \in \hat{CP}_k \;\big|\; \nexists\: (t, s_t) \in CP_k \;\text{s.t.}\; |t - \hat{t}| < \tau\big\}\Big| \\
+FN ={}&{}\Big|\big\{ (t, s_t) \in CP_k \;\big|\; \nexists\: (\hat{t}, \hat{s}_t) \in \hat{CP}_k \;\text{s.t.}\; |t - \hat{t}| < \tau\big\}\Big| 
+\end{split}
+\end{equation}
+With these in mind, we measure precision, recall, and their harmonic mean F1 Score with three values for $\tau$: 1, 3, and 5 seconds. The smaller the tolerance is the stricter the definitions become and the lower the numbers are. 
+
+\subsection{State detection metrics (RQs 2, 4, and 5)}
+% To answer RQ2, we again use the modified confusion matrix (using the tolerance margin $\tau$), but  
+In RQ2, we have a multi-class classification problem and thus multiple precisions/recalls will be calculated, one per class (state label). We then report the mean value across all classes. 
+\begin{equation}
+\begin{split}
+P_s ={}&{}\big\{\hat{s}_t \in \hat{O}_k \;\big|\; \hat{s}_t = s\big\} \\
+T_s ={}&{}\big\{s_t \in O_k \;\big|\; s_t = s\big\} \\
+TP_s ={}&{}\big\{\hat{s}_t \in P_s \;\big|\; \hat{s}_t = s_t \in O_k\big\} \\
+\end{split}
+\end{equation}
+$$Precision =\frac{1}{N_s}\sum_{s=1}^{N_s} \frac{|TP_s|}{|P_s|} \quad,\quad Recall = \frac{1}{N_s}\sum_{s=1}^{N_s} \frac{|TP_s|}{|T_s|}$$
+
+\section{Comparison Baselines} 
+\subsection{CPD baselines (RQs 1 and 3)} \label{sec:CPD_baseline}
+We used `ruptures' library developed by authors of a recent CPD survey study \cite{Truong2018ChangePointSurvey}. It provides a modular framework for applying several CPD algorithms to univariate and multivariate data. % We did not apply the methods that required knowing the number of change points a priori. 
+As mentioned earlier two main elements of a CPD algorithm in their survey are the search method and the cost function.
+
+I used Pelt \cite{killick2012optimal} as the most efficient exact search method. As examples of approximate search methods, we applied bottom-up segmentation and window-based methods using a default window size of 100 \cite{keogh2001online}.
+However, after trying to run Pelt algorithm \hl{on MicroPilot's data}, we realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so we only use the bottom-up and the window-based segmentation methods, as our CPD baselines in RQ1.
+\hl{Fortunately, for RQ 3 with smaller data set size of Papaarazzi, it was feasible (though still quite time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.}
+
+For the cost function, I tried ``Least Absolute Deviation'', ``Least Squared Deviation'', ``Gaussian Process Change'', ``Kernelized Mean Change'', ``Linear Model Change'', ``Rank-based Cost Function'', and ``Auto-regressive model change'' as defined in the library. Their parameters were left as default.
+To optimize the number of change points a penalty value (linearly proportionate to the number of detected change points) is added to the cost function, which limits the number of detected change points, the higher the penalty the fewer reported change points. We tried three different ratios (100, 500, and 1000) for the penalty.
+
+\subsection{Multi-class classification baselines (RQs 2 and 4)}
+We used a sliding window of width $w$ over the 10 time-series values and then flattened it to make a vector of size $10w$ as the features. For the labels, we used one-hot encoded state of the system.
+The window sizes were chosen as same as the sizes of convolutional layers' kernel sizes (3, 5, 10, 15, 20), to make the baselines better comparable with our method. 
+We used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''. For ``maximum number of features'' we tried no limits, $\sqrt{10w}$, and $\log_2{10w}$. To find best ``maximum depth'' we first tried having no upper bound and observed how deep the tree grows; then we tried multiple numbers less than the maximum, until a drop in performance was observed. 
+
+\hl{In RQ4, pretty similar to RQ2,} I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MP's case (RQ2), with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any, as will be seen in the RQ2's answer later on), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms to answer RQ4. 
+
+
+
