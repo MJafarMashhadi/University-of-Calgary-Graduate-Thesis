@@ -200,6 +200,7 @@
 \setlength{\cftbeforechapterskip}{3pt plus 0pt}
 \renewcommand{\cftchapterleader}{\normalfont\cftdotfill{\cftsectiondotsep}}
 \renewcommand{\contentsname}{Table of Contents}
+\setcounter{tocdepth}{5}
 
 % we need toc, lof, lot to begin on a new page
 

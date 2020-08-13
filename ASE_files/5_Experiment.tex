@@ -1,16 +1,16 @@
-\section{Empirical Evaluation} \label{sec:experiment}
+\chapter{Empirical Evaluation} \label{sec:experiment}
 %In this section we reiterate the problem, provide more detail about the experiment and evaluation process, and describe the system and the data we collected from it to perform the study.
 In this section, we explain our empirical evaluation of the proposed approach through a case study.
 
-\subsection{The Study Objectives}
+\section{The Study Objectives}
 The goals of this study is to evaluate our proposed method in terms of change point detection and state inference, in comparison to traditional techniques in this domain.  Therefore, our research questions are as follows:
 
-\subsubsection{RQ 1) How does our proposed technique perform in detecting the state changes?}
+\subsection{RQ 1) How does our proposed technique perform in detecting the state changes?}
 The goal of this RQ is to see how close the predicted state-change times are to the real state-change times.  In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
 To answer this question, we compare the performance of our proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
 
 
-\subsubsection{RQ 2) How well does our proposed technique predict the internal state of the system?}
+\subsection{RQ 2) How well does our proposed technique predict the internal state of the system?}
 In RQ1, we are only interested in detecting the time a state-change happens (binary classification), but here in RQ2, we extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).  
 %We need to evaluate how similar is our model's prediction about the internal state of the system at each time $t$ to the actual state.
 Therefore, to answer this RQ, we change the labels from a Boolean (changed/not changed) to the actual collected labels. 
@@ -18,8 +18,8 @@ Therefore, to answer this RQ, we change the labels from a Boolean (changed/not c
 
 Note that for both RQs, in our empirical study, to evaluate our approach, we use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All we provide here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though we use the source code to label the training set, we still look at the test set as a black-box and don't leak any information.
 
-\subsection{Evaluation Metrics}
-\subsubsection{RQ1 (CPD) Performance Metrics} \label{sec:CPD_metrics}
+\section{Evaluation Metrics}
+\subsection{RQ1 (CPD) Performance Metrics} \label{sec:CPD_metrics}
 %In CPD-natured tasks 
 Given that in RQ1 there is an inherent class imbalance (there are far more points where a change has \textit{not} happened compared to points with a state-change positive label), we avoid using accuracy and report both precision and recall. %, so the sheer number of true negatives makes metrics such as accuracy almost useless. A trivial model can always output 0 (no change) and have an accuracy of 99\% on a input of length 1000 with 10 true change points.To address this problem, metrics such as precision and recall that do not account for true negatives are used in the literature \cite{Truong2018ChangePointSurvey, Lee2018TimeSeriesSegmentation}.
 However, the original precision/recall metrics require some modifications due to the difficulty of predicting the exact time stamp that a state-change happened. To handle this, similar to related work \cite{Truong2018ChangePointSurvey}, we use a tolerance margin $\tau$. If a detected state-change ($\in\hat{CP}_k$) is within $\pm\tau$ of a true change ($\in{CP}_k$) , we call the prediction a True Positive, otherwise it is a False Positive. Similar adjustment to definition is applied for True Negative and False Negative. 
@@ -37,7 +37,7 @@ FN ={}&{}\Big|\big\{ (t, s_t) \in CP_k \;\big|\; \nexists\: (\hat{t}, \hat{s}_t)
 \end{equation}
 With these in mind, we measure precision, recall, and their harmonic mean F1 Score with three values for $\tau$: 1, 3, and 5 seconds. The smaller the tolerance is the stricter the definitions become and the lower the numbers are. 
 
-\subsubsection{RQ2 (State detection) metrics}
+\subsection{RQ2 (State detection) metrics}
 % To answer RQ2, we again use the modified confusion matrix (using the tolerance margin $\tau$), but  
 In RQ2, we have a multi-class classification problem and thus multiple precisions/recalls will be calculated, one per class (state label). We then report the mean value across all classes. 
 \begin{equation}
@@ -49,8 +49,8 @@ TP_s ={}&{}\big\{\hat{s}_t \in P_s \;\big|\; \hat{s}_t = s_t \in O_k\big\} \\
 \end{equation}
 $$Precision =\frac{1}{N_s}\sum_{s=1}^{N_s} \frac{|TP_s|}{|P_s|} \quad,\quad Recall = \frac{1}{N_s}\sum_{s=1}^{N_s} \frac{|TP_s|}{|T_s|}$$
 
-\subsection{Comparison Baselines} 
-\subsubsection{RQ1 (CPD) baselines} \label{sec:CPD_baseline}
+\section{Comparison Baselines} 
+\subsection{RQ1 (CPD) baselines} \label{sec:CPD_baseline}
 We used `ruptures' library developed by authors of a recent CPD survey study \cite{Truong2018ChangePointSurvey}. It provides a modular framework for applying several CPD algorithms to univariate and multivariate data. % We did not apply the methods that required knowing the number of change points a priori. 
 As mentioned earlier two main elements of a CPD algorithm in their survey are the search method and the cost function.
 
@@ -61,12 +61,12 @@ For the cost function, we tried ``Least Absolute Deviation'', ``Least Squared De
 To optimize the number of change points a penalty value (linearly proportionate to the number of detected change points) is added to the cost function, which limits the number of detected change points, the higher the penalty the fewer reported change points. We tried three different ratios (100, 500, and 1000) for the penalty.
 
 
-\subsubsection{RQ2 (Multi-class classification) baselines}
+\subsection{RQ2 (Multi-class classification) baselines}
 We used a sliding window of width $w$ over the 10 time-series values and then flattened it to make a vector of size $10w$ as the features. For the labels, we used one-hot encoded state of the system.
 The window sizes were chosen as same as the sizes of convolutional layers' kernel sizes (3, 5, 10, 15, 20), to make the baselines better comparable with our method. 
 We used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''. For ``maximum number of features'' we tried no limits, $\sqrt{10w}$, and $\log_2{10w}$. To find best ``maximum depth'' we first tried having no upper bound and observed how deep the tree grows; then we tried multiple numbers less than the maximum, until a drop in performance was observed. 
 
-\subsection{Dataset and the Data Collection Process}\label{sec:mp_data_collection_process}
+\section{Dataset and the Data Collection Process}\label{sec:mp_data_collection_process}
 We ran 948 existing test cases from MicroPilot's test repository using a software simulator\footnote{It is developed by MicroPilot and provides an accurate simulation of the aerodynamic forces on the aircraft, the physical environment irregularities (e.g. unexpected wind gusts), and noises in sensor readings} and collected the logged flight data, over time. The test cases are system-level tests. Each test case includes a flight scenario for various supported aircraft. A flight scenario goes through different phases in a flight such as ``take off'', ``climb'', ``cruise'', ``hitting way points'', and ``landing''.
 We sampled input and output values (listed in Table~\ref{tab:in_outs}) at 5 Hz rate, which is the rate that AutoPilot reads the sensor values and performs the calculations required to update its output values at.
 % The AutoPilot inputs and outputs, we collect in this study, are listed in Table~\ref{tab:in_outs}.
@@ -118,15 +118,15 @@ The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for train
 % To work it backwards we capture the input/outputs (the UAV's relevant signals) over time and examine their correlations, i.e. how changes in one of them results in changes in another. When the state of the system changes these relations may change. So if we can capture what the relations are and when they change we can determine the state in which the system is in. 
 % Of course pinpointing the exact moment when the changes happen is difficult; It is also impacted by the sampling time resolution so the inferred states and the change points are approximations.
 
-\subsection{Experiment Execution Environment} \label{sec:machines_config}
+\section{Experiment Execution Environment} \label{sec:machines_config}
 Training and evaluation of the deep learning model was done on a single node running Ubuntu 18.04 LTS (Linux 5.3.0) equipped with Intel Core i7-9700 CPU, 32 gigabytes of main memory, and 8 gigabytes of GPU memory on a NVIDIA GeForce RTX 2080 graphics card.
 The code was implemented using keras on TensorFlow 2.0.
 
 The baseline models could not fit on that machine, so two nodes on Compute Canada's Beluga cluster, one with 6 CPUs and 75GiB of memory and one with 16 CPUs and 64GiB of memory, were used to train and evaluate them.
 
-\subsection{Results} \label{sec:results}
+\section{Results} \label{sec:results}
 In this section, we present the results of the experiments and answer the two research questions. 
-\subsubsection{RQ1 Results: CPD Performance}
+\subsection{RQ1 Results: CPD Performance}
 \begin{sidewaystable} 
 % \begin{table*}
 \caption{Change point detection precision, recall, and F1-score calculated for the baseline methods using three values of tolerance ($\tau$) for multiple configurations.}
@@ -201,7 +201,7 @@ So to answer RQ1, our method has shown $(66.18/32.73)-1=102.20\%$ improvement in
 Our model, which requires less memory compared to traditional CPD algorithms, improved their best performance by up to 102\%, measured by F1 score, in less execution time.
 \end{rqanswer}
 
-\subsubsection{RQ2 Results: Multi-class Classification Performance}
+\subsection{RQ2 Results: Multi-class Classification Performance}
 To answer RQ2, we first compare different configurations of the baseline methods using the F1 score (harmonic mean of precision and recall) on the test data. The results are presented in Table~\ref{tab:rq2-1-results}.
 
 \begin{table}
@@ -260,7 +260,7 @@ Our model, which requires less than half as many CPUs and 70\% as much memory co
 
 
 
-\subsection{Limitations and Threats to Validity} \label{sec:threats_to_validity}
+\section{Limitations and Threats to Validity} \label{sec:threats_to_validity}
 One of the limitations of our approach is that it might miss an input-output invariant correlation. It can happen when the input remains constant or it changes too little to reveal its relation with certain outputs. 
 %In addition, as mentioned before, our approach relies on changes in signals. 
 We assume that during the data collection, sampling happens in regular intervals; our approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.

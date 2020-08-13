@@ -1,9 +1,9 @@
-\section{Background} \label{sec:background}
+\chapter{Background and Related Work} \label{sec:background}
 Unlike the numerous techniques in the literature for behavior model inference \cite{lang1998results, walkinshaw2016inferring, Lo2007Mining, dallmeier2006mining} which abstract a set of execution traces into states, our approach requires consuming a multivariate time-series and detect the state changes across time and predict the exact state labels. Thus, in this section, we briefly explain the two main sets of relevant existing techniques for ``Change Point Detection'' and ``State Prediction'' in time-series that can serve as background for our approach.  
 % \subsection{State Model Inference}
 
 
-\subsection{Change Point Detection}
+\section{Change Point Detection}
 A fundamental tool in time-series data analysis is Change Point Detection (CPD). It refers to the task of finding points of abrupt change in the underlying statistical model or its parameters that could be a result of a state transition \cite{aminikhanghahi2017survey}.
 %An auto-pilot software detects changes in the inputs and makes adjustments to its outputs in order to hold some invariants (predefined rules). 
 %For example, if the auto-pilot is in the ``hold altitude'' mode, it monitors the altimeter's readings and when it goes out of the acceptable range, proportionate adjustments to the throttle or the nose pitch will be made to get it back to the desired altitude. This is basically how a typical feedback loop controller, such as PID or its variations, work \cite{feedbacksystemsBook}.
@@ -21,7 +21,7 @@ In the context of this thesis, we need a CPD method with no assumption on data d
 Therefore, we propose a novel CPD techniques that is based on Hybrid DNNs and compare it with several existing CPD techniques as our baselines, which are explained in details in section~\ref{sec:experiment}.   
 
 
-\subsection{Convolutional and Recurrent Neural Networks}
+\section{Convolutional and Recurrent Neural Networks}
 In both our problems (CPD and state classification), we can see that the changes in signals are more informative than their absolute values. Therefore, applying a derivation operation (or more generally a gradient) seems like necessary, at some point in the processing. Farid and Simoncelli listed some discrete derivation kernels in their study \cite{Farid2004}, but to have a more generalized and more flexible notion of discrete derivatives, convolutions seems like a better choice to apply. 
 Nowadays, applying convolutional filters on signals is pretty much a standard process in signal processing studies that leverage deep learning \cite{morales2016deep, zeng2014convolutional, yang2015deep}. Convolutional neural networks (CNNs) can learn to find features in a multidimensional input while being less sensitive to the exact location of the feature in the input \cite{lecun2015deep}. In the forward pass of a convolutional layer, multiple filters are applied to the input. %Each convolutional layer can learn and apply multiple filters, 
 It means that in a trained neural net, multiple features can be leaned in one single convolutional layer.
@@ -29,4 +29,48 @@ It means that in a trained neural net, multiple features can be leaned in one si
 Recurrent neural networks (RNN) have shown great performance in analysing sequential data such as machine translation, time-series prediction, and time-series classification \cite{cho2014learning, zhang2000predicting, wang2017time, murad2017deep, yang2015deep, Ordonez2016}. RNNs can capture long-term temporal dependencies which is quite useful for solving our problem. \cite{Che2018} For example, they might learn that ``climb'' state in a UAV auto-pilot usually follows ``take off''. Therefore, while it is outputting ``take off'' it anticipates what the next state will probably be and as soon as its input features start shifting, it detects the onset of a state change. It will help the model to better predict the system's behavior and be quicker to detect state changes in a way that could hardly be achieved with classic methods.
 Therefore, in this thesis, we combine the CNNs and RNNs to create what is known as a hybrid deep neural network \cite{wang2017time} to use for both CPD and state classification problems, in our context.  
 % http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture12.pdf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Time Series Change Point Detection}
+Change point detection is a well-studied subject due to its wide range of applications \cite{basseville1993detection}.
+Several statistical and algorithmic methods have been tried to tackle several variations of this problem \cite{chen2011parametric, hasan2014information, hsu1982bayesian, lee2017implicit, oh2002analyzing, ramos2016anomalies, chowdhury2012bayesian, reeves2007review, rosenfield2010change, wang2011non, xie2013sequential, yamanishi2004line, Lavielle1999}. 
+The models vary based on: whether the whole data is available at once (offline) or it is being generated on the go (online), whether there are statistical assumptions about the data distribution \cite{takeuchi2006unifying, ide2007change}, whether the number of change points is known \cite{Truong2018ChangePointSurvey}, or whether we are dealing with a univariate or a multivariate time series, etc. 
+
+Ives and Dakos utilized locally linear models and used statistical significance test to determine at which point the changes in model parameters are large enough to signal a change in the state \cite{Ives2012}. Blythe et al., used subspace analysis to reduce data dimensionality to keep the most non-stationary dimensions. This process helps detecting change points more effectively \cite{Blythe2012}.
+Several techniques have used penalty functions to find models that best fit each segment of the signal \cite{Lavielle1999, lavielle2005using, keshavarz2018optimal, pein2017heterogeneous, khan2019deep}. 
+Desobry et al., and Hido et al., proposed methods to indirectly use classifiers such as SVM to detect change points \cite{desobry2005online, hido2008unsupervised, Khan2019thesis}. We applied their approach on our data in early stages of the research but it could not perform as others.
+Lee et al., trained deep auto encoder networks that learns latent features in the data to detect change points \cite{Lee2018TimeSeriesSegmentation}. Ebrahimzadeh et al., proposed what they call a pyramid recurrent neural network architecture, which is resilient to missing to detect patterns that are warped in time \cite{Ebrahimzadeh2019}.
+
+There are also a family of methods based on Bayesian models that focus on finding changes in parameters of underlying distributions of the data \cite{Lee2018TimeSeriesSegmentation, adams2007bayesian, bai1997estimation, barry1993bayesian, erdman2008fast, ray2002bayesian}. 
+
+Making assumptions about the data such as its distribution or the distribution of change points across the time and relying on basic statistical properties are the two major short comings of traditional CPD methods \cite{Lee2018TimeSeriesSegmentation}, which our proposed approach has overcome.
+
+
+\section{State Model Inference}
+Roughly speaking, dynamic EFSM\footnote{Extended Finite State Machines, are special kind of state machines that have conditional expressions called ``transition guards'' on their transitions \cite{lorenzoli2008automatic}. A state transition can only happen if the transition guard evaluates as true.} inference algorithms generally take a trace of ``events'' (along with perhaps some variable values) as their input \cite{walkinshaw2016inferring} to infer a generalized finite state machine. They use the events to find the state transitions and the values for detecting invariants and generating the guard conditions on the transitions. 
+k Tails, Gk Tail, EDSM, and MINT are examples of these algorithms, each improving upon the previous one \cite{biermann1972synthesis, lorenzoli2008automatic, lang1998results, walkinshaw2016inferring}.  % Merge paragraphs together
+
+Walkinshaw et al., proposed an algorithm and developed a tool for state model inference \cite{walkinshaw2016inferring}. Their work is based on previous endeavors on state merging algorithms such as gk-tail and k-tails \cite{lorenzoli2008automatic, biermann1972synthesis}. These methods require an execution trace of the program consisting of a list of ``events'' that occurred during program execution, such as function calls, system calls, transmitted network data, etc. Krka et al., performed an empirical study on 4 different categories of model inference algorithms to figure out what makes each group of methods more effective \cite{krka2014automatic}. Beschastnikh et al., proposed a method to mine invariants from partially ordered logs from concurrent/distributed systems \cite{beschastnikh2011mining}. Invariants can be used to augment state models \cite{beschastnikh2014inferring, beschastnikh2011leveraging}. Groz et al., use machine learning to heuristically infer state machine models of a un-resettable black-box system \cite{groz2018revisiting}, however a significant difference between our method and theirs is that their method still relies on discrete events (such as HTTP request and responses) while our method does not assume that the input and outputs contain any kind of ``events'' happening at certain times. Our method aims to search for such events as change points in a continuous stream of data as time series. %Papadopoulos et al., proposed an active learning method (with repeated interaction with a user) to model a black-box system and generate test data \cite{Papadopoulos2015}.
+
+
+\section{Using Deep Learning on Time Series Data} \label{sec:related_work_har}
+Human activity recognition (HAR) is a well researched task which is quite relevant to the problem of black-box model inference. In HAR, just like in our context, a multivariate time series data is created from various sensors on a human body. The goal is to figure our what was the activity that human was performing in different time intervals. The sensors can be body worn accelerometers, or more generic sensors such as the ones found in a smart watch or a smartphone. 
+Murad et al., \cite{murad2017deep} have shown deep RNNs outperform fully convolutional networks and deep belief networks in HAR task.
+Hybrid models are the combination of some deep architectures \cite{wang2019deep}, such as a CNN + RNN or a CNN + a fully connected net. Morales et al., have shown the former preforms better than the latter in HAR \cite{morales2016deep}. Yao et al., \cite{deepsense} introduced a CNN + RNN architecture that outperforms the state of the art both in classification and in regression tasks. Similar results have been shown in other works such as \cite{Ordonez2016, singh2017transforming, zheng2016exploiting}, as well.
+
+Another related topic here is the time series classification. However, time series classification techniques often output only one label classifying entire data, thus not applicable in our context. What is more related to our problem is called ``segmentation'', using the computer vision terminology (not be confused with time series segmentation, such as \cite{lemire2007better}). U-net is one of the promising auto-encoder architectures for image segmentation \cite{ronneberger2015u}. Perslev et al., developed a similar idea for time-series to capture long-term dependencies and called it U-time \cite{perslev2019u}. It is fully convolutional and does not use memory cells (recurrent cells). A fully convolutional model can perform very well, since convolutions operate locally and image segments are large chunks of pixels in the 2D space and capturing local features using neighbouring pixels is quite useful. However, it cannot necessarily be as powerful on a more limited 1D data of time-series with different characteristics from an image.  This study's design is optimized for the task of sleep phase detection, which does not have very clear boundaries between states and also the state changes are not very frequent. Therefore, the same method does not necessarily generalize to tasks such as ours, where we cannot make assumptions about frequency of state changes.
+
 

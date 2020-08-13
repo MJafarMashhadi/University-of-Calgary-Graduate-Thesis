@@ -1,7 +1,7 @@
-\section{Hybrid Neural Network for State Inference} \label{sec:approach}
+\chapter{Hybrid Neural Network for State Inference} \label{sec:approach}
 In this section, we describe our proposed deep learning approach for the black-box state inference task, in details. 
 
-\subsection{The Model Architecture}
+\section{The Model Architecture}
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{ASE_files/GeneralConvolutionalNet.pdf}
@@ -33,7 +33,7 @@ In terms of loss function to optimize in the training process, a good choice is 
 
 
 %We aimed to infer high level states of a black-box system using a machine learning model that observes the system's behavior. 
-\subsection{Data Encoding}
+\section{Data Encoding}
 % To collect data we run the system $N$ times using $N$ existing test cases and record the input/output values. The recorded data from $k$-th run, $T_k$, forms a discrete multivariate time series data.
 The input/output values of the black-box system create a multivariate time-series ($T_k$), which can be defined as a set of $n$ univariate time series ($V_i$) of the same length $l_k$. Each $V_i$ corresponds to the recorded values for one of the inputs or outputs of the system:
 \begin{equation} \label{eq:T_k}
@@ -59,7 +59,7 @@ So in summary, the dataset consists of $N$ pairs of the I/O values as features a
 % Each example in dataset contains one whole test case. The output labels were one-hot encoded to match the model output shape.
 %It is worth mentioning that in section~\ref{mp_data_collection} we explain what we did to keep the variety of the collected data (and hence its quality) high. 
 
-\subsubsection{Data Preprocessing}
+\subsection{Data Preprocessing}
 %\subsubsection{Inputs and Labels} %\label{data_set_properties}
 Before being fed into the model $\mathcal{F}$ (as defined below), the inputs and labels need some preprocessing. 
 \begin{equation}\label{eq:model_F}
@@ -94,7 +94,7 @@ If there are more than two possible states ($N_s > 2$), $O$ needs to be one-hot 
 
 
 
-\subsection{The Model Implementation} \label{sec:architecture_detail}
+\section{The Model Implementation} \label{sec:architecture_detail}
 The first few layers of the model are convolutional layers. We have used 5 convolutional layers with 64 filters each and a growing kernel size.
 The intuition behind this design is that starting with a small kernel guides the training in a way that the first layers learn simpler more local features that fits in their window (kernel size).
 Kernel sizes started with 3 since it is a common number in the literature for kernel sizes, then we used multiples of 5 from 5 to 20. 
