@@ -135,9 +135,20 @@ Our model, which requires less than half as many CPUs and 70\% as much memory co
 \subsection{RQ3 Results: CPD Performance on Paparazzi (replication)}
 \hl{NEW SECTION}
 The results of applying baseline algorithms on Paparazzi data set can be seen in table~\ref{tab:cpd_paparazzi}.
-The numbers are quite varied, there are scores worse then 1\% as well as some 100\% recall scores. The 100\% recalls are accompanied with a low precision; achieving that is not difficult. A method that outputs every point as a change-point will get similar results. The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for MP's study. As a matter of fact, in this study getting the results for Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23800 experiments. 
+The numbers are quite varied, for example there are scores worse then 1\% as well as some 100\% recall scores. 
+The 100\% recalls are accompanied with a low precision; achieving that is not difficult. A method that outputs every point as a change-point will get similar results. 
+The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for the first two RQs. 
+As a matter of fact, running Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23800 experiments. 
 
-Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in the MP study (See the RQ1 results summary box and the paragraph above that in section~\ref{sec:results}). However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. It can be due to the fact that the new data set is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. To reiterate, Paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 sample tests in MP's data set. It is worth mentioning that both in the original study on MP's data and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
+Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in RQ1. (see the RQ1 results summary box and the paragraph above that). % in section~\ref{sec:results}). 
+However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. 
+It can be due to the fact that the new data set is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. 
+As a reminder: Paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 in MP's data set. 
+It is worth mentioning that both in the first two RQs and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
+
+\begin{rqanswer}
+Here I summarize the answer.
+\end{rqanswer}
 
 \begin{sidewaystable}
     \centering
@@ -199,11 +210,12 @@ Comparing the baseline results with the neural network model's results in the la
 \subsection{RQ4 Results: Multi-class Classification Performance on Paparazzi (replication)}
 \hl{NEW SECTION}
 In table~\ref{tab:rq2-1-results-replicate} the comparative results of the aforementioned algorithms with my method is presented. 
-To compare with the original study, we can see that in all but two settings limiting the maximum number of features did not help improve the model. Another similar observation is that the scores do not vary very much with changing the window size, and decision trees almost universally outperform linear classifiers.
-The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% which was 32-39\% in the original study, for decision trees it is in 67-68\% here and it was 73-77\% in the original study. 
+To compare with the MP's case, we can see that in all but two settings limiting the maximum number of features did not help improve the model. 
+Another similar observation is that the scores do not vary much with changing the window size, and decision trees almost universally outperform linear classifiers.
+The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% range, which was 32-39\% in RQ2. For decision trees it is in 67-68\% range here while it is in 73-77\% range in RQ 2. 
 
 The deep learning model's performance measures (on validation data) can be found in the last row of the table. 
-You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in the original study was 16.83\%. This, again confirms the reproducibility of the results from 
+You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in RQ2 is 16.83\%, not very different from this. This, again confirms the reproducibility of the results in the first two RQs.
 
 \begin{table}
 \caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, we only show the results of the best performing model in each group.}
@@ -239,9 +251,14 @@ They say a picture is worth a thousand words\footnote{missing citation}, to bett
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{6_files/states_chart.png}
-    \caption{The states are color coded and each rectangle shows one test, only the first 1000 samples (200 seconds) are shown for more clarity. The same as figure~\ref{fig:test_0} in the previous chapter, the top half of each rectangle shows the model's output and the bottom half shows the true labels.}
+    \caption{The states are color coded and each rectangle shows one test, only the first 1000 samples (200 seconds) are shown for more clarity. The same as figure~\ref{fig:test_0} in, the top half of each rectangle shows the model's output and the bottom half shows the true labels.}
     \label{fig:paparazzi_predictions}
 \end{figure}
+
+
+\begin{rqanswer}
+Here I summarize the answer.
+\end{rqanswer}
 
 \subsection{RQ5 Results: Hyper-parameter Tuning}
 \hl{NEW SECTION}
@@ -277,7 +294,9 @@ The green highlighted line is the best configuration tried, with the highest are
 
 I used these hyper-parameters to train the best model. The scores used in the research question 3 and 4 are the evaluation results of this model on the [previously unseen] validation data. The stopping criteria on training the model was for the validation loss to plateau, with a `patience' of 15 epochs. The optimizer converged in 54 epochs, after less than 3 minutes of training. 
 
+\begin{rqanswer}
 The result of this tuning was a model with fewer convolutional layers and smaller kernel sizes but with more convolutional filters and recurrent layers that could perform better than the baselines. This shows having more and smaller convolutional filters is more effective in capturing local features in the data compared to having a small number of large filters (with kernels of size 20 for example which has 200 parameters). It also shows the important role that recurrent layers play in discovering long-term relations between inputs and outputs. 
+\end{rqanswer}
 
 
 \section{Limitations and Threats to Validity} \label{sec:threats_to_validity}
@@ -289,5 +308,3 @@ We assume that during the data collection, sampling happens in regular intervals
 
 In terms of construct validity, we are using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, we have used multiple margins and reported all results. In terms of internal validity threats, we reduced the threat by not implementing the CPD baselines by ourselves and rather reusing existing libraries. In terms of conclusion validity threats, we have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, our study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. We plan to extend this work with more case studies from other domains, to increase its generalizability.}
 
-
- 
