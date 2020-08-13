@@ -45,7 +45,7 @@ In simulations, the modem and wireless communications are no longer needed, inst
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{4_files/Pprz_communication_agents.jpg}
-    \caption{High level overview of communication links architecture in paparazzi \cite{hattenberger2014using}}
+    \caption{High level overview of communication links architecture in Paparazzi \cite{hattenberger2014using}}
     \label{fig:paparazzi_comm_agents}
 \end{figure}
 
@@ -67,7 +67,7 @@ I implemented the pipeline of generating tests, running them, and aggregating fl
 
 
 \subsection{Flight Data Recorder}
-Although paparazzi comes with a logging feature in its `server' component (Figure~\ref{fig:paparazzi_comm_agents}), it only logs a subset of required data. Furthermore, the data comes in separate messages with different frequencies; for example speed updates are sent in \verb|AIRSPEED| message once a second, orientation updates and engine rpm are reported in \verb|ATTITUDE| and \verb|ENGINE_STATUS| messages respectively which are dispatched every 200 milliseconds, while servo outputs are only sent once every 5 seconds. All these data need to be aggregated and aligned. Please refer to the Table~\ref{tab:pprz_messages} in \hyperref[appendixa]{Appendix~A} for a full list of messages used.
+Although Paparazzi comes with a logging feature in its `server' component (Figure~\ref{fig:paparazzi_comm_agents}), it only logs a subset of required data. Furthermore, the data comes in separate messages with different frequencies; for example speed updates are sent in \verb|AIRSPEED| message once a second, orientation updates and engine rpm are reported in \verb|ATTITUDE| and \verb|ENGINE_STATUS| messages respectively which are dispatched every 200 milliseconds, while servo outputs are only sent once every 5 seconds. All these data need to be aggregated and aligned. Please refer to the Table~\ref{tab:pprz_messages} in \hyperref[appendixa]{Appendix~A} for a full list of messages used.
 
 The most flexible option with the least overhead is to have an independent module that understands Paparazzi link, captures these messages and does data aggregation and logging in real-time. So I created a flight data recorder to collect all the required data from telemetry messages.
 
@@ -105,12 +105,12 @@ The core test plan runner is implemented as an observer class that listens for m
 
 Test plans should be importable from \verb|pprz_tester.generated_plans| module. The structure is simple and clearly defined so that they can easily be handcrafted (like the example above) or generated using the test generator component.
 
-The test runner is tailored specifically for paparazzi in several ways:
+The test runner is tailored specifically for Paparazzi in several ways:
 \begin{enumerate}
     \item % First, 
 As mentioned before, it takes care of aircraft initialization, take off, and landing
     \item %Second, 
-It uses standard paparazzi environment variables such as \verb|$PAPARAZZI_HOME|.\footnote{If it is not set, the user can use \texttt{-p /path/to/paprazzi} command line argument to set this value, and if that is not set too, a default value will be used.} 
+It uses standard Paparazzi environment variables such as \verb|$PAPARAZZI_HOME|.\footnote{If it is not set, the user can use \texttt{-p /path/to/paprazzi} command line argument to set this value, and if that is not set too, a default value will be used.} 
     \item %Third, 
 It can build the auto pilot if \verb|--build| argument is set so the user does not have to build it manually in Paprazzi center. 
 

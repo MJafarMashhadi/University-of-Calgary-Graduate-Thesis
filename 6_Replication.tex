@@ -13,10 +13,10 @@ The result of this tuning was a model with fewer convolutional layers and smalle
 
 
 \section{The Case Study Subject}
-I chose paparazzi auto pilot as an open-source alternative to MP\footnote{MicroPilot}'s auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
-A comparison about how paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
-In addition to that, after doing a preliminary study, I found out that paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
-Furthermore, paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
+I chose Paparazzi auto pilot as an open-source alternative to MP\footnote{MicroPilot}'s auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
+A comparison about how Paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
+In addition to that, after doing a preliminary study, I found out that Paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
+Furthermore, Paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
 
 
 \section{Objectives}
@@ -27,7 +27,7 @@ I used the same configurations in the previous study.
 To evaluate them, I used the same precision, recall, and F1 score (with a margin of tolerance) as the previous study which are defined in section~\ref{sec:CPD_metrics}.
 
 \subsection{RQ 2) Can the results be replicated with regards to internal state prediction?}
-I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with paparazzi the number of classes are smaller. 
+I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi the number of classes are smaller. 
 There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
 \subsection{RQ 3) How will hyper-parameter tuning affect the results?}
@@ -75,10 +75,10 @@ Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-white
 \section{Results}
 \subsection{CPD baselines (RQ 1)}
 
-The results of applying baseline algorithms on paparazzi data set can be seen in table~\ref{tab:cpd_paparazzi}.
+The results of applying baseline algorithms on Paparazzi data set can be seen in table~\ref{tab:cpd_paparazzi}.
 The numbers are quite varied, there are scores worse then 1\% as well as some 100\% recall scores. The 100\% recalls are accompanied with a low precision; achieving that is not difficult. A method that outputs every point as a change-point will get similar results. The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for MP's study. As a matter of fact, in this study getting the results for Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23800 experiments. 
 
-Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in the MP study (See the RQ1 results summary box and the paragraph above that in section~\ref{sec:results}). However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. It can be due to the fact that the new data set is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. To reiterate, paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 sample tests in MP's data set. It is worth mentioning that both in the original study on MP's data and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
+Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in the MP study (See the RQ1 results summary box and the paragraph above that in section~\ref{sec:results}). However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. It can be due to the fact that the new data set is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. To reiterate, Paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 sample tests in MP's data set. It is worth mentioning that both in the original study on MP's data and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
 
 \begin{sidewaystable}
     \centering
@@ -133,7 +133,7 @@ Comparing the baseline results with the neural network model's results in the la
 \bottomrule
 \end{tabular}%
 }
-    \caption{Change point detection methods performance on paparazzi data set. Since the 100\% recalls are actually outliers, the next largest recall values are in bold face as well.}
+    \caption{Change point detection methods performance on Paparazzi data set. Since the 100\% recalls are actually outliers, the next largest recall values are in bold face as well.}
     \label{tab:cpd_paparazzi}
 \end{sidewaystable}
 
