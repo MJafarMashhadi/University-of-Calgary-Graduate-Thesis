@@ -70,12 +70,12 @@ plan                  &  Plan name to run as a python module in \verb|pprz_teste
 -b,--build            &  Build the aircraft before launching the simulation \\
 --gcs                 &  Open GCS window \\
 --no-sim              &  Does not launch the simulator \\
---prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by way point (circle) or both. \\ \hline
---fuzz-wps            &  Way points to fuzz locations of. Use * to fuzz all \\
---wp-fuzz-bounds-lat  &  Minimum and maximum latitude (south-north) to fuzz way point locations in \\
---wp-fuzz-bounds-lon  &  Minimum and maximum longitude (east-west) to fuzz way point locations in \\
---wp-fuzz-bounds-alt  &  The boundaries inside which way point altitudes are fuzzed \\
--w,--wp-location      &  Fix one or more way points locations (overrides fuzzing) \\ \hline
+--prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by waypoint (circle) or both. \\ \hline
+--fuzz-wps            &  Waypoints to fuzz locations of. Use * to fuzz all \\
+--wp-fuzz-bounds-lat  &  Minimum and maximum latitude (south-north) to fuzz waypoint locations in \\
+--wp-fuzz-bounds-lon  &  Minimum and maximum longitude (east-west) to fuzz waypoint locations in \\
+--wp-fuzz-bounds-alt  &  The boundaries inside which waypoint altitudes are fuzzed \\
+-w,--wp-location      &  Fix one or more waypoints' locations (overrides fuzzing) \\ \hline
 -Dname=value          &  Optional plan arguments. They will be passed to \verb|get_items| as keyword arguments. \\ \bottomrule
 \end{longtable}
 \caption{Test runner command line arguments}
