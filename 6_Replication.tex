@@ -153,4 +153,34 @@ The scores themselves are just around the same values as well: Ridge classifier 
 }
 \end{table}
 \subsection{Hyper-parameter Tuning (RQ 3)}
-% TODO
+I used Tensor Board to visualize and compare the effects of different hyper-parameters on the model's performance. First, for a sanity check, I visualized 4 metrics, precision and recall in detecting change points with a small tolerance of $\tau=1s$, and precision and recall in estimating the internal state. A healthy linear and positive correlation is visible between all pairs of these metrics, it means that trying to improve one usually will not come at the expense of others. 
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{6_files/prec_recall_matrix_tuning.png}
+    \caption{Matrix of scatter plots comparing precision and recall of the deep learning model on test data.}
+    \label{fig:precision_recall_matrix}
+\end{figure}
+
+Filtering the data to find the commonalities of better hyper parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
+It also shows that the kernel sizes and number of convolutional layers does not have an as strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
+It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
+Therefore we can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
+
+The new search space was all the combinations of these hyper-parameters:
+
+\begin{enumerate}
+    \item Learning rate, options being: $3\times10^{-4}$, $1\times10^{-3}$, and $3\times10^{-3}$
+    \item Number of GRU cells, options: 128, 256, 384, and 512
+    \itme Number of convolutional filters in each layer: 32, 64, and 72
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{6_files/refined_prec_recall.png}
+    \caption{Parallel coordinates view showing the effects of select hyper parameters on the performance measures.}
+    \label{fig:precision_recall_parallel_coordinates}
+\end{figure}
+The results of the second round of tuning are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. This chart shows 3 + 8 parallel axis, 3 hyper parameters and 8 metrics. To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
+The green highlighted line is the best configuration tried, with the highest area under the curve. That configuration has the best or close to the best performance in all metrics. The configuration is to use 256 GRU cells, 72 filter per layer, and the lower learning rate of $3\times10^{-4}$.
+
+I used these hyper parameters to train the best model. The scores used in the first two research question are the evaluation results of this model on the previously unseen validation data. 
