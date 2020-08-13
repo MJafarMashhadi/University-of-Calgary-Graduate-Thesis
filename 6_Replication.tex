@@ -6,11 +6,12 @@ In the previous chapter, we have seen the results of applying my proposed model 
 
 I could replicate the relative differences in performance of different CPD methods. The same goes with classic machine learning classifiers: a linear classifier with regularization and a decision tree classifier. 
 Also, I confirmed that a similar neural network architecture can be trained to infer states of Paparazzi as well.
-In addition to replicating these, I created an automated hyper parameter tuning pipeline to get a better performance out of the neural network model. 
-% TODO: a summary of the results, tuning + comparing results with baselines
+In addition to replicating these, I created an automated hyper-parameter tuning pipeline to get a better performance out of the neural network model. I used a simple grid search technique over the hyper-parameters, in two steps to find the sweet spot for the best overall performance over 8 metrics.
+The result of this tuning was a model with fewer convolutional layers and smaller kernel sizes but with more convolutional filters and recurrent layers that could perform better than the baselines. This shows more and smaller convolutional filters is more effective in capturing local features in the data rather than to have a small number of large filters (with kernels of size $10\times20$ for example). It also shows the important role that recurrent layers play in discovering long-term relations between inputs and outputs. 
+
 
 \section{The Case Study Subject}
-I chose paparazzi auto pilot as an open-source alternative to MicroPilot's auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane. A comparison about how paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
+I chose paparazzi auto pilot as an open-source alternative to MP\footnote{MicroPilot}'s auto-pilot for replication. Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane. A comparison about how paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
 In addition to that, after doing a preliminary study, I found out that paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
 Furthermore, paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
 
@@ -22,20 +23,20 @@ There are 7 cost functions, 3 search methods (1 exact and 2 approximate), and 3 
 I used the same configurations in the previous study. 
 To evaluate them, I used the same precision, recall, and F1 score (with a margin of tolerance) as the previous study which are defined in section~\ref{sec:CPD_metrics}.
 
-\subsection{RQ 2) Can the results be replicated with regards to state detection?}
+\subsection{RQ 2) Can the results be replicated with regards to internal state prediction?}
 I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with paparazzi the number of classes are smaller. 
 There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
 \subsection{RQ 3) How will hyper-parameter tuning affect the results?}
 In previous study the hyper-parameters of the neural network model were tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameters such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication I opted for existing automated ways for finding better hyper-parameters.
 
-The training data was split into 3 chunks after shuffling: 70\% of the data was used for training, 20\% was used as the test set for tuning the hyper parameters, and the remaining 10\% was set aside as the validation data to measure the trained model's performance. 
+The training data was split into 3 chunks after shuffling: 70\% of the data was used for training, 20\% was used as the test set for tuning the hyper-parameters, and the remaining 10\% was set aside as the validation data to measure the trained model's performance. 
 
 
 \section{Experiment}
 \subsection{Data Collection}
 The process of collecting the data has already been explained in chapter~\ref{chapter:fuzz_tester} in detail. However, let us have a quick recapitulation:
-Unlike MicroPilot, Paparazzi did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. My tool can automatically generate system tests, run them in a simulator (or on hardware\footnote{Although I have not tested running tests on a hardware (HWIL, see section~\ref{sec:mp_test_scenarios}) to confirm, but having implemented the protocol it potentially is capable of doing so}), and also collect required telemetry data from the aircraft. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
+Unlike MP, Paparazzi did not include any system tests. So, I developed a fuzz tester tool to generate valid, diverse, and meaningful test plans based on the example flight plan that is shipped with the software. My tool can automatically generate system tests, run them in a simulator (or on hardware\footnote{Although I have not tested running tests on a hardware (HWIL, see section~\ref{sec:mp_test_scenarios}) to confirm, but having implemented the protocol it potentially is capable of doing so}), and also collect required telemetry data from the aircraft. The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours. My fuzz tester tool ran ran each generated scenario in a simulation and recorded the required flight data.
 The result was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These pre-processing steps include normalizing some values as well as metric to imperial unit conversions.
 
@@ -50,20 +51,20 @@ Figure~\ref{fig:paparazzi_test_length} shows the distribution of test lengths. T
 
 \subsection{CPD baselines (RQ 1)}
 Similar to the MicroPilot study, I fed the data from Paparazzi to several CPD baselines implemented in ``ruptures'' library.
-Fortunately, with smaller data set size (in comparison to MicroPilot's), it was feasible (though still time-consuming) to try ``Pelt'' CPD method \cite{killick2012optimal} as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MicroPilot's data. All other CPD methods are approximate algorithms.
+Fortunately, with smaller data set size (in comparison to MP's), it was feasible (though still time-consuming) to try ``Pelt'' CPD method \cite{killick2012optimal} as well, making the replication study is richer in that sense. Pelt is the most efficient exact CPD method which, as mentioned before, failed to scale up to process MP's data. All other CPD methods are approximate algorithms.
 
 \subsection{Classification algorithms (RQ 2)}
-I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MicroPilot's case, with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms. 
+I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MP's case, with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms. 
 
 \subsection{Hyper-parameter Tuning (RQ 3)}
-I created a model creation and evaluation pipeline that takes hyper parameters as the input and outputs the model performance scores on test data as its output. The hyper parameters that I searched over are:
+I created a model creation and evaluation pipeline that takes hyper-parameters as the input and outputs the model performance scores on test data as its output. The hyper-parameters that I searched over are:
 \begin{itemize}
     \item Number of GRU cells in the recurrent section: between 32 and 256
     \item Number of convolutional filters in each layer: between 16 to 64
     \item The size of convolution kernels and the number of convolutional layers: between 3 to 5 layers with increasing kernel size
     \item The learning rate of Adam optimizer: from $1\times 10^{-4}$ to $3\times10^{-3}$
 \end{itemize}
-Please refer to figure~\ref{fig:model_arch} for a recap on these hyper parameters. 
+Please refer to figure~\ref{fig:model_arch} for a recap on these hyper-parameters. 
 I performed an exhaustive grid search over these parameters, using Tensor Board for keeping track of the metrics and finding the right balance.
 
 Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-whitepaper} that provides great insight for better training TensorFlow models.
@@ -72,9 +73,9 @@ Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-white
 \subsection{CPD baselines (RQ 1)}
 
 The results of applying baseline algorithms on paparazzi data set can be seen in table~\ref{tab:cpd_paparazzi}.
-The numbers are quite varied, there are scores worse then 1\% as well as some 100\% recall scores. The 100\% recalls are accompanied with a low precision; achieving that is not difficult. A method that outputs every point as a change-point will get similar results. The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for MicroPilot's study. As a matter of fact, in this study getting the results for Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23800 experiments. 
+The numbers are quite varied, there are scores worse then 1\% as well as some 100\% recall scores. The 100\% recalls are accompanied with a low precision; achieving that is not difficult. A method that outputs every point as a change-point will get similar results. The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for MP's study. As a matter of fact, in this study getting the results for Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23800 experiments. 
 
-Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in the MicroPilot study (See the RQ1 results summary box and the paragraph above that in section~\ref{sec:results}). However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. It can be due to the fact that the new data set is tiny compared to MicroPilot, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could in MicroPilot. To reiterate, paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 sample tests in MicroPilot's data set. It is worth mentioning that both in the original study on MP's data and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
+Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in the MP study (See the RQ1 results summary box and the paragraph above that in section~\ref{sec:results}). However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. It can be due to the fact that the new data set is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. To reiterate, paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 sample tests in MP's data set. It is worth mentioning that both in the original study on MP's data and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
 
 \begin{sidewaystable}
     \centering
@@ -139,7 +140,7 @@ To compare with the original study, we can see that in all but two settings limi
 The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% which was 32-39\% in the original study, for decision trees it is in 67-68\% here and it was 73-77\% in the original study. 
 
 The deep learning model's performance measures (on validation data) can be found in the last row of the table. 
-You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in the original study was 16.83\%. This, again confirms the reproducability of the results from 
+You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in the original study was 16.83\%. This, again confirms the reproducibility of the results from 
 
 \begin{table}
 \caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, we only show the results of the best performing model in each group.}
@@ -188,7 +189,7 @@ I used Tensor Board to visualize and compare the effects of different hyper-para
     \label{fig:precision_recall_matrix}
 \end{figure}
 
-Filtering the data to find the commonalities of better hyper parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
+Filtering the data to find the commonalities of better hyper-parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
 It also shows that the kernel sizes and number of convolutional layers does not have an as strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
 It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
 Therefore we can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
@@ -204,10 +205,10 @@ The new search space was all the combinations of these hyper-parameters:
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{6_files/refined_prec_recall.png}
-    \caption{Parallel coordinates view showing the effects of select hyper parameters on the performance measures.}
+    \caption{Parallel coordinates view showing the effects of select hyper-parameters on the performance measures.}
     \label{fig:precision_recall_parallel_coordinates}
 \end{figure}
-The results of the second round of tuning are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. This chart shows 3 + 8 parallel axis, 3 hyper parameters and 8 metrics. To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
+The results of the second round of tuning are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. This chart shows 3 + 8 parallel axis, 3 hyper-parameters and 8 metrics. To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
 The green highlighted line is the best configuration tried, with the highest area under the curve. That configuration has the best or close to the best performance in all metrics. The configuration is to use 256 GRU cells, 72 filter per layer, and the lower learning rate of $3\times10^{-4}$.
 
-I used these hyper parameters to train the best model. The scores used in the first two research question are the evaluation results of this model on the previously unseen validation data. 
+I used these hyper-parameters to train the best model. The scores used in the first two research question are the evaluation results of this model on the previously unseen validation data. The stopping criteria on training the model was for the validation loss to plateau, with a `patience' of 15 epochs. The optimizer converged in 54 epochs, after less than 3 minutes of training. 
