@@ -1,6 +1,6 @@
 
 \section{Results} \label{sec:results}
-In this section, we present the results of the experiments and answer the two research questions. 
+In this section, I present the results of the experiments and answer the two research questions. 
 \subsection{RQ1 Results: CPD Performance}
 \begin{sidewaystable} 
 % \begin{table*}
@@ -45,7 +45,7 @@ In this section, we present the results of the experiments and answer the two re
 
 Table~\ref{tab:rq1-results} shows the results of running CPD algorithms for various configurations (as described in \ref{sec:CPD_baseline}). For each search method and cost function pair only one of the penalty values which resulted in the highest F1 scores for all $\tau$ values is reported. 
 
-The first observation from the results is that as values of $\tau$ increases the scores get better. This was expected, since larger values relax the constraints on which detected change points are considered as a true positive. Another observation is that the bottom-up segmentation consistently outperforms the window-based segmentation method. We can also see that the linear cost function beats all the other ones, in terms of precision. The Gaussian cost function achieves much higher recall values costing it a huge loss in precision. It means this cost function results in detecting numerous change points spread across the time axis, so there is a good chance of having at least one change point predicted close to each true change point (hence the high recall), but also there are a lot of false positives, which leads to a low precision. 
+The first observation from the results is that as values of $\tau$ increases the scores get better. This was expected, since larger values relax the constraints on which detected change points are considered as a true positive. Another observation is that the bottom-up segmentation consistently outperforms the window-based segmentation method. I can also see that the linear cost function beats all the other ones, in terms of precision. The Gaussian cost function achieves much higher recall values costing it a huge loss in precision. It means this cost function results in detecting numerous change points spread across the time axis, so there is a good chance of having at least one change point predicted close to each true change point (hence the high recall), but also there are a lot of false positives, which leads to a low precision. 
 
 \begin{table}
 \caption{Change point detection precision, recall, and F1-score calculated, on the test data, for the proposed model, using three values of tolerance ($\tau$) compared with the respective $\tau$'s best F1 score among baseline methods}
@@ -66,7 +66,7 @@ The first observation from the results is that as values of $\tau$ increases the
 \end{table}
 
 Measuring the same metrics on how the proposed model performs on the test data shows better scores, almost twice the F1 score of the best performing baseline (see Table~\ref{tab:rq1-2-results}). 
-Please note that unlike machine learning algorithms (such as ours), CPD algorithms do not have a separate training and testing phases. This fact works in their favor (by using the entire dataset for prediction and not just the training set), but still my model outperforms them.
+Please note that unlike machine learning algorithms (such as mine), CPD algorithms do not have a separate training and testing phases. This fact works in their favor (by using the entire dataset for prediction and not just the training set), but still my model outperforms them.
 
 %Although measuring the time it takes to detect change points was not one of the comparison metrics it would not hurt to note that
 In terms of execution cost, running all 42 different settings of CPD algorithms on the whole dataset took a bit over 12 hours in the cloud using 16 CPUs and 64GB of main memory. The deep learning model on the other hand takes about an hour to train (which only needs to be done once), on a smaller machine (see section~\ref{sec:machines_config}). It made predictions on the whole dataset in less than a minute.
@@ -78,10 +78,10 @@ The proposed model, which requires less memory compared to traditional CPD algor
 \end{rqanswer}
 
 \subsection{RQ2 Results: Multi-class Classification Performance}
-To answer RQ2, we first compare different configurations of the baseline methods using the F1 score (harmonic mean of precision and recall) on the test data. The results are presented in Table~\ref{tab:rq2-1-results}.
+To answer RQ2, I first compare different configurations of the baseline methods using the F1 score (harmonic mean of precision and recall) on the test data. The results are presented in Table~\ref{tab:rq2-1-results}.
 
 \begin{table}
-\caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers (DT) with different sliding window widths ($w$). For each algorithm on each $w$ several hyper-parameters were applied producing 152 different models. In this table, we only show the results of the best performing model in each group.}
+\caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers (DT) with different sliding window widths ($w$). For each algorithm on each $w$ several hyper-parameters were applied producing 152 different models. In this table, I only show the results of the best performing model in each group.}
 \label{tab:rq2-1-results}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{clcclll}
@@ -219,7 +219,7 @@ The deep learning model's performance measures (on validation data) can be found
 You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in RQ2 is 16.83\%, not very different from this. This, again confirms the reproducibility of the results in the first two RQs.
 
 \begin{table}
-\caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, we only show the results of the best performing model in each group.}
+\caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, I only show the results of the best performing model in each group.}
 \label{tab:rq2-1-results-replicate}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{llcccc}
@@ -274,7 +274,7 @@ I used Tensor Board to visualize and compare the effects of different hyper-para
 Filtering the data to find the commonalities of better hyper-parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
 It also shows that the kernel sizes and number of convolutional layers does not have an as strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
 It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
-Therefore we can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
+Therefore I can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
 
 The new search space was all the combinations of these hyper-parameters:
 
@@ -307,5 +307,5 @@ We assume that during the data collection, sampling happens in regular intervals
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 
-In terms of construct validity, we are using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, we have used multiple margins and reported all results. In terms of internal validity threats, we reduced the threat by not implementing the CPD baselines by ourselves and rather reusing existing libraries. In terms of conclusion validity threats, we have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, this study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. We plan to extend this work with more case studies from other domains, to increase its generalizability.}
+In terms of construct validity, I am using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, I have used multiple margins and reported all results. In terms of internal validity threats, I reduced the threat by not implementing the CPD baselines by myself and rather reusing existing libraries. In terms of conclusion validity threats, I have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, this study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. I plan to extend this work with more case studies from other domains, to increase its generalizability.}
 

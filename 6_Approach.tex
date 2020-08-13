@@ -1,5 +1,5 @@
 \chapter{Hybrid Neural Network for State Inference} \label{sec:approach}
-In this section, we describe my proposed deep learning approach for the black-box state inference task, in details. 
+In this section, I describe my proposed deep learning approach for the black-box state inference task, in details. 
 
 \section{The Model Architecture}
 \begin{figure*}
@@ -47,13 +47,14 @@ The input/output values of the black-box system create a multivariate time-serie
     |{V_1}_k|=|{V_2}_k|=\ldots=|{V_n}_k|=l_k 
 \end{equation}
 
-Note that, as figure~\ref{fig:general_net} shows, we take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models. This is to make sure we can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account 
+Note that, as figure~\ref{fig:general_net} shows, we take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models. 
+This is to make sure that we can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account 
 % the ``acceleration'' state before ``takeoff'' and the breaking state after landing
 a mid-flight ``descend'' state and the ``approach'' state right before landing
 are indistinguishable, using the sensor readings (inputs) alone. 
 
 Having such a time-series, the only remaining pieces from a training set are the labels. Unlike the input/output values (the features in the data set) the labels are not usually given. My method to infer the labels is a supervised approach. Thus, we need the domain expert to manually label each individual time stamp with a state name/ID. In practice, what they would do is to identify the approximate time that a state change happens and assign the new state to one of the previous states labels or define a new label for this new state.
-Thus we encode the states information over time as a set of tuples in the form of $(t_s, s)$ where $t_s$ denotes the timestamp where the system entered state $s$. We show the set of all possible states with $S$ ($s \in S$) and define $N_s$ as the cardinality of this set. 
+Thus I encode the states information over time as a set of tuples in the form of $(t_s, s)$ where $t_s$ denotes the timestamp where the system entered state $s$. We show the set of all possible states with $S$ ($s \in S$) and define $N_s$ as the cardinality of this set. 
 \begin{equation}\label{eq:change_point}\begin{split}
     CP_k {}&{}= \big\{ (t_{s_1}, s_1), (t_{s_2}, s_2), \ldots, (t_{s_l}, s_l) \big\}\:,\; s_i \in S \\
     N_s  {}&{}= |S|
@@ -99,14 +100,14 @@ If there are more than two possible states ($N_s > 2$), $O$ needs to be one-hot 
 
 
 \section{The Model Implementation} \label{sec:architecture_detail}
-The first few layers of the model are convolutional layers. We have used 5 convolutional layers with 64 filters each and a growing kernel size.
+The first few layers of the model are convolutional layers. I used 5 convolutional layers with 64 filters each and a growing kernel size.
 The intuition behind this design is that starting with a small kernel guides the training in a way that the first layers learn simpler more local features that fits in their window (kernel size).
-Kernel sizes started with 3 since it is a common number in the literature for kernel sizes, then we used multiples of 5 from 5 to 20. 
+Kernel sizes started with 3 since it is a common number in the literature for kernel sizes, then I used multiples of 5 from 5 to 20. 
 The rationale behind choosing 5 is because the sampling frequency is 5, so each layer with a kernel size of $5n$ processes a whole $n$ seconds worth of simulation data, in each step.
-Stopping at kernel size of 20 was a compromise between generalizability and model size. Generally, a larger model has more learning capacity, but it is also more prone to over-fitting. The current models are the smallest we could make the models (to avoid over-fitting), without compromising the performance.
+Stopping at kernel size of 20 was a compromise between generalizability and model size. Generally, a larger model has more learning capacity, but it is also more prone to over-fitting. The current models are the smallest I could make the models (to avoid over-fitting), without compromising the performance.
 
 Same compromise was made in the second section of the model (Recurrent layers), the sweet spot for hyper-parameters here was to use two GRU layers with 128 cells each. Their output was fed into a fully connected layer with 128 neurons with a leaky ReLU ($\alpha=0.3$) activation function \cite{maas2013rectifier} and finally to a dense layer with $N_s=25$ units with softmax activation.
-We used Adam optimizer \cite{kingma2014adam} that could converge in 60-80 epochs, i.e. validation accuracy plateaued. The full architecture can be seen in figure~\ref{fig:model_arch}.
+I used Adam optimizer \cite{kingma2014adam} that could converge in 60-80 epochs, i.e. validation accuracy plateaued. The full architecture can be seen in figure~\ref{fig:model_arch}.
 \begin{figure*}
     \centering
     \includegraphics[width=\linewidth]{ASE_files/Convolutional_Net.pdf}
