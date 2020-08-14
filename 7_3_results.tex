@@ -103,13 +103,13 @@ To answer RQ2, I first compare different configurations of the baseline methods 
 15 & DT    & -   & $\sqrt{10w}$ & 69.06\% & 80.76\% & 74.45\% \\ \midrule
 20 & Ridge & -   & -          & \textbf{80.38\%} & 26.50\% & 39.86\% \\
 20 & DT    & 175 & $\sqrt{10w}$ & 73.21\% & 82.16\% & \textbf{77.42\%} \\  \midrule
-   & \multicolumn{3}{l}{My Proposed Method} & \textbf{86.29\%} & \textbf{95.04\%} & \textbf{90.45\%} \\
+   & \multicolumn{3}{l}{My Approach} & \textbf{86.29\%} & \textbf{95.04\%} & \textbf{90.45\%} \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-Comparing the baseline methods with my proposed method (the last row) in Table~\ref{tab:rq2-1-results} shows that my model outperforms all baselines. Comparing it with the model with the best F1-score shows a $(86.29/73.21)-1=17.87\%$ improvement in precision as well as a $(95.04/82.16)-1=15.68\%$ improvement in recall that means $(90.45/77.42)-1=16.83\%$ overall improvement in F1-score. 
+Comparing the baseline methods with my approach (the last row) in Table~\ref{tab:rq2-1-results} shows that my model outperforms all baselines. Comparing it with the model with the best F1-score shows a $(86.29/73.21)-1=17.87\%$ improvement in precision as well as a $(95.04/82.16)-1=15.68\%$ improvement in recall that means $(90.45/77.42)-1=16.83\%$ overall improvement in F1-score. 
 
 To have a feeling of how good my predictions are in practice, Figure~\ref{fig:test_0} shows the output of my model side by side with the ground truth. The horizontal axis shows sample ID (time) and the states are color coded. As it is seen, this algorithm performs better when the state changes are farther apart. Also there are some state changes that happen quite briefly which are not detected. That is not to a great surprise since it takes some time for state changes to be reflected in the outputs and those might not have got any chance.
 
@@ -196,7 +196,7 @@ Here I summarize the answer.
     & bottomup & 100  &       15.66\% &     1.90\% &  9.45\% &        44.23\% &      5.36\% & 12.95\% &        62.37\% &      7.48\% & 15.66\% \\
     & exact & 100  &       14.07\% &     1.64\% &  9.77\% &        42.06\% &      4.74\% & 12.59\% &        60.92\% &      6.67\% & 14.56\% \\
     & window & 100  &        8.31\% &     0.61\% &  9.97\% &        29.38\% &      2.02\% & 10.60\% &        53.34\% &      3.39\% & 10.79\% \\ \midrule \midrule
-\multirow{3}{*}{\textbf{My approach}} 
+\multirow{3}{*}{\textbf{My Approach}} 
     & \multirow{3}{*}{\textbf{Data set:}}  
          & \textbf{Validation} &  45.63\% &    55.46\% & 50.07\% &   81.39\% &     90.97\% & 85.92\% &   88.38\% &     97.12\% & 92.54\%  \\
     & {} & b\textbf{Test (Tuning)} &  42.65\% &    54.87\% & 47.99\% &   76.73\% &     90.96\% & 83.24\% &   85.18\% &     97.46\% & 90.91\%  \\

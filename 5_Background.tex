@@ -1,5 +1,14 @@
 \chapter{Background and Related Work} \label{sec:background}
 Unlike the numerous techniques in the literature for behavior model inference \cite{lang1998results, walkinshaw2016inferring, Lo2007Mining, dallmeier2006mining} which abstract a set of execution traces into states, my approach requires consuming a multivariate time-series and detect the state changes across time and predict the exact state labels. Thus, in this section, we briefly explain the two main sets of relevant existing techniques for ``Change Point Detection'' and ``State Prediction'' in time-series that can serve as background for my approach.  
+
+\section{State Model Inference}
+Roughly speaking, dynamic EFSM\footnote{Extended Finite State Machines, are special kind of state machines that have conditional expressions called ``transition guards'' on their transitions \cite{lorenzoli2008automatic}. A state transition can only happen if the transition guard evaluates as true.} inference algorithms generally take a trace of ``events'' (along with perhaps some variable values) as their input \cite{walkinshaw2016inferring} to infer a generalized finite state machine. They use the events to find the state transitions and the values for detecting invariants and generating the guard conditions on the transitions. 
+k Tails, Gk Tail, EDSM, and MINT are examples of these algorithms, each improving upon the previous one \cite{biermann1972synthesis, lorenzoli2008automatic, lang1998results, walkinshaw2016inferring}.  % Merge paragraphs together
+
+Walkinshaw et al., proposed an algorithm and developed a tool for state model inference \cite{walkinshaw2016inferring}. Their work is based on previous endeavors on state merging algorithms such as gk-tail and k-tails \cite{lorenzoli2008automatic, biermann1972synthesis}. These methods require an execution trace of the program consisting of a list of ``events'' that occurred during program execution, such as function calls, system calls, transmitted network data, etc. Krka et al., performed an empirical study on 4 different categories of model inference algorithms to figure out what makes each group of methods more effective \cite{krka2014automatic}. Beschastnikh et al., proposed a method to mine invariants from partially ordered logs from concurrent/distributed systems \cite{beschastnikh2011mining}. Invariants can be used to augment state models \cite{beschastnikh2014inferring, beschastnikh2011leveraging}. Groz et al., use machine learning to heuristically infer state machine models of a un-resettable black-box system \cite{groz2018revisiting}, however a significant difference between my method and theirs is that their method still relies on discrete events (such as HTTP request and responses) while my method does not assume that the input and outputs contain any kind of ``events'' happening at certain times. My method aims to search for such events as change points in a continuous stream of data as time series. %Papadopoulos et al., proposed an active learning method (with repeated interaction with a user) to model a black-box system and generate test data \cite{Papadopoulos2015}.
+
+% TODO: add more related work here, Taha paper
+
 % \subsection{State Model Inference}
 
 \section{Change Point Detection}
@@ -39,22 +48,6 @@ It means that in a trained neural net, multiple features can be leaned in one si
 Recurrent neural networks (RNN) have shown great performance in analysing sequential data such as machine translation, time-series prediction, and time-series classification \cite{cho2014learning, zhang2000predicting, wang2017time, murad2017deep, yang2015deep, Ordonez2016}. RNNs can capture long-term temporal dependencies which is quite useful to solve this problem. \cite{Che2018} For example, they might learn that ``climb'' state in a UAV auto-pilot usually follows ``take off''. Therefore, while it is outputting ``take off'' it anticipates what the next state will probably be and as soon as its input features start shifting, it detects the onset of a state change. It will help the model to better predict the system's behavior and be quicker to detect state changes in a way that could hardly be achieved with classic methods.
 Therefore, in this thesis, I combine the CNNs and RNNs to create what is known as a hybrid deep neural network \cite{wang2017time} to use for both CPD and state classification problems, in this context.  
 % http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture12.pdf
-
-
-
-
-
-
-
-
-
-
-
-\section{State Model Inference}
-Roughly speaking, dynamic EFSM\footnote{Extended Finite State Machines, are special kind of state machines that have conditional expressions called ``transition guards'' on their transitions \cite{lorenzoli2008automatic}. A state transition can only happen if the transition guard evaluates as true.} inference algorithms generally take a trace of ``events'' (along with perhaps some variable values) as their input \cite{walkinshaw2016inferring} to infer a generalized finite state machine. They use the events to find the state transitions and the values for detecting invariants and generating the guard conditions on the transitions. 
-k Tails, Gk Tail, EDSM, and MINT are examples of these algorithms, each improving upon the previous one \cite{biermann1972synthesis, lorenzoli2008automatic, lang1998results, walkinshaw2016inferring}.  % Merge paragraphs together
-
-Walkinshaw et al., proposed an algorithm and developed a tool for state model inference \cite{walkinshaw2016inferring}. Their work is based on previous endeavors on state merging algorithms such as gk-tail and k-tails \cite{lorenzoli2008automatic, biermann1972synthesis}. These methods require an execution trace of the program consisting of a list of ``events'' that occurred during program execution, such as function calls, system calls, transmitted network data, etc. Krka et al., performed an empirical study on 4 different categories of model inference algorithms to figure out what makes each group of methods more effective \cite{krka2014automatic}. Beschastnikh et al., proposed a method to mine invariants from partially ordered logs from concurrent/distributed systems \cite{beschastnikh2011mining}. Invariants can be used to augment state models \cite{beschastnikh2014inferring, beschastnikh2011leveraging}. Groz et al., use machine learning to heuristically infer state machine models of a un-resettable black-box system \cite{groz2018revisiting}, however a significant difference between my method and theirs is that their method still relies on discrete events (such as HTTP request and responses) while my method does not assume that the input and outputs contain any kind of ``events'' happening at certain times. My method aims to search for such events as change points in a continuous stream of data as time series. %Papadopoulos et al., proposed an active learning method (with repeated interaction with a user) to model a black-box system and generate test data \cite{Papadopoulos2015}.
 
 
 \section{Using Deep Learning on Time Series Data} \label{sec:related_work_har}

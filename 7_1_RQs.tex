@@ -1,12 +1,12 @@
 \section{The Study Objectives}
 The goals of this study is to evaluate the proposed method in terms of change point detection and state inference, in comparison to traditional techniques in this domain. Therefore, the research questions are as follows:
 
-\subsection{RQ 1) How does my proposed technique perform in detecting the state changes?}
+\subsection{RQ 1) How does the proposed technique perform in detecting the state changes?}
 The goal of this RQ is to see how close the predicted state-change times are to the real state-change times. In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
 To answer this question, I compare the performance of my proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
 
 
-\subsection{RQ 2) How well does my proposed technique predict the internal state of the system?}
+\subsection{RQ 2) How well does the proposed technique predict the internal state of the system?}
 In RQ1, we are only interested in detecting the time a state-change happens (binary classification), but here in RQ2, I extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).  
 %We need to evaluate how similar is my model's prediction about the internal state of the system at each time $t$ to the actual state.
 Therefore, to answer this RQ, I change the labels from a Boolean (changed/not changed) to the actual collected labels. 
@@ -45,7 +45,7 @@ Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-white
 Note that in the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All that is provided here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though I use the source code to label the training set, I still look at the test set as a black-box and do not leak any information.
 
 \section{Evaluation Metrics}
-\subsection{CPD Performance Metrics (RQs 1,3, and 5)} \label{sec:CPD_metrics}
+\subsection{CPD Performance Metrics (RQs 1, 3, and 5)} \label{sec:CPD_metrics}
 %In CPD-natured tasks 
 Given that in RQ1 there is an inherent class imbalance (there are far more points where a change has \textit{not} happened compared to points with a state-change positive label), I avoid using accuracy and report both precision and recall. %, so the sheer number of true negatives makes metrics such as accuracy almost useless. A trivial model can always output 0 (no change) and have an accuracy of 99\% on a input of length 1000 with 10 true change points.To address this problem, metrics such as precision and recall that do not account for true negatives are used in the literature \cite{Truong2018ChangePointSurvey, Lee2018TimeSeriesSegmentation}.
 However, the original precision/recall metrics require some modifications due to the difficulty of predicting the exact time stamp that a state-change happened. To handle this, similar to related work \cite{Truong2018ChangePointSurvey}, I use a tolerance margin $\tau$. If a detected state-change ($\in\hat{CP}_k$) is within $\pm\tau$ of a true change ($\in{CP}_k$) , we call the prediction a True Positive, otherwise it is a False Positive. Similar adjustment to definition is applied for True Negative and False Negative. 
