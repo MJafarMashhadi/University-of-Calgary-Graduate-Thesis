@@ -81,6 +81,7 @@
   \ExecuteOptions{doublespaced}
   \AtEndOfClass{\manuscriptthesis}}
 
+
 % All other options are passed to the base class directly.
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{memoir}}
@@ -201,10 +202,13 @@
 \setlength{\cftbeforechapterskip}{3pt plus 0pt}
 \renewcommand{\cftchapterleader}{\normalfont\cftdotfill{\cftsectiondotsep}}
 \renewcommand{\contentsname}{Table of Contents}
-\setcounter{tocdepth}{5}
 
 % we need toc, lof, lot to begin on a new page
 
 \def\tocheadstart{\clearpage}
 \def\lofheadstart{\clearpage}
 \def\lotheadstart{\clearpage}
+
+
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{3}
