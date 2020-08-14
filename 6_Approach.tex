@@ -47,8 +47,8 @@ The input/output values of the black-box system create a multivariate time-serie
     |{V_1}_k|=|{V_2}_k|=\ldots=|{V_n}_k|=l_k 
 \end{equation}
 
-Note that, as figure~\ref{fig:general_net} shows, I take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models.
-This is to make sure that I can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account
+Note that, as figure~\ref{fig:general_net} shows, we take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models.
+This is to make sure that we can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account
 % the ``acceleration'' state before ``takeoff'' and the breaking state after landing
 a mid-flight ``descend'' state and the ``approach'' state right before landing
 are indistinguishable, using the sensor readings (inputs) alone. 
