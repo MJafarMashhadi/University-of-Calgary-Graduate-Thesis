@@ -273,7 +273,7 @@ I used Tensor Board to visualize and compare the effects of different hyper-para
 
 Filtering the data to find the commonalities of better hyper-parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
 It also shows that the kernel sizes and number of convolutional layers does not have an as strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
-It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, I can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
+It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
 Therefore I can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
 
 The new search space was all the combinations of these hyper-parameters:
@@ -303,7 +303,7 @@ The result of this tuning was a model with fewer convolutional layers and smalle
 \section{Limitations and Threats to Validity} \label{sec:threats_to_validity}
 One of the limitations of this approach is that it might miss an input-output invariant correlation. It can happen when the input remains constant or it changes too little to reveal its relation with certain outputs. 
 %In addition, as mentioned before, my approach relies on changes in signals. 
-I assume that during the data collection, sampling happens in regular intervals; this approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.
+The assumption is that during the data collection, sampling happens in regular intervals; this approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 
