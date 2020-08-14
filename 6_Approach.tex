@@ -9,7 +9,7 @@ In this section, I describe my proposed deep learning approach for the black-box
     \label{fig:general_net}
 \end{figure*}
 
-The goal of this study is to infer the states of a running software system, over time. Given that my assumption is I don't have access to the source code (or part of it), I only leverage the values of inputs and outputs of the system, over time.
+The goal of this study is to infer the states of a running software system, over time. Given that my assumption is we do not have access to the source code (or part of it), I only leverage the values of inputs and outputs of the system, over time.
 As can be seen in figure~\ref{fig:general_net}, I capture all the inputs and outputs of the system as a time series and then process it in a DNN. 
 The architecture of my proposed model is a hybrid DNN which is inspired by models proposed in the field of Human Activity Recognition (HAR). This task is quite similar to the subject of this thesis in the sense that they both take in a multivariate time series-data (from sensor readings) and output the state of the system that generated those readings (see section~\ref{sec:related_work_har} for more details on HAR papers). 
 This DNN is made of three parts in sequence: 1) Convolutional, 2) Recurrent, and 3) Fully connected layers. This architecture addresses the aforementioned traditional methods' challenges; each part serves a different purpose in this process, as follows.
