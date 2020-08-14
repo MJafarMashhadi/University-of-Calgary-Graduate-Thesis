@@ -11,7 +11,7 @@ I have applied this approach on a real UAV auto-pilot solution from our industry
 I ran 888 recent system-level test cases and inferred states, over time. 
 Comparison with several traditional time series change point detection techniques showed that this approach improves their performance by up to 102\%, in terms of finding state change points, measured by F1 score. I also showed that this state classification algorithm provides on average 90.45\% F1 score, which improves traditional classification algorithms by up to 17\%.
 
-\hl{Furthermore, I verified efficacy of this approach with a second case study: Paparazzi open source auto-pilot.} As it did not include system test like MP, I created a tool that generates and runs fuzzy test scenarios. I used the data from 378 simulations for replication. The improvements of this approach over the baselines, as measuredd by F1 score, for change point detection was up to 49\% and for state detection was up to 68\%.
+\hl{Furthermore, I verified efficacy of this approach with a second case study: Paparazzi open source auto-pilot.} As it did not include system test like MP, I created a tool that generates and runs fuzzy test scenarios. I used the data from 378 simulations for replication. The improvements of this approach over the baselines, as measured by F1 score, for change point detection was up to 49\% and for state detection was up to 68\%.
 In addition, by creating a hyper-parameter tuning pipeline using grid search technique, I managed to get a better performance out of the neural network model as measured by 8 metrics (compared to using the same hyper-parameters that worked for MP's case, for Paparazzi).%  As a result, in addition to confirming that the technique is applicable on other software, I.
 
 % \end{abstract}
@@ -27,7 +27,7 @@ This thesis is an original work by the author.
 %     \item The second chapter explains the data collection process that is step 0 in performing any analysis on the software. This chapter gets more technical and points to my open source contributions and the testing tool set I developed.% for data collection purpose. 
 %     The details are moved to an appendix.
 %     \item Chapter~3 Contains the manuscript I published in ASE '20 conference. In that paper, I introduce a deep neural network for the task and compare it to several baselines. The case study in this paper is the auto-pilot developed by our industry partner.
-%     \item The next chapter is a continuation of chapter~3. I replicated the same study on another auto pilot software, an open source one. In addition to that, I used a hyper-parameter tuning technique to improve the results even more.
+%     \item The next chapter is a continuation of chapter~3. I replicated the same study on another auto-pilot software, an open source one. In addition to that, I used a hyper-parameter tuning technique to improve the results even more.
 %     \item The last chapter wraps up the results and introduces some lines for future work.
 % \end{itemize}
 
