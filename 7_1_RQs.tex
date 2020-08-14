@@ -2,12 +2,12 @@
 The goals of this study is to evaluate the proposed method in terms of change point detection and state inference, in comparison to traditional techniques in this domain. Therefore, the research questions are as follows:
 
 \subsection{RQ 1) How does the proposed technique perform in detecting the state changes?}
-The goal of this RQ is to see how close the predicted state-change times are to the real state-change times. In other words, in RQ1, I do not predict the exact state labels and are only interested in predicting the change.
+The goal of this RQ is to see how close the predicted state-change times are to the real state-change times. In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
 To answer this question, I compare the performance of my proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
 
 
 \subsection{RQ 2) How well does the proposed technique predict the internal state of the system?}
-In RQ1, I am only interested in detecting the time a state-change happens (binary classification), but here in RQ2, I extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).
+In RQ1, we are only interested in detecting the time a state-change happens (binary classification), but here in RQ2, I extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).
 %I need to evaluate how similar is my model's prediction about the internal state of the system at each time $t$ to the actual state.
 Therefore, to answer this RQ, I change the labels from a Boolean (changed/not changed) to the actual collected labels. 
 
@@ -65,7 +65,7 @@ With these in mind, I measure precision, recall, and their harmonic mean F1 Scor
 
 \subsection{State detection metrics (RQs 2, 4, and 5)}
 % To answer RQ2, I again use the modified confusion matrix (using the tolerance margin $\tau$), but
-In RQ2, I have a multi-class classification problem and thus multiple precisions/recalls will be calculated, one per class (state label). I then report the mean value across all classes.
+In RQ2, we have a multi-class classification problem and thus multiple precisions/recalls will be calculated, one per class (state label). I then report the mean value across all classes.
 \begin{equation}
 \begin{split}
 P_s ={}&{}\big\{\hat{s}_t \in \hat{O}_k \;\big|\; \hat{s}_t = s\big\} \\
