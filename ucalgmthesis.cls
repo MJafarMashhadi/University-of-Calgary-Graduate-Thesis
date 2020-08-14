@@ -193,6 +193,7 @@
 \makeoddfoot{ucalgaryruled}{}{\thepage}{}
 \makeevenfoot{ucalgaryruled}{}{\thepage}{}
 
+
 % Since the TOC must include everything in the front matter, the
 % default TOC style looks odd. We reduce the space between chapter
 % entries and add dotted leaders also to chapters.

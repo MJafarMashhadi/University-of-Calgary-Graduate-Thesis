@@ -24,7 +24,8 @@
 % per line. For filing in the Vault, remove that option to produce a
 % more compact thesis with a slightly better layout.
 
-\documentclass[utopia,headers,manuscript]{ucalgmthesis}
+\documentclass[utopia,headers]{ucalgmthesis}
+% \documentclass[utopia,headers,manuscript]{ucalgmthesis}
 
 % Using LaTeX? Then you're probably using math, and so you want to use
 % the AMS math commands and define some theorem environments! But you
@@ -137,12 +138,12 @@
 \mainmatter
 
 
-\input{3_Introduction}
-\input{4_Motivation}
-\input{5_Background}
-\input{6_Approach}
-\input{7_Experiment}
-\input{8_Conclusion}
+\include{3_Introduction}
+\include{4_Motivation}
+\include{5_Background}
+\include{6_Approach}
+\include{7_Experiment}
+\include{8_Conclusion}
 
 
 % \include{4_fuzzy}

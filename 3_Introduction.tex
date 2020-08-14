@@ -4,7 +4,7 @@ Automated specification mining or model inference \cite{lo2011mining} is the pro
 
 Inferring a behavior model of a system in a black-box manner is particularly interesting. In many real-world applications, the large-scale system is built by integrating many off-the-shelf libraries that are only available as binaries (no source code access). Thus, from a system's point of view, knowing the exact behavior of the system including all the interactions between black-box units are needed for most run-time analysis. 
 
-\hl{ThisParagraph}\\
+\hl{ThisParagraph}
 Model inference techniques are generally grouped into static and dynamic analysis categories. 
 Static approaches use the code as their input data. They are able to gather all the required information such as function call graphs for example from the source code itself without a need to run the software.
 A typical dynamic model inference pipeline, on the other hand, starts with running existing tests in the software to collect required data \cite{Papadopoulos2015}.
@@ -32,17 +32,17 @@ I evaluated the method from two perspectives: how well the model can detect the 
 Comparing the proposed approach with state-of-the-art alternatives, the results show that it better in both change point and state detection. I observed 88.00\% to 102.20\% improvement in the F1 score of this CPD, compared to traditional CPD techniques. In addition, I saw a 7.35\% to 16.83\% improvement in the F1 score of state detection, compared to traditional classification algorithms on a sliding window, over the data.
 
 
-The contributions of this chapter can be summarised as:
+\hl{The contributions of this thesis can be summarised as:}
 \begin{itemize}
     \item Introducing the first (to the best of my knowledge) deep learning architecture to infer behavior models from black-box software systems.
-    \item Empirically evaluating the model and achieving very high accuracy compared to baselines using a real-world and large-scale case study on a UAV auto-pilot system developed by our industry partner.
+    \item Empirically evaluating the model and achieving very high accuracy compared to baselines using two real-world and large-scale case studies on a UAV auto-pilot system developed by our industry partner as well as an open source UAV auto-pilot.
+    \item Developed an automated fuzz testing tool capable of generating and executing test cases for Paparazzi auto-pilot.
+    \item Created a hyper-parameter tuning pipeline to juice the best performance out of the deep learning model
 \end{itemize}
 
-Note that I have made all the source code, models, and execution scripts available online\footnote{https://github.com/sea-lab/hybrid-net}, however, due to confidentiality, dataset cannot be shared publicly. 
+Note that I have made all the source code, models, and execution scripts available online\footnote{https://github.com/sea-lab/hybrid-net}, however, due to confidentiality, data set cannot be shared publicly. 
 
-The rest of this thesis is organized as follows: In chapter~\ref{sec:motivation} I explain further how and in which contexts this research can be beneficial. 
-Then in chapter~\ref{sec:background} I go thorogh some background material and related papers this work is based on. 
-In chapter~\ref{sec:approach}, I explain how my proposed model is designed. The way it was evaluated and the results are explained in chapter~\ref{sec:experiment}. 
-Finally,
-% related work reviewed in section~\ref{sec:related_work}, and 
-some final remarks about the future work are made in chapter~\ref{sec:summary}.
+\hl{The rest of this thesis is organized as follows:} In chapter~\ref{sec:motivation} I explain further how and in which contexts this research can be beneficial. 
+Then in chapter~\ref{sec:background} I go through some background material and related papers this work is based on. 
+In chapter~\ref{sec:approach}, I present my proposed method and model. The way it was evaluated and the results are explained in chapter~\ref{sec:experiment}. 
+A summary of the paper and some discussion about the results are made in chapter~\ref{sec:summary} and finally I briefly discuss some paths for future continuation of this work in chapter~\ref{sec:future_work}.
