@@ -251,7 +251,7 @@ You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the basel
 They say a picture is worth a thousand words\footnote{missing citation}, to better see the predictions of the deep learning model compared to the ground truth, see figure~\ref{fig:paparazzi_predictions}. 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{6_files/states_chart.png}
+    \includegraphics[width=\columnwidth]{RQ3-5_charts/states_chart.png}
     \caption{The states are color coded and each rectangle shows one test, only the first 1000 samples (200 seconds) are shown for more clarity. The same as figure~\ref{fig:test_0} in, the top half of each rectangle shows the model's output and the bottom half shows the true labels.}
     \label{fig:paparazzi_predictions}
 \end{figure}
@@ -266,7 +266,7 @@ Here I summarize the answer.
 I used Tensor Board to visualize and compare the effects of different hyper-parameters on the model's performance. First, for a sanity check, I visualized 4 metrics, precision and recall in detecting change points with a small tolerance of $\tau=1s$, and precision and recall in estimating the internal state. A healthy linear and positive correlation is visible between all pairs of these metrics, it means that trying to improve one usually will not come at the expense of others. 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{6_files/prec_recall_matrix_tuning_white_background.png}
+    \includegraphics[width=\columnwidth]{RQ3-5_charts/prec_recall_matrix_tuning_white_background.png}
     \caption{Matrix of scatter plots comparing precision and recall of the deep learning model on test data.}
     \label{fig:precision_recall_matrix}
 \end{figure}
@@ -286,7 +286,7 @@ The new search space was all the combinations of these hyper-parameters:
 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{6_files/refined_prec_recall_white_background.png}
+    \includegraphics[width=\columnwidth]{RQ3-5_charts/refined_prec_recall_white_background.png}
     \caption{Parallel coordinates view showing the effects of select hyper-parameters on the performance measures.}
     \label{fig:precision_recall_parallel_coordinates}
 \end{figure}
