@@ -9,7 +9,7 @@ In this section, I describe my proposed deep learning approach for the black-box
     \label{fig:general_net}
 \end{figure*}
 
-The goal of this study is to infer the states of a running software system, over time. Given that my assumption is we don't have access to the source code (or part of it), I only leverage the values of inputs and outputs of the system, over time. 
+The goal of this study is to infer the states of a running software system, over time. Given that my assumption is I don't have access to the source code (or part of it), I only leverage the values of inputs and outputs of the system, over time.
 As can be seen in figure~\ref{fig:general_net}, I capture all the inputs and outputs of the system as a time series and then process it in a DNN. 
 The architecture of my proposed model is a hybrid DNN which is inspired by models proposed in the field of Human Activity Recognition (HAR). This task is quite similar to the subject of this thesis in the sense that they both take in a multivariate time series-data (from sensor readings) and output the state of the system that generated those readings (see section~\ref{sec:related_work_har} for more details on HAR papers). 
 This DNN is made of three parts in sequence: 1) Convolutional, 2) Recurrent, and 3) Fully connected layers. This architecture addresses the aforementioned traditional methods' challenges; each part serves a different purpose in this process, as follows.
@@ -31,14 +31,14 @@ In terms of loss function to optimize in the training process, a good choice is 
 % To make it more clear, compare it to applying a convolution (or a discrete derivative) to each signal independently. It can only learn temporal features, nothing about the interactions between the signals.
 % Using convolutional layers instead of predefined kernels allows the model to learn which subset of possible connections and interactions (which can involve two or more variables) can be used as features. This flexibility has another advantage as well. It helps the model to be more resilient to time lag between noticing a deviation in input signals and the reaction that will appear in the output signals. This time lag can be caused by a number of reasons including: physical limitations, sampling resolution, tuning of the controller, or design choices in the system.
 %\subsubsection{Data Collection}
-%The object system is treated as a black-box where we can only read its input and output values. 
+%The object system is treated as a black-box where I can only read its input and output values.
 %Capturing the input and output data ($T_k$s) is straightforward. In the first step the system is executed and multiple logs of the input/output values are recorded. After that, state change points ($CP_k$s) data is required to be collected. A typical way to obtain them is with help of a domain expert. They label the logs indicating the time stamps where the system's internal state has changed as well as the new state that it went in. Domain experts are ideal for labeling since they know what the system is and what it is supposed to do, so they can (probably with some inherent human error) detect the system state. 
 %They can do it based on a variety of information sources such as examining the system's I/O (which we already have captured), logs, or a high level program or set of instructions preloaded into the system.
 
 
-%We aimed to infer high level states of a black-box system using a machine learning model that observes the system's behavior. 
+%I aimed to infer high level states of a black-box system using a machine learning model that observes the system's behavior.
 \section{Data Encoding}
-% To collect data we run the system $N$ times using $N$ existing test cases and record the input/output values. The recorded data from $k$-th run, $T_k$, forms a discrete multivariate time series data.
+% To collect data I run the system $N$ times using $N$ existing test cases and record the input/output values. The recorded data from $k$-th run, $T_k$, forms a discrete multivariate time series data.
 The input/output values of the black-box system create a multivariate time-series ($T_k$), which can be defined as a set of $n$ univariate time series ($V_i$) of the same length $l_k$. Each $V_i$ corresponds to the recorded values for one of the inputs or outputs of the system:
 \begin{equation} \label{eq:T_k}
     T_k = \{{V_1}_k, {V_2}_k, \ldots, {V_n}_k\}
@@ -47,14 +47,14 @@ The input/output values of the black-box system create a multivariate time-serie
     |{V_1}_k|=|{V_2}_k|=\ldots=|{V_n}_k|=l_k 
 \end{equation}
 
-Note that, as figure~\ref{fig:general_net} shows, we take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models. 
-This is to make sure that we can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account 
+Note that, as figure~\ref{fig:general_net} shows, I take both inputs and outputs as part of the time-series data to be fed as input into my deep learning models.
+This is to make sure that I can model state-based behavior of the system, where the current state depends not only on the inputs, but also on the last state(s) (captured as previous outputs) of the system. As an example, from the case study, if the outputs are not taken into account
 % the ``acceleration'' state before ``takeoff'' and the breaking state after landing
 a mid-flight ``descend'' state and the ``approach'' state right before landing
 are indistinguishable, using the sensor readings (inputs) alone. 
 
-Having such a time-series, the only remaining pieces from a training set are the labels. Unlike the input/output values (the features in the data set) the labels are not usually given. My method to infer the labels is a supervised approach. Thus, we need the domain expert to manually label each individual time stamp with a state name/ID. In practice, what they would do is to identify the approximate time that a state change happens and assign the new state to one of the previous states labels or define a new label for this new state.
-Thus I encode the states information over time as a set of tuples in the form of $(t_s, s)$ where $t_s$ denotes the timestamp where the system entered state $s$. We show the set of all possible states with $S$ ($s \in S$) and define $N_s$ as the cardinality of this set. 
+Having such a time-series, the only remaining pieces from a training set are the labels. Unlike the input/output values (the features in the data set) the labels are not usually given. My method to infer the labels is a supervised approach. Thus, I need the domain expert to manually label each individual time stamp with a state name/ID. In practice, what they would do is to identify the approximate time that a state change happens and assign the new state to one of the previous states labels or define a new label for this new state.
+Thus I encode the states information over time as a set of tuples in the form of $(t_s, s)$ where $t_s$ denotes the timestamp where the system entered state $s$. I show the set of all possible states with $S$ ($s \in S$) and define $N_s$ as the cardinality of this set.
 \begin{equation}\label{eq:change_point}\begin{split}
     CP_k {}&{}= \big\{ (t_{s_1}, s_1), (t_{s_2}, s_2), \ldots, (t_{s_l}, s_l) \big\}\:,\; s_i \in S \\
     N_s  {}&{}= |S|
@@ -62,7 +62,7 @@ Thus I encode the states information over time as a set of tuples in the form of
 \end{equation}
 So in summary, the dataset consists of $N$ pairs of the I/O values as features and their state information as labels $\big\{(X=T_k,\;y=CP_k)|1\leq~k\leq~N\big\}$. 
 % Each example in dataset contains one whole test case. The output labels were one-hot encoded to match the model output shape.
-%It is worth mentioning that in section~\ref{mp_data_collection} we explain what we did to keep the variety of the collected data (and hence its quality) high. 
+%It is worth mentioning that in section~\ref{mp_data_collection} I explain what I did to keep the variety of the collected data (and hence its quality) high.
 
 \subsection{Data Preprocessing}
 %\subsubsection{Inputs and Labels} %\label{data_set_properties}

@@ -6,7 +6,7 @@ In this section more details on how data was collected from each system will be 
 \subsection{MicroPilot AutoPilot}
 \subsubsection{Instrumentation}
 Control decisions in this software are made in a 5Hz loop, it means that every 200ms all the sensor inputs are read and based on the current state of the aircraft and the system's goal at the moment (e.g. maintaining a constant speed) decisions will be made and output is generated. Considering this, the best way to capture those data is in the end of each iteration of this loop. I inserted instrumentation code there, to log input and output values (listed in Table~\ref{tab:in_outs}) at the exact spot where they are updated. 
-Please note that although it is more convenient to capture the values in this way, it does not give us any special advantage or insight that breaks the black-box condition. In other words, the exact same data could be collected from the compiled binaries without any access to the internals, just with extra steps. Inputs and outputs, after all, are the very least thing available in both black-box and white-box settings.
+Please note that although it is more convenient to capture the values in this way, it does not give me? any special advantage or insight that breaks the black-box condition. In other words, the exact same data could be collected from the compiled binaries without any access to the internals, just with extra steps. Inputs and outputs, after all, are the very least thing available in both black-box and white-box settings.
 
 \subsubsection{Test Scenarios}\label{sec:mp_test_scenarios}
 MicroPilot has a repository of 948 system tests, I ran them in a software simulator\footnote{It is developed by MicroPilot and provides an accurate simulation of the aerodynamic forces on the aircraft, the physical environment irregularities (e.g. unexpected wind gusts), and noises in sensor readings} and collected the logged flight data, over time. 
@@ -46,8 +46,8 @@ Out of the 948 flight logs, I omitted 60 that were either too short or too long 
 % During the data preprocessing, after the time series data is converted into tensors, all of the shorter $T_i$s were post-padded to the length of the longest one: $L=18000$ time steps.
 The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for training, validation, and testing, where each sample corresponds to one test execution. Note that separate test and validation sets are needed to facilitate proper hyper-parameters tuning, without leaking information. 
 % \subsection{System Under Study} \label{mp_data_collection}
-% Our case study is a state-based system, which is real-time controller for UAVs, developed by
-% our partner
+% My case study is a state-based system, which is real-time controller for UAVs, developed by
+% My partner
 % \begin{anonsuppress}
 % Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV AutoPilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years.
 % \end{anonsuppress}
@@ -56,7 +56,7 @@ The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for train
 %What the AutoPilot does can be summarized as `trying to hold some invariants based on the goal/state of the system'.
 % % Maybe these two paragraphs can be moved somewhere more appropriate
 % \label{changes_in_inputs}
-% To work it backwards we capture the input/outputs (the UAV's relevant signals) over time and examine their correlations, i.e. how changes in one of them results in changes in another. When the state of the system changes these relations may change. So if we can capture what the relations are and when they change we can determine the state in which the system is in. 
+% To work it backwards I capture the input/outputs (the UAV's relevant signals) over time and examine their correlations, i.e. how changes in one of them results in changes in another. When the state of the system changes these relations may change. So if I can capture what the relations are and when they change I can determine the state in which the system is in.
 % Of course pinpointing the exact moment when the changes happen is difficult; It is also impacted by the sampling time resolution so the inferred states and the change points are approximations.
 The auto-pilot can be used in SWIL and HWIL modes \cite{melmoth2019true}, which stand for software in the loop and hardware in the loop respectively. I used SWIL mode as it provides what was needed without any of the costs and hassles that come from HWIL mode. 
 

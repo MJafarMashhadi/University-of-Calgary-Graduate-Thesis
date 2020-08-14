@@ -114,7 +114,7 @@ Comparing the baseline methods with my approach (the last row) in Table~\ref{tab
 To have a feeling of how good my predictions are in practice, Figure~\ref{fig:test_0} shows the output of my model side by side with the ground truth. The horizontal axis shows sample ID (time) and the states are color coded. As it is seen, this algorithm performs better when the state changes are farther apart. Also there are some state changes that happen quite briefly which are not detected. That is not to a great surprise since it takes some time for state changes to be reflected in the outputs and those might not have got any chance.
 
 
-The classical models only see one window of the data at a time, convolutional layers on the other hand are more generalized and flexible since each filter in each layer is comparable to a sliding window. As we saw in Table~\ref{tab:rq2-1-results}, a larger window size means a higher performance. However, it gets significantly more difficult to train a model with large window sizes. In addition, convolutions can automatically learn preprocessing steps that could be beneficial such as a moving average. Each convolutional filter can learn a linear combination of its inputs. So when the convolutional layers are stacked on each other, with non-linear activation functions in between, the hypothesis space they can learn becomes quite large, probably much larger than most of the classical ML algorithms here. Also, they are still quite efficient (more efficient than baselines) due to parameter sharing and their high parallelizability.
+The classical models only see one window of the data at a time, convolutional layers on the other hand are more generalized and flexible since each filter in each layer is comparable to a sliding window. As you saw in Table~\ref{tab:rq2-1-results}, a larger window size means a higher performance. However, it gets significantly more difficult to train a model with large window sizes. In addition, convolutions can automatically learn preprocessing steps that could be beneficial such as a moving average. Each convolutional filter can learn a linear combination of its inputs. So when the convolutional layers are stacked on each other, with non-linear activation functions in between, the hypothesis space they can learn becomes quite large, probably much larger than most of the classical ML algorithms here. Also, they are still quite efficient (more efficient than baselines) due to parameter sharing and their high parallelizability.
 
 The fact that the performance improves as the window size increases indicates the positive effect of being able to see longer-term relations in detecting the system's state. Recurrent cells (such as GRU) can capture long-term dependencies (that do not necessarily fall into one window) and learn sequences. This is one of the major differences between an RNN model and others, such as decision trees, which do not have such a notion of a ``long-term memory'' as LSTM/GRU neural networks do. All a decision tree could see is the values in a sliding window.
 
@@ -148,7 +148,7 @@ As a reminder: Paparazzi data set consists of ~300 tests vs. ~900 tests in MP, a
 It is worth mentioning that both in the first two RQs and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
 
 \begin{rqanswer}
-The proposed approach was applied on another similar software system with a smaller data set size and showed a near 49\% improvement over the baselines, confirming that it is a feasible approach even with smaller data set size. The lower margin of improvement compared to RQ1 is attributed to the baselines peforming better on this data, rather than my approach not performing good enough.
+The proposed approach was applied on another similar software system with a smaller data set size and showed a near 49\% improvement over the baselines, confirming that it is a feasible approach even with smaller data set size. The lower margin of improvement compared to RQ1 is attributed to the baselines performing better on this data, rather than my approach not performing good enough.
 \end{rqanswer}
 
 \begin{sidewaystable}
@@ -273,7 +273,7 @@ I used Tensor Board to visualize and compare the effects of different hyper-para
 
 Filtering the data to find the commonalities of better hyper-parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
 It also shows that the kernel sizes and number of convolutional layers does not have an as strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
-It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
+It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, I can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
 Therefore I can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
 
 The new search space was all the combinations of these hyper-parameters:
@@ -303,7 +303,7 @@ The result of this tuning was a model with fewer convolutional layers and smalle
 \section{Limitations and Threats to Validity} \label{sec:threats_to_validity}
 One of the limitations of this approach is that it might miss an input-output invariant correlation. It can happen when the input remains constant or it changes too little to reveal its relation with certain outputs. 
 %In addition, as mentioned before, my approach relies on changes in signals. 
-We assume that during the data collection, sampling happens in regular intervals; this approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.
+I assume that during the data collection, sampling happens in regular intervals; this approach probably will have a hard time achieving high performances, working on unevenly spaced time-series data.
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 

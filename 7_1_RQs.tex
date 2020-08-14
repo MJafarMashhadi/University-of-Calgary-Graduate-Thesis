@@ -2,13 +2,13 @@
 The goals of this study is to evaluate the proposed method in terms of change point detection and state inference, in comparison to traditional techniques in this domain. Therefore, the research questions are as follows:
 
 \subsection{RQ 1) How does the proposed technique perform in detecting the state changes?}
-The goal of this RQ is to see how close the predicted state-change times are to the real state-change times. In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
+The goal of this RQ is to see how close the predicted state-change times are to the real state-change times. In other words, in RQ1, I do not predict the exact state labels and are only interested in predicting the change.
 To answer this question, I compare the performance of my proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}.
 
 
 \subsection{RQ 2) How well does the proposed technique predict the internal state of the system?}
-In RQ1, we are only interested in detecting the time a state-change happens (binary classification), but here in RQ2, I extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).  
-%We need to evaluate how similar is my model's prediction about the internal state of the system at each time $t$ to the actual state.
+In RQ1, I am only interested in detecting the time a state-change happens (binary classification), but here in RQ2, I extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).
+%I need to evaluate how similar is my model's prediction about the internal state of the system at each time $t$ to the actual state.
 Therefore, to answer this RQ, I change the labels from a Boolean (changed/not changed) to the actual collected labels. 
 
 \subsection{RQ 3) Can the results be replicated with regards to state change point detection (RQ1) on Paparazzi auto-pilot?}
@@ -42,7 +42,7 @@ I performed an exhaustive grid search over these parameters, using Tensor Board 
 Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-whitepaper} that provides great insight for better training TensorFlow models.
 
 
-Note that in the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All that is provided here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though I use the source code to label the training set, I still look at the test set as a black-box and do not leak any information.
+Note that in the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All that is provided here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights. Also note that even though I use the source code to label the training set, I still look at the test set as a black-box and do not leak any information.
 
 \section{Evaluation Metrics}
 \subsection{CPD Performance Metrics (RQs 1, 3, and 5)} \label{sec:CPD_metrics}
@@ -64,8 +64,8 @@ FN ={}&{}\Big|\big\{ (t, s_t) \in CP_k \;\big|\; \nexists\: (\hat{t}, \hat{s}_t)
 With these in mind, I measure precision, recall, and their harmonic mean F1 Score with three values for $\tau$: 1, 3, and 5 seconds. The smaller the tolerance is the stricter the definitions become and the lower the numbers are. 
 
 \subsection{State detection metrics (RQs 2, 4, and 5)}
-% To answer RQ2, we again use the modified confusion matrix (using the tolerance margin $\tau$), but  
-In RQ2, we have a multi-class classification problem and thus multiple precisions/recalls will be calculated, one per class (state label). I then report the mean value across all classes. 
+% To answer RQ2, I again use the modified confusion matrix (using the tolerance margin $\tau$), but
+In RQ2, I have a multi-class classification problem and thus multiple precisions/recalls will be calculated, one per class (state label). I then report the mean value across all classes.
 \begin{equation}
 \begin{split}
 P_s ={}&{}\big\{\hat{s}_t \in \hat{O}_k \;\big|\; \hat{s}_t = s\big\} \\
@@ -77,7 +77,7 @@ $$Precision =\frac{1}{N_s}\sum_{s=1}^{N_s} \frac{|TP_s|}{|P_s|} \quad,\quad Reca
 
 \section{Comparison Baselines} 
 \subsection{CPD baselines (RQs 1 and 3)} \label{sec:CPD_baseline}
-I used `ruptures' library developed by authors of a recent CPD survey study \cite{Truong2018ChangePointSurvey}. It provides a modular framework for applying several CPD algorithms to univariate and multivariate data. % We did not apply the methods that required knowing the number of change points a priori. 
+I used `ruptures' library developed by authors of a recent CPD survey study \cite{Truong2018ChangePointSurvey}. It provides a modular framework for applying several CPD algorithms to univariate and multivariate data. % I did not apply the methods that required knowing the number of change points a priori.
 As mentioned earlier two main elements of a CPD algorithm in their survey are the search method and the cost function.
 
 I used Pelt \cite{killick2012optimal} as the most efficient exact search method. As examples of approximate search methods, I applied bottom-up segmentation and window-based methods using a default window size of 100 \cite{keogh2001online}.
@@ -85,7 +85,7 @@ However, after trying to run Pelt algorithm \hl{on MicroPilot's data}, I realize
 \hl{Fortunately, for RQ 3 with smaller data set size of Papaarazzi, it was feasible (though still quite time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.}
 
 For the cost function, I tried ``Least Absolute Deviation'', ``Least Squared Deviation'', ``Gaussian Process Change'', ``Kernelized Mean Change'', ``Linear Model Change'', ``Rank-based Cost Function'', and ``Auto-regressive model change'' as defined in the library. Their parameters were left as default.
-To optimize the number of change points a penalty value (linearly proportionate to the number of detected change points) is added to the cost function, which limits the number of detected change points, the higher the penalty the fewer reported change points. We tried three different ratios (100, 500, and 1000) for the penalty.
+To optimize the number of change points a penalty value (linearly proportionate to the number of detected change points) is added to the cost function, which limits the number of detected change points, the higher the penalty, the fewer reported change points. I tried three different ratios (100, 500, and 1000) for the penalty.
 
 \subsection{Multi-class classification baselines (RQs 2 and 4)}
 I used a sliding window of width $w$ over the 10 time-series values and then flattened it to make a vector of size $10w$ as the features. For the labels, I used one-hot encoded state of the system.
