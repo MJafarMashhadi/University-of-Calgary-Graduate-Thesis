@@ -22,12 +22,13 @@ Papadopoulos et al., proposed an active learning method (with repeated interacti
 In \cite{jafar2019interactive} a semi-interactive method for inferring state machines is proposed. It requires instrumenting the source code (white-box) and performs dynamic analysis of the system under study.
 
 \section{Automated Test Generation} \hl{new subsection in BKG}
-Testing software can be automated using the state of practice tools such as JUnit and Pytest. In automated testing, a developer writes test code that runs their code, gives it inputs and compares outputs with the expected outputs to verify if the program is behaving correctly. 
 Automated testing is widely researched and ubiquitously used in the industry. 
+Software test execution can be automated using the state of practice tools such as JUnit and Pytest. In such automated testing, a developer writes a test code that runs their source code, gives it inputs, and compares its outputs with the expected outputs to verify if the program is behaving correctly. However, in such practices the test generation and design is still manual and only the execution, evaluation and reporting is automated. 
 
-The next level in test automation is automated test generation, that is having a code that can automatically generate test code \cite{ibrahim2007automatic}. 
+The next level in test automation is automated test generation, that is having a tool that can automatically generate test code \cite{ibrahim2007automatic}. 
 There are several approaches in the literature for tackling this problem. 
-Model-based testing approaches use inferred models or hand crafted models to automate some tasks in testing. For example, Papadopoulos et al.'s method \cite{Papadopoulos2015} can generate test data using active learning. A similar paper is the work by Volpato and Tretmans \cite{volpato2014active} that use state models for test generation.
+Model-based testing approaches use specification models (inferred or hand crafted) to automate verification of requirements. For example, Papadopoulos et al.'s method \cite{Papadopoulos2015} can generate test data using active learning. A similar paper is the work by Volpato and Tretmans \cite{volpato2014active} that use state models for test generation. 
+
 Search-based testing approaches, use well-known search algorithms such as evolutionary algorithms to generate test cases and test data. Random testing approaches generate randomized input data for testing.
 For example, evo-suite is a widely used test generation tool that uses evolutionary algorithms under the hood \cite{fraser2011evosuite} to generate unit tests for Java applications. DART and Randoop \cite{Godefroid2005DART, pacheco2007randoop} generate random data to test the software. Feedback-directed random test generation is an step of improvement over naïve random test generation techniques \cite{pacheco2007feedback}.
 Fuzz testing is a similar approach to random test generation. DeepFuzz uses fuzzing to generate syntactically valid C code to catch bugs in C compilers \cite{liu2019deepfuzz}. Fairfuzz \cite{lemieux2018fairfuzz} monitors branch coverage of generated inputs to guide fuzzing in a way that rare branches are also covered adequately.

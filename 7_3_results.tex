@@ -136,19 +136,19 @@ The proposed model, which requires less than half as many CPUs and 70\% as much 
 \subsection{RQ3 Results: CPD Performance on Paparazzi (replication)}
 \hl{NEW SECTION}
 The results of applying baseline algorithms on Paparazzi data set can be seen in table~\ref{tab:cpd_paparazzi}.
-The numbers are quite varied, for example there are scores worse then 1\% as well as some 100\% recall scores. 
+The range of CPD performance is quite varied across the techniques, for example there are scores less then 1\% (e.g., ???) as well as some 100\% scores (e.g., ???). 
 The 100\% recalls are accompanied with a low precision; achieving that is not difficult. A method that outputs every point as a change-point will get similar results. 
-The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for the first two RQs. 
-As a matter of fact, running Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23800 experiments. 
+The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1,000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger data set, as it was the case for the first two RQs. 
+As a matter of fact, running Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23,800 experiments. 
 
 Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in RQ1. (see the RQ1 results summary box and the paragraph above that). % in section~\ref{sec:results}). 
 However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. 
 It can be due to the fact that the new data set is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. 
-As a reminder: Paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2500 samples vs. 18000 in MP's data set. 
+As a reminder: Paparazzi data set consists of ~300 tests vs. ~900 tests in MP, and simulation lengths are up to 2,500 samples vs. 18,000 in MP's data set. 
 It is worth mentioning that both in the first two RQs and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
 
 \begin{rqanswer}
-The proposed approach was applied on another similar software system with a smaller data set size and showed a near 49\% improvement over the baselines, confirming that it is a feasible approach even with smaller data set size. The lower margin of improvement compared to RQ1 is attributed to the baselines peforming better on this data, rather than my approach not performing good enough.
+The proposed approach was applied on another similar software system with a smaller data set size and showed a near 49\% improvement over the baselines, confirming that it is a feasible approach even with smaller data set size. The lower margin of improvement compared to RQ1 is attributed to the baselines performing better on this data, rather than my approach not performing good enough.
 \end{rqanswer}
 
 \begin{sidewaystable}
@@ -199,7 +199,7 @@ The proposed approach was applied on another similar software system with a smal
 \multirow{3}{*}{\textbf{My Approach}} 
     & \multirow{3}{*}{\textbf{Data set:}}  
          & \textbf{Validation} &  45.63\% &    55.46\% & 50.07\% &   81.39\% &     90.97\% & 85.92\% &   88.38\% &     97.12\% & 92.54\%  \\
-    & {} & b\textbf{Test (Tuning)} &  42.65\% &    54.87\% & 47.99\% &   76.73\% &     90.96\% & 83.24\% &   85.18\% &     97.46\% & 90.91\%  \\
+    & {} & \textbf{Test (Tuning)} &  42.65\% &    54.87\% & 47.99\% &   76.73\% &     90.96\% & 83.24\% &   85.18\% &     97.46\% & 90.91\%  \\
     & {} & \textbf{Training}  &  39.81\% &    51.96\% & 45.08\% &   75.69\% &     90.62\% & 82.49\% &   84.96\% &     97.55\% & 90.82\%  \\
 \bottomrule
 \end{tabular}%
@@ -216,7 +216,7 @@ Another similar observation is that the scores do not vary much with changing th
 The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% range, which was 32-39\% in RQ2. For decision trees it is in 67-68\% range here while it is in 73-77\% range in RQ 2. 
 
 The deep learning model's performance measures (on validation data) can be found in the last row of the table. 
-You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in RQ2 is 16.83\%, not very different from this. This, again confirms the reproducibility of the results in the first two RQs.
+You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in RQ2 is 16.83\%, not very different from this. This, again provides some evidence on the generalizabilty of the results in the first two RQs.
 
 \begin{table}
 \caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, I only show the results of the best performing model in each group.}
@@ -248,7 +248,8 @@ You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the basel
 }
 \end{table}
 
-They say a picture is worth a thousand words\footnote{missing citation}, to better see the predictions of the deep learning model compared to the ground truth, see figure~\ref{fig:paparazzi_predictions}. 
+%They say a picture is worth a thousand words\footnote{missing citation}, 
+Figure~\ref{fig:paparazzi_predictions} summarizes the prediction results of the deep learning model compared to the ground truth. 
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{RQ3-5_charts/states_chart.png}
@@ -258,7 +259,7 @@ They say a picture is worth a thousand words\footnote{missing citation}, to bett
 
 
 \begin{rqanswer}
-Compared to the baselines, the proposed approach could detect the internal state of system with a 71\% precision and 89\% recall rate, showing a 19\% improvements. Similar results were seen in RQ 2 (which is closely related to this question) confirming that the improvements are replicable and are not just a fluke.
+Compared to the baselines, the proposed approach could detect the internal state of system with a 71\% precision and 89\% recall rate, showing a 19\% improvements. Similar results were seen in RQ 2 (which is closely related to this question) confirming generalizabilty of the findings.
 \end{rqanswer}
 
 \subsection{RQ5 Results: Hyper-parameter Tuning}
@@ -272,11 +273,11 @@ I used Tensor Board to visualize and compare the effects of different hyper-para
 \end{figure}
 
 Filtering the data to find the commonalities of better hyper-parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
-It also shows that the kernel sizes and number of convolutional layers does not have an as strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
+It also shows that the kernel sizes and number of convolutional layers does not have an strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
 It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
 Therefore I can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
 
-The new search space was all the combinations of these hyper-parameters:
+The new search space includes all combinations of these hyper-parameters:
 
 \begin{enumerate}
     \item Learning rate, options being: $3\times10^{-4}$, $1\times10^{-3}$, and $3\times10^{-3}$
@@ -287,10 +288,10 @@ The new search space was all the combinations of these hyper-parameters:
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{RQ3-5_charts/refined_prec_recall_white_background.png}
-    \caption{Parallel coordinates view showing the effects of select hyper-parameters on the performance measures.}
+    \caption{Parallel coordinates view showing the effects of selected hyper-parameters on the performance measures.}
     \label{fig:precision_recall_parallel_coordinates}
 \end{figure}
-The results of the second round of tuning are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. This chart shows 3 + 8 parallel axis, 3 hyper-parameters and 8 metrics. To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
+The results of the second round of tuning are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. This chart shows 3 + 8 parallel axes, 3 hyper-parameters and 8 metrics. To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
 The green highlighted line is the best configuration tried, with the highest area under the curve. That configuration has the best or close to the best performance in all metrics. The configuration is to use 256 GRU cells, 72 filter per layer, and the lower learning rate of $3\times10^{-4}$.
 
 I used these hyper-parameters to train the best model. The scores used in the research question 3 and 4 are the evaluation results of this model on the [previously unseen] validation data. The stopping criteria on training the model was for the validation loss to plateau, with a `patience' of 15 epochs. The optimizer converged in 54 epochs, after less than 3 minutes of training. 
@@ -307,5 +308,5 @@ We assume that during the data collection, sampling happens in regular intervals
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 
-In terms of construct validity, I am using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, I have used multiple margins and reported all results. In terms of internal validity threats, I reduced the threat by not implementing the CPD baselines by myself and rather reusing existing libraries. In terms of conclusion validity threats, I have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, this study suffers from being limited to only one case study. However, the study is a large-scale real-world study with many test cases. I plan to extend this work with more case studies from other domains, to increase its generalizability.}
+In terms of construct validity, I am using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, I have used multiple margins and reported all results. In terms of internal validity threats, I reduced the threat by not implementing the CPD baselines by myself and rather reusing existing libraries. In terms of conclusion validity threats, I have used many (888) real test cases from Micropilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. \hl{Finally, in terms of external validity threats, this study suffers from being limited to only two case studies. However, (a) the studies are large-scale real-world systems with many test cases, and (b) they are both from industry and open source to be more representative. In the future one potetnial extension is to extend this work with more case studies from other domains, to increase its generalizability.}
 

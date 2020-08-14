@@ -79,9 +79,9 @@ In simulations, the modem and wireless communications are no longer needed, inst
 Paparazzi comes with a multitude of small tools that could do most of what I needed in terms of instrumentation. There is a remote logger and a log player which are quite close to the instrumentation tool I need, however upon trying them in action, I figured that they cannot record some of the information that I need. Therefore, I developed a custom flight data recorder tool. 
 
 \subsubsection{Test Scenarios}
-Unlike MicroPilot that had a quite a number of system tests (in addition to other types of tests such as unit tests which I did not use), Paparazzi comes with only unit tests. As it is an open source software under GPL licence it comes with no warranty and also does not need certain certifications and approvals that commercial systems require, therefore incentives to have such tests are lower. 
-Although it is a reliable and widely used auto-pilot, it owes that reliability more to its widespread use in action (by many researchers and enthusiasts) rather than automated tests that verify its behaviour.
-In this situation, where many eyes are watching over the code, bugs are discovered and patched quickly. However, to the best of my knowledge they are not recorded as system tests that verify the bugs are properly patched and detect regressions in the future.
+Unlike MicroPilot that had a large a number of system tests (in addition to other types of tests such as unit tests which I did not use), Paparazzi comes with only unit tests. As it is an open source software under GPL licence it comes with no warranty and also does not need certain certifications and approvals that commercial systems require, therefore incentives to have such tests are lower. 
+Although it is a reliable and widely used autopilot, it owes that reliability more to its widespread use in action (by many researchers and enthusiasts) rather than automated tests that verify its behaviour.
+In this situation, where many eyes are watching over the code, bugs are discovered and patched quickly. However, to the best of my knowledge they are not recorded as system tests that verify the bugs are properly patched and detect regressions, in the future.
 
 To fill the void, I created a fuzz testing tool that can automatically generate valid, diverse, and meaningful automated system tests for Paparazzi based on the example flight plan that is included with it.
 My tool can automatically generate system tests, run them in a simulator (or on hardware\footnote{Although I have not tested running tests on a hardware (HWIL) to confirm, but having implemented the protocol it potentially is capable of doing so}), and also collect required telemetry data from the aircraft. 
@@ -96,11 +96,11 @@ More details about the tool is left for next section, section~\ref{section:fuzzi
 The result of generating and running tests was 378 runs worth of different flight scenarios.
 After collecting the data I performed some pre-processing steps on them to make them more similar to what the previous model was trained on. These pre-processing steps include normalizing some values as well as metric to imperial unit conversions.
 
-Figure~\ref{fig:paparazzi_test_length} shows the distribution of the test lengths. The test lengths range from 140 samples (70 seconds) to 2580 samples, with a median of 2170 and a mean of 1896.
+Figure~\ref{fig:paparazzi_test_length} shows the distribution of the test lengths. The test lengths range from 140 samples (70 seconds) to 2,580 samples, with a median of 2,170 and a mean of 1896.
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{RQ3-5_charts/test_lengths.png}
-    \caption{The histogram of number of tests of different test sizes. The smallest samples contains 140 samples worth of recorded flight data and the largest one has 2580 samples, equivalent of a 516-second flight (Sampling rate is 5Hz). }
+    \caption{The histogram of number of tests of different test sizes. The smallest samples contains 140 samples worth of recorded flight data and the largest one has 2,580 samples, equivalent of a 516-second flight (Sampling rate is 5Hz). }
     \label{fig:paparazzi_test_length}
 \end{figure}
 
