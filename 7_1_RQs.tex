@@ -12,8 +12,8 @@ In RQ1, we are only interested in detecting the time a state-change happens (bin
 Therefore, to answer this RQ, I change the labels from a Boolean (changed/not changed) to the actual collected labels. The evaluation of this RQ is again in the context of the industrial autopilot case study.
 
 \subsection{RQ 3) Can the results be replicated with regards to state change point detection (RQ1) on another case study?}
-\hl{In the first two research question, I evaluate my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to assess the generalizability of the findings, a replication on a similar software is quite helpful. 
-In this RQ and the next one I want to explore how my method performs on Paparazzi, an open source equivalent to MP\footnote{MicroPilot}'s auto-pilot.}
+In the first two research question, I evaluate my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to assess the generalizability of the findings, a replication on a similar software is quite helpful. 
+In this RQ and the next one I want to explore how my method performs on Paparazzi, an open source equivalent to MP\footnote{MicroPilot}'s auto-pilot.
 
 % I chose Paparazzi auto-pilot as an open source alternative to MP's auto-pilot for replication. 
 Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
@@ -24,8 +24,8 @@ Furthermore, Paparazzi supports multiple flight dynamic model (FDM) simulators. 
 
 
 \subsection{RQ 4) Can the results of internal state prediction task (RQ2) be replicated on Paparazzi auto-pilot?}
-\hl{I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi the number of classes are smaller. 
-There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.}
+I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi the number of classes are smaller. 
+There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
 \subsection{RQ 5) How will hyper-parameter tuning affect the results?}
 \hl{In RQs 1 and 2 the hyper-parameters of the neural network model are tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameters such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication (RQs 3 and 4) I opted for existing automated ways for finding better hyper-parameters.}
@@ -81,8 +81,8 @@ I used `ruptures' library developed by authors of a recent CPD survey study \cit
 As mentioned earlier two main elements of a CPD algorithm in their survey are the search method and the cost function.
 
 I used Pelt \cite{killick2012optimal} as the most efficient exact search method. As examples of approximate search methods, I applied bottom-up segmentation and window-based methods using a default window size of 100 \cite{keogh2001online}.
-However, after trying to run Pelt algorithm \hl{on MicroPilot's data}, I realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so I only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
-\hl{Fortunately, for RQ 3 with smaller data set size of Papaarazzi, it was feasible (though still quite time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.}
+However, after trying to run Pelt algorithm on MicroPilot's data, I realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so I only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
+Fortunately, for RQ 3 with smaller data set size of Papaarazzi, it was feasible (though still really time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.
 
 For the cost function, I tried ``Least Absolute Deviation'', ``Least Squared Deviation'', ``Gaussian Process Change'', ``Kernelized Mean Change'', ``Linear Model Change'', ``Rank-based Cost Function'', and ``Auto-regressive model change'' as defined in the library. Their parameters were left as default.
 To optimize the number of change points a penalty value (linearly proportionate to the number of detected change points) is added to the cost function, which limits the number of detected change points, the higher the penalty the fewer reported change points. We tried three different ratios (100, 500, and 1000) for the penalty.
@@ -92,7 +92,7 @@ I used a sliding window of width $w$ over the 10 time-series values and then fla
 The window sizes were chosen as same as the sizes of convolutional layers' kernel sizes (3, 5, 10, 15, 20), to make the baselines better comparable with my method. 
 I used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''. For ``maximum number of features'' I tried: no limits, $\sqrt{10w}$, and $\log_2{10w}$. To find best ``maximum depth'' I first tried having no upper bound and observed how deep the tree grows; then I tried multiple numbers less than the maximum, until a drop in performance was observed. 
 
-\hl{In RQ4, pretty similar to RQ2,} I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MP's case (RQ2), with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any, as will be seen in the RQ2's answer later on), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms to answer RQ4. 
+In RQ4, pretty similar to RQ2, I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MP's case (RQ2), with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any, as will be seen in the RQ2's answer later on), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms to answer RQ4. 
 
 
 

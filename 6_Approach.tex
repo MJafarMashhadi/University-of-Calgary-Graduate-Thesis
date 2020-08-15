@@ -108,10 +108,11 @@ Stopping at kernel size of 20 was a compromise between generalizability and mode
 
 Same compromise was made in the second section of the model (Recurrent layers), the sweet spot for hyper-parameters here was to use two GRU layers with 128 cells each. Their output was fed into a fully connected layer with 128 neurons with a leaky ReLU ($\alpha=0.3$) activation function \cite{maas2013rectifier} and finally to a dense layer with $N_s=25$ units with softmax activation.
 I used Adam optimizer \cite{kingma2014adam} that could converge in 60-80 epochs, i.e. validation accuracy plateaued. The full architecture can be seen in figure~\ref{fig:model_arch}.
+\begin{landscape}
 \begin{figure*}
     \centering
-    \includegraphics[width=\linewidth]{ASE_files/Convolutional_Net.pdf}
+    \includegraphics[width=\columnwidth]{ASE_files/Convolutional_Net.pdf}
     \caption{Model architecture in a nutshell. Tandem convolutional layers with increasing kernel size fed into two sequence-to-sequence recurrent layers with 128 GRU cells each, which is then fed into dense layers to output the predicted system state, as a list of one-hot encoded states. $\hat{O}$ will be the result of applying argmax operation on the last layer's output. $L=18000,\: N_s=25$}
     \label{fig:model_arch}
 \end{figure*}
-
+\end{landscape}
