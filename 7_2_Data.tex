@@ -38,7 +38,7 @@ Out of the 948 flight logs, I omitted 60 that were either too short or too long 
     \centering
     \includegraphics[width=\columnwidth]{ASE_files/test_lengths.png}
     % \Description[Number of tests histogram]{A histogram chart maxing on numbers less than 2,000 and over 17,500}
-    \caption{Distribution of flight log lengths for the $N=888$ (out of the original 948 available logs) logs that were kept in the dataset ($200 \leq l_k \leq 20,000$), \hl{from MicroPilot.}}
+    \caption{Distribution of flight log lengths for the $N=888$ (out of the original 948 available logs) logs that were kept in the dataset ($200 \leq l_k \leq 20,000$), from MicroPilot.}
     \label{fig:test_lengths}
 \end{figure}
 
@@ -61,9 +61,6 @@ The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for train
 The auto-pilot can be used in SWIL and HWIL modes \cite{melmoth2019true}, which stand for software in the loop and hardware in the loop respectively. I used SWIL mode as it provides what was needed without any of the costs and hassles that come from HWIL mode. 
 
 \subsection{Paparazzi}\label{sec:paparazzi_data_collection}
-
-\hl{This sub section is new}
-
 \subsubsection{Instrumentation}
 Paparazzi provides a rich and flexible API that can be configured to record several different parameters in flight. The aircraft periodically sends data back to the ground station over a wireless link using a protocol called Paparazzi link. Paparazzi link is built over Ivy, a message bus protocol that uses UDP. 
 In Paparazzi's architecture a process called `link' interfaces the wireless link to the aircraft to the computer's network; on one side are the Paparazzi link messages that come and go as UDP datagrams and on its other side is the (often wireless\footnote{A wired connection is used in HWIL test mode as well as some scenarios where the AutoPilot equipment is used in a autonomous submarine rather than an autonomous unmanned aircraft.}) connection to the aircraft.
@@ -193,7 +190,7 @@ This test generator is completely compatible with Paparazzi and designed with sp
     \item Action timing
 \end{enumerate}
 
-The test generator can be configured to fuzz all or some of them. \hl{I generated 31 tests with fuzzing the last two. Please note that the sequence of actions can have any length between 1 and the number of possible actions (5, in my case). Also for each sequence, $n!$ different permutations can be made that will result in very different outcomes. That makes the number of tests, $5!\times1+4!\times5+\lddots+1!\times5=325$. Also note that these generated tests are made of unique blocks, in other words, a test scenario does not contain plans like ``Do A then B then A again'' while these plans are perfectly valid. In case one wants to have such plans they can write test plans manually.} \hl{to move}
+The test generator can be configured to fuzz all or some of them. I generated 31 tests with fuzzing the last two. Please note that the sequence of actions can have any length between 1 and the number of possible actions (5, in my case). Also for each sequence, $n!$ different permutations can be made that will result in very different outcomes. That makes the number of tests, $5!\times1+4!\times5+\lddots+1!\times5=325$. Also note that these generated tests are made of unique blocks, in other words, a test scenario does not contain plans like ``Do A then B then A again'' while these plans are perfectly valid. In case one wants to have such plans they can write test plans manually.
 
 The output is a python module that contains a subclass of \verb|PlanBase|, as expected by the automated test executor. These two work together seamlessly and the user can just use them in a plug-and-play manner without touching the code. Though, the generated code is designed to be effortlessly understandable and easily editable it even incorporates some auto-generated comments in the code.
 
@@ -221,6 +218,6 @@ Some of the available actions and all the waypoints in this flight plan can be s
 
 \section{Experiment Execution Environment} \label{sec:machines_config}
 Training and evaluation of the deep learning model was done on a single node running Ubuntu 18.04 LTS (Linux 5.3.0) equipped with Intel Core i7-9700 CPU, 32 gigabytes of main memory, and 8 gigabytes of GPU memory on a NVIDIA GeForce RTX 2080 graphics card.
-The code was implemented using keras on TensorFlow 2.0.
+The code was implemented using Keras on TensorFlow 2.0 \cite{tensorflow2015-whitepaper}.
 
 The baseline models could not fit on that machine, so two nodes on Compute Canada's Beluga cluster, one with 6 CPUs and 75GiB of memory and one with 16 CPUs and 64GiB of memory, were used to train and evaluate them.
