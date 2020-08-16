@@ -3,7 +3,7 @@
 \section{Data Collection Process}
 In this section more details on how data was collected from each system will be presented. 
 
-\subsection{MicroPilot AutoPilot}
+\subsection{MicroPilot Autopilot}
 \subsubsection{Instrumentation}
 Control decisions in this software are made in a 5Hz loop, it means that every 200ms all the sensor inputs are read and based on the current state of the aircraft and the system's goal at the moment (e.g. maintaining a constant speed) decisions will be made and output is generated. Considering this, the best way to capture those data is in the end of each iteration of this loop. I inserted instrumentation code there, to log input and output values (listed in Table~\ref{tab:in_outs}) at the exact spot where they are updated. 
 Please note that although it is more convenient to capture the values in this way, it does not give us any special advantage or insight that breaks the black-box condition. In other words, the exact same data could be collected from the compiled binaries without any access to the internals, just with extra steps. Inputs and outputs, after all, are the very least thing available in both black-box and white-box settings.
@@ -12,7 +12,7 @@ Please note that although it is more convenient to capture the values in this wa
 MicroPilot has a repository of 948 system tests, I ran them in a software simulator\footnote{It is developed by MicroPilot and provides an accurate simulation of the aerodynamic forces on the aircraft, the physical environment irregularities (e.g. unexpected wind gusts), and noises in sensor readings} and collected the logged flight data, over time. 
 The test cases are system-level tests. Each test case includes a flight scenario for various supported aircraft. A flight scenario goes through different phases in a flight such as ``take off'', ``climb'', ``cruise'', ``hitting way points'', and ``landing''.
 \begin{table}
-    \caption{The $n=10$ collected I/Os of AutoPilot. The inputs are sensor readings and the outputs are the servo position update commands. All these I/Os over time are used as the inputs of the state prediction model.}
+    \caption{The $n=10$ collected I/Os of autopilot. The inputs are sensor readings and the outputs are the servo position update commands. All these I/Os over time are used as the inputs of the state prediction model.}
     \label{tab:in_outs}
     \centering
 \begin{tabularx}{\columnwidth}{lX}
@@ -49,22 +49,22 @@ The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for train
 % Our case study is a state-based system, which is real-time controller for UAVs, developed by
 % our partner
 % \begin{anonsuppress}
-% Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV AutoPilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years.
+% Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV autopilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years.
 % \end{anonsuppress}
 % .
 
-%What the AutoPilot does can be summarized as `trying to hold some invariants based on the goal/state of the system'.
+%What the autopilot does can be summarized as `trying to hold some invariants based on the goal/state of the system'.
 % % Maybe these two paragraphs can be moved somewhere more appropriate
 % \label{changes_in_inputs}
 % To work it backwards we capture the input/outputs (the UAV's relevant signals) over time and examine their correlations, i.e. how changes in one of them results in changes in another. When the state of the system changes these relations may change. So if we can capture what the relations are and when they change we can determine the state in which the system is in. 
 % Of course pinpointing the exact moment when the changes happen is difficult; It is also impacted by the sampling time resolution so the inferred states and the change points are approximations.
-The auto-pilot can be used in SWIL and HWIL modes \cite{melmoth2019true}, which stand for software in the loop and hardware in the loop respectively. I used SWIL mode as it provides what was needed without any of the costs and hassles that come from HWIL mode. 
+The autopilot can be used in SWIL and HWIL modes \cite{melmoth2019true}, which stand for software in the loop and hardware in the loop respectively. I used SWIL mode as it provides what was needed without any of the costs and hassles that come from HWIL mode. 
 
 \subsection{Paparazzi}\label{sec:paparazzi_data_collection}
 \subsubsection{Instrumentation}
 Paparazzi provides a rich and flexible API that can be configured to record several different parameters in flight. The aircraft periodically sends data back to the ground station over a wireless link using a protocol called Paparazzi link. Paparazzi link is built over Ivy, a message bus protocol that uses UDP. 
-In Paparazzi's architecture a process called `link' interfaces the wireless link to the aircraft to the computer's network; on one side are the Paparazzi link messages that come and go as UDP datagrams and on its other side is the (often wireless\footnote{A wired connection is used in HWIL test mode as well as some scenarios where the AutoPilot equipment is used in a autonomous submarine rather than an autonomous unmanned aircraft.}) connection to the aircraft.
-In simulations, the modem and wireless communications are no longer needed, instead the auto-pilot runs as a separate process and mimics a wireless channel over the local network. (See Figure~\ref{fig:paparazzi_comm_agents})
+In Paparazzi's architecture a process called `link' interfaces the wireless link to the aircraft to the computer's network; on one side are the Paparazzi link messages that come and go as UDP datagrams and on its other side is the (often wireless\footnote{A wired connection is used in HWIL test mode as well as some scenarios where the autopilot equipment is used in a autonomous submarine rather than an autonomous unmanned aircraft.}) connection to the aircraft.
+In simulations, the modem and wireless communications are no longer needed, instead the autopilot runs as a separate process and mimics a wireless channel over the local network. (See Figure~\ref{fig:paparazzi_comm_agents})
 
 \begin{figure}
     \centering
@@ -77,7 +77,7 @@ Paparazzi comes with a multitude of small tools that could do most of what I nee
 
 \subsubsection{Test Scenarios}
 Unlike MicroPilot that had a large a number of system tests (in addition to other types of tests such as unit tests which I did not use), Paparazzi comes with only unit tests. As it is an open source software under GPL licence it comes with no warranty and also does not need certain certifications and approvals that commercial systems require, therefore incentives to have such tests are lower. 
-Although it is a reliable and widely used auto-pilot, it owes that reliability more to its widespread use in action (by many researchers and enthusiasts) rather than automated tests that verify its behaviour.
+Although it is a reliable and widely used autopilot, it owes that reliability more to its widespread use in action (by many researchers and enthusiasts) rather than automated tests that verify its behaviour.
 In this situation, where many eyes are watching over the code, bugs are discovered and patched quickly. However, to the best of my knowledge they are not recorded as system tests that verify the bugs are properly patched and detect regressions, in the future.
 
 To fill the void, I created a fuzz testing tool that can automatically generate valid, diverse, and meaningful automated system tests for Paparazzi based on the example flight plan that is included with it.
@@ -87,7 +87,7 @@ It is called PprzTester and the source code, version history, project planning d
 The targeted randomizations in test inputs are augmented with the stochastic wind model in the simulation to further diversify the observed behaviours.
 
 In addition to that tool, I needed to patch some parts of Paparazzi to make the logging and testing more similar to MicroPilot, for example increase telemetry reporting rate from 2Hz to 5Hz. A list of these patches including the reason why that change was necessary or beneficial and the exact lines of code that need to be changed is available in the project wiki at \url{https://github.com/MJafarMashhadi/pprz_tester/wiki/Paparazzi-Patches}.
-Aside from the patches, I found some bugs, missing features, missing documentations, and bad smells in the code that needed to be fixed. I contributed new code and documentation to the Paparazzi project to address these issues. The contributions were useful, up to the standards, and welcome in the project; they are included in the latest release\footnote{as of August 3rd, 2020} of Paparazzi auto-pilot: version 5.16.
+Aside from the patches, I found some bugs, missing features, missing documentations, and bad smells in the code that needed to be fixed. I contributed new code and documentation to the Paparazzi project to address these issues. The contributions were useful, up to the standards, and welcome in the project; they are included in the latest release\footnote{as of August 3rd, 2020} of Paparazzi autopilot: version 5.16.
 
 More details about the tool is left for next section, section~\ref{section:fuzzing_tool}.
 The result of generating and running tests was 378 runs worth of different flight scenarios.
@@ -120,7 +120,7 @@ The most flexible option with the least overhead is to have an independent modul
 
 In the beginning the instance of ``AircraftManager'' singleton class starts with listening for \verb|NEW_AIRCRAFT| messages. This message type notifies this class when new aircraft come online in the simulation. Then it sends a \verb|AIRCRAFTS_REQ| request message to server to get a list of currently online aircraft. The response to both of these messages are processed in the same way: The aircraft unique ID will be checked against the hash table of known aircraft, if it is a new one an ``Aircraft'' instance will be created and added to the hash table. (See the class diagram in Figure~\ref{fig:fdr_class_diagram} in \hyperref[appendixa]{Appendix~A})
 
-Each ``Aircraft'' object in the makes a number of requests back and forth with other components in the system (server, data link, and the auto-pilot process) to gather required information about that aircraft, including its flight plan. This class along with ``Aircraft Parameters'' and ``Aircraft Commands'' provide a unified programmatic API for monitoring and controlling the aircraft. 
+Each ``Aircraft'' object in the makes a number of requests back and forth with other components in the system (server, data link, and the autopilot process) to gather required information about that aircraft, including its flight plan. This class along with ``Aircraft Parameters'' and ``Aircraft Commands'' provide a unified programmatic API for monitoring and controlling the aircraft. 
 
 I implemented observer pattern \cite{gamma1995design} in ``Aircraft Parameters'' to enable other components (such as flight data recorder and automated test executor) to listen for changes in the aircraft state and respond accordingly in an event-driven manner. 
 After creation of an ``Aircraft'' object, as a part of its initialization, several observers are created and attached to it. A ``Record Flight'' instance is one of them. It observes new \verb|FLIGHT_PARAM| messages as well as changes in `throttle', `flight time', and `commands.values' parameters. This class stores and aligns these parameters in a pandas data frame which is stored on disk periodically. The data can be stored in a human-readable CSV file or as a compressed HD5 binary. Some data normalization and unit conversions (such as meters to feet) also happen before saving in order to make the generated data similar to MicroPilot's.
@@ -130,7 +130,7 @@ Supplementary UML diagrams are provided in \hyperref[appendixa]{Appendix~A}.
 
 \subsubsection{Automated Test Executor}
 Here I first explain how the test executor work, since knowing this is prerequisite of understanding the test generator component.
-The test executor takes the control of the aircraft by running prefabricated test scenarios. While the low level control of the aircraft is done by the auto-pilot software (the system under test), it needs high level commands such as ``climb to 200ft''. Automated test executor does that, using hand crafted test scenarios or the ones generated by the test generator component.
+The test executor takes the control of the aircraft by running prefabricated test scenarios. While the low level control of the aircraft is done by the autopilot software (the system under test), it needs high level commands such as ``climb to 200ft''. Automated test executor does that, using hand crafted test scenarios or the ones generated by the test generator component.
 
 Tests scenarios are defined as subclasses of \verb|PlanBase| class. Each plan needs to override a method that returns an iterable of plan items which should be executed one by one. 
 \begin{lstlisting}[language=Python, basicstyle=\linespread{0.1}]
@@ -160,12 +160,12 @@ As mentioned before, it takes care of aircraft initialization, take off, and lan
     \item %Second, 
 It uses standard Paparazzi environment variables such as \verb|$PAPARAZZI_HOME|.\footnote{If it is not set, the user can use \texttt{-p /path/to/paprazzi} command line argument to set this value, and if that is not set too, a default value will be used.} 
     \item %Third, 
-It can build the auto-pilot if \verb|--build| argument is set so the user does not have to build it manually in Paprazzi center. 
+It can build the autopilot if \verb|--build| argument is set so the user does not have to build it manually in Paprazzi center. 
 
     \item %Fourth, 
 If \verb|--gcs| argument is set, the ground control station window will be opened (See Figure~\ref{fig:paparazzi_gcs}). It provides a real-time map that visualizes the aircraft path, waypoint locations, wind direction and velocity, and several other parameters of the aircraft such as their airspeed and altitude. 
     \item %And last, 
-\verb|--no-sim| argument tells tester to not launch the simulator. Its use case can be when a physical auto-pilot is being used (similar to MicroPilot's HWIL mode), or when for any reason the user chooses to run the simulator manually. 
+\verb|--no-sim| argument tells tester to not launch the simulator. Its use case can be when a physical autopilot is being used (similar to MicroPilot's HWIL mode), or when for any reason the user chooses to run the simulator manually. 
 \end{enumerate}
 
 \begin{figure}
@@ -181,9 +181,9 @@ The comprehensive list of command line arguments is included in Table~\ref{tab:t
 
 
 \subsubsection{Automated Test Generator}
-The test generator component is a fuzz test generator specifically designed for Paparazzi. An auto-pilot has plenty of parameters to change. Many of them need to remain unchanged. For example, changing aerodynamic and physical parameters of an air frame will make it behave incorrectly or even crash. A naïve algorithm might be tempted to only change these parameters to optimize a metric of ``bug''s per test. To comply with the constraints in input format and range and optimize test scenario diversity without having to have thousands of tests, I opted for developing a specialized automated test generator. 
+The test generator component is a fuzz test generator specifically designed for Paparazzi. An autopilot has plenty of parameters to change. Many of them need to remain unchanged. For example, changing aerodynamic and physical parameters of an air frame will make it behave incorrectly or even crash. A naïve algorithm might be tempted to only change these parameters to optimize a metric of ``bug''s per test. To comply with the constraints in input format and range and optimize test scenario diversity without having to have thousands of tests, I opted for developing a specialized automated test generator. 
 
-This test generator is completely compatible with Paparazzi and designed with specific needs of an auto-pilot in mind. It begins with loading and parsing the one fixed wing flight plan that comes with Paparazzi. It defines multiple actions (control blocks) available to a fixed wing aircraft. Two important components in the flight plan that are used are the waypoint names and locations, and available blocks. A test scenario is generated by taking the initial flight plan and fuzzing three parameters about it:
+This test generator is completely compatible with Paparazzi and designed with specific needs of an autopilot in mind. It begins with loading and parsing the one fixed wing flight plan that comes with Paparazzi. It defines multiple actions (control blocks) available to a fixed wing aircraft. Two important components in the flight plan that are used are the waypoint names and locations, and available blocks. A test scenario is generated by taking the initial flight plan and fuzzing three parameters about it:
 \begin{enumerate}
     \item Waypoint locations
     \item Sequence of actions 

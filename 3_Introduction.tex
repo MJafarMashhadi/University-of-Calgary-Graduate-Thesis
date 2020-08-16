@@ -23,7 +23,7 @@ In this thesis, I propose a dynamic analysis method to detect the internal state
 % In this study the goal is to infer a state model of the system under study as a black-box without access to its source code. Therefore I am limited to observing the inputs and outputs of the system. Another piece of information that is often overlooked is time. In this study time is taken into consideration as well. I capture all the inputs and output values of the system in regular intervals. Since they are all numeric, they make a multivariate time series that I use to generate time-aware state models. 
 
 
-I applied and evaluated this method on an auto-pilot software (AutoPilot) used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner, Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV auto-pilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years. In addition to that, I further replicated the results on another highly capable and widely used auto-pilot, Paparazzi \cite{hattenberger2014using}, as well.
+I applied and evaluated this method on an autopilot software used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner, Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV autopilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years. In addition to that, I further replicated the results on another highly capable and widely used autopilot, Paparazzi \cite{hattenberger2014using}, as well.
 I evaluated the method from two perspectives: how well the model can detect the point in time when a state change happens? (RQs 1 and 3: Change Point Detection (CPD)), and how accurately it can predict which state the system is in, during the execution? (RQs 2 and 4: State Classification). I also explored the possibilities of improving the results via hyper-parameter tuning in RQ 5.
 
 
@@ -34,8 +34,8 @@ Comparing the proposed approach with state-of-the-art alternatives, the results 
 The contributions of this thesis can be summarised as:
 \begin{itemize}
     \item Introducing the first (to the best of my knowledge) deep learning architecture to infer behavior models from black-box software systems.
-    \item Empirically evaluating the model and achieving very high accuracy compared to baselines using two real-world and large-scale case studies on a UAV auto-pilot system developed by our industry partner as well as an open source UAV auto-pilot.
-    \item Developed an automated fuzz testing tool capable of generating and executing test cases for Paparazzi auto-pilot.
+    \item Empirically evaluating the model and achieving very high accuracy compared to baselines using two real-world and large-scale case studies on a UAV autopilot system developed by our industry partner as well as an open source UAV autopilot.
+    \item Developed an automated fuzz testing tool capable of generating and executing test cases for Paparazzi autopilot.
     \item Created a hyper-parameter tuning pipeline to optimize the performance of the deep learning model.
 \end{itemize}
 

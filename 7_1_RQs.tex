@@ -3,27 +3,27 @@ The goals of this study is to evaluate the proposed method in terms of change po
 
 \subsection{RQ 1) How does the proposed technique perform in detecting the state changes?}
 The goal of this RQ is to see how close the predicted state-change times are to the real state-change times. In other words, in RQ1, we do not predict the exact state labels and are only interested in predicting the change.
-To answer this question, I compare the performance of my proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}, in the context of an industrial auto-pilot case study.
+To answer this question, I compare the performance of my proposed approach with several traditional baselines (see \ref{sec:CPD_baseline}), in terms of modified precision, recall, and F1 scores that are introduced in section \ref{sec:CPD_metrics}, in the context of an industrial autopilot case study.
 
 
 \subsection{RQ 2) How well does the proposed technique predict the internal state of the system?}
 In RQ1, we are only interested in detecting the time a state-change happens (binary classification), but here in RQ2, I extend that and are also interested in predicting the label of the new state that the system is going into (multi-class classification).  
 %We need to evaluate how similar is my model's prediction about the internal state of the system at each time $t$ to the actual state.
-Therefore, to answer this RQ, I change the labels from a Boolean (changed/not changed) to the actual collected labels. The evaluation of this RQ is again in the context of the industrial auto-pilot case study.
+Therefore, to answer this RQ, I change the labels from a Boolean (changed/not changed) to the actual collected labels. The evaluation of this RQ is again in the context of the industrial autopilot case study.
 
 \subsection{RQ 3) Can the results be replicated with regards to state change point detection (RQ1) on another case study?}
 In the first two research question, I evaluate my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to assess the generalizability of the findings, a replication on a similar software is quite helpful. 
-In this RQ and the next one I want to explore how my method performs on Paparazzi, an open source equivalent to MP\footnote{MicroPilot}'s auto-pilot.
+In this RQ and the next one I want to explore how my method performs on Paparazzi, an open source equivalent to MP\footnote{MicroPilot}'s autopilot.
 
-% I chose Paparazzi auto-pilot as an open source alternative to MP's auto-pilot for replication. 
-Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic auto-pilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source auto-pilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
+% I chose Paparazzi autopilot as an open source alternative to MP's autopilot for replication. 
+Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic autopilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source autopilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
 A comparison about how Paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
 In addition to that, after doing a preliminary study, I found out that Paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
 Furthermore, Paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
 
 
 
-\subsection{RQ 4) Can the results of internal state prediction task (RQ2) be replicated on Paparazzi auto-pilot?}
+\subsection{RQ 4) Can the results of internal state prediction task (RQ2) be replicated on Paparazzi autopilot?}
 I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi the number of classes are smaller. 
 There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
