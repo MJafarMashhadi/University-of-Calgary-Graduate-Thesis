@@ -209,6 +209,5 @@
 \def\lofheadstart{\clearpage}
 \def\lotheadstart{\clearpage}
 
-
 \setcounter{tocdepth}{5}
-\setcounter{secnumdepth}{3}
+\setsecnumdepth{subsubsection}
