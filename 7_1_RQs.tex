@@ -70,7 +70,7 @@ In this section I provide the details on experiment configurations as well as my
 \subsection{CPD (RQs 1 and 3)} \label{sec:CPD_baseline}
 There are three search methods implemented in ``ruptures'' library which were suitable to use in my experiments. Pelt \cite{killick2012optimal} is the most efficient exact search method. Two other ones are approximate search methods: bottom-up segmentation and window-based search method. 
 After trying to run Pelt algorithm on MicroPilot's data, I realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so I only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
-Fortunately, for RQ 3 with smaller data set size of Paparazzi, it was feasible (though still really time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.
+Fortunately, for RQ 3 with smaller dataset size of Paparazzi, it was feasible (though still really time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.
 When using window-based search method, I left the window size parameter with the default size of 100 \cite{keogh2001online}.
 
 For the cost function, I tried ``Least Absolute Deviation'', ``Least Squared Deviation'', ``Gaussian Process Change'', ``Kernelized Mean Change'', ``Linear Model Change'', ``Rank-based Cost Function'', and ``Auto-regressive model change'' as defined in the library. Their parameters were left as default.
