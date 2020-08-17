@@ -7,14 +7,14 @@
 Inferring behavior model of a running software system is quite useful for several automated software engineering tasks, such as program comprehension, anomaly detection, and testing. Most existing dynamic model inference techniques are white-box, i.e., they require source code to be instrumented to get run-time traces. However, in many systems, instrumenting the entire source code is not possible (e.g., when using black-box third-party libraries) or might be very costly. %One useful scenario for automated black-box behavior inference is in software control units (such as autopilots), where the software system's reactions over time changes based on the inputs. Run-time state models of such systems are very powerful means for anomaly detection and debugging. 
 Unfortunately, most black-box techniques that detect states over time are either univariate, or make assumptions on the data distribution, or have limited power for learning over a long period of past behavior. 
 To overcome the above issues, in this thesis, I proposed a hybrid deep neural network that accepts as input a set of time series, one per input/output signal of the system, and applies a set of convolutional and recurrent layers to learn the non-linear correlations between signals and the patterns, over time. 
-I have applied this approach on two real UAV autopilot case studies: one from our industry partner, MicroPilot (MP in short), with half a million lines of C code and one widely used open source solution: Paparazzi. 
-I ran more than 1200 system-level tests in total and inferred states, over time.
+I have applied this approach on two real UAV autopilot case studies: one from our industry partner, MicroPilot (MP in short), with half a million lines of C code, and one widely used open source solution: Paparazzi. 
+I ran more than 1200 system-level tests in total (to generate the input data) and inferred the system's internal state, over time.
 In case of Paparazzi, as it did not include system tests like MP, I created a tool that generates and executes meaningful test scenarios.
-Comparison with several traditional time series change point detection techniques showed that this approach improves their performance by up to 102\% in MPs case and 49\% in Paparazzi's, in terms of finding state change points, measured by F1 score. I also showed that this state classification algorithm provides on average 90.45\% F1 score for MP and 81.92\% for Paparazzi, which improves traditional classification algorithms by up to 17\% in MP's case and 18\% in Paparazzi's.
+Comparison with several traditional time series change point detection techniques showed that this approach improves their performance by up to 102\% in MP's case and 49\% in Paparazzi's, in terms of finding state change points, measured by F1 score. I also showed that this state classification algorithm provides on average 90.45\% F1 score for MP and 81.92\% for Paparazzi, which improves traditional classification algorithms by up to 17\% in MP's case and 18\% in Paparazzi's.
 
 %Furthermore, I verified efficacy of this approach with a second case study: Paparazzi open source autopilot. As it did not include system tests like MP, I created a tool that generates and runs fuzzy test scenarios. Using the tool I generated and executed 378 test cases %325 test cases using different permutations of a flight plan; I used the fuzzy test execution tool to run 378 simulations using those scenarios; some scenarios were used twice but due to fuzzing in other parameters the generated data are different. I used the data that was produced during those executions for replication. 
 %The improvements of this approach over the baselines, as measured by F1 score, were up to 49\% in change point detection and up to 68\% for state detection.
-In addition, by creating a hyper-parameter tuning pipeline using grid search technique, despite having a way smaller training set compared to MicroPilot's (7 times smaller), in the second case study I managed to get a better performance, up to 42\% better, out of the neural network model as measured by 8 metrics.
+In addition, by creating a hyper-parameter tuning pipeline using grid search technique, despite having a way smaller training set in the second case study (7 times smaller compared to the first one), I managed to get a better performance, up to 42\% better, out of the neural network model as measured by 8 metrics.
 The tuning performance is compared to using the same hyper-parameters that worked for MP's case, for Paparazzi.%  As a result, in addition to confirming that the technique is applicable on other software, I.
 
 % \end{abstract}
@@ -31,7 +31,7 @@ Hamed, for sharing his knowledge of Machine Learning, recommending me useful tal
 Adam, for his thorough answers to my questions about MP's autopilot.
 MicroPilot Inc. and NSERC for providing financial support for this research.
 The anonymous reviewers of the papers I published for their constructive comments.
-And finally, to my family and all the friends who supported me and made this  a more pleasant experience.
+And finally, to my family and all the friends who supported me and made it a more pleasant experience.
 
 
 \dedication{To the ones who made this a smoother journey.} 
@@ -55,10 +55,10 @@ And finally, to my family and all the friends who supported me and made this  a 
 
 \chapter{Contributions}
 During this research, I have made contributions in form of publishing papers, datasets, contributing to the open source, etc. 
-Since not all of them ended up in this theses, I would like to quickly enumerate them so they will not go unnoticed:
+Since not all of them ended up in this thesis, I would like to quickly enumerate them so they will not go unnoticed:
 \begin{enumerate}
-    \item ICPC '19 conference paper: An empirical study on practicality of specification mining algorithms on a real-world application
-    \item IST journal paper: Interactive semi-automated specification mining for debugging: An experience report
+    \item ICPC '19 conference paper: An empirical study on practicality of specification mining algorithms on a real-world application \cite{mashhadi2019empirical}
+    \item IST journal paper: Interactive semi-automated specification mining for debugging: An experience report \cite{jafar2019interactive}
     \item ASE '19: presenting the above journal paper in journal-first-conference-second track
     \item Salvaged a Java instrumentation tool that is used for white-box analysis: \url{https://github.com/sea-lab/JInstrumenter}
     \item Developed a fuzz test generator/executor/flight data recorder tool specialized for Paparazzi: \url{https://github.com/MJafarMashhadi/pprz_tester}
