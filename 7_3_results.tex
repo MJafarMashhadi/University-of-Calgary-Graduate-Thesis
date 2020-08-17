@@ -294,8 +294,8 @@ I used this set of hyper-parameters to train the best model. The stopping criter
 You can see the performance scores of the tuned model in tables~\ref{tab:rq2-1-results-replicate} and \ref{tab:cpd_paparazzi}.
 % The scores used in the research question 3 and 4 are the evaluation results of this model on the [previously unseen] validation data. 
 
-The sensitivity of this approach to the hyper parameter tuning can be seen clearly here. I started the first iteration with the hyper-parameters that worked best for MP and the values close to them. With that set of hyper-parameters the performance was even worse than the baselines in some cases see table~\ref{tab:results_no_tuning}.
-In the second iteration, after removing the worst performing configurations and reshaping the search space, that set of parameters was discarded. 
+The sensitivity of this approach to the hyper parameter tuning can be seen clearly here. I started the first iteration with the hyper-parameters that worked best for MP and the values close to them. With that set of hyper-parameters the performance was even worse than the baselines in some cases; see table~\ref{tab:results_no_tuning}.
+In the second iteration, after removing the worst performing configurations and defining a new search space, that set of parameters was discarded. 
 This is to emphasize the effect and importance of fine-tuning hyper-params.
 
 \begin{table}[]
