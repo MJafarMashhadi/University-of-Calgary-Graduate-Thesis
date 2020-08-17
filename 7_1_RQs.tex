@@ -63,11 +63,11 @@ I tried every possible combination of these two.
 I used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''.
 
 
-\section{Experiment Design}
+\section{Experiment}
 Reading down to here, you already have a big picture about what experiments I have done and how they were evaluated.
 In this section I provide the details on experiment configurations as well as my rationale on specific design choices that require some more explanation.
 
-\subsection{CPD (RQs 1 and 3)} \label{sec:CPD_baseline}
+\subsection{CPD (RQs 1 and 3)}
 There are three search methods implemented in ``ruptures'' library which were suitable to use in my experiments. Pelt \cite{killick2012optimal} is the most efficient exact search method. Two other ones are approximate search methods: bottom-up segmentation and window-based search method. 
 After trying to run Pelt algorithm on MicroPilot's data, I realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so I only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
 Fortunately, for RQ 3 with smaller dataset size of Paparazzi, it was feasible (though still really time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.

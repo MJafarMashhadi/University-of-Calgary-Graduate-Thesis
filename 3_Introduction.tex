@@ -23,12 +23,12 @@ In this thesis, I propose a dynamic analysis method to detect the internal state
 % In this study the goal is to infer a state model of the system under study as a black-box without access to its source code. Therefore I am limited to observing the inputs and outputs of the system. Another piece of information that is often overlooked is time. In this study time is taken into consideration as well. I capture all the inputs and output values of the system in regular intervals. Since they are all numeric, they make a multivariate time series that I use to generate time-aware state models. 
 
 
-I applied and evaluated this method on an autopilot software used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner, Winnipeg based Micropilot Inc. Micropilot is the world-leader in professional UAV autopilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years. In addition to that, I further replicated the results on another highly capable and widely used autopilot, Paparazzi \cite{hattenberger2014using}, as well.
-I evaluated the method from two perspectives: how well the model can detect the point in time when a state change happens? (RQs 1 and 3: Change Point Detection (CPD)), and how accurately it can predict which state the system is in, during the execution? (RQs 2 and 4: State Classification). I also explored the possibilities of improving the results via hyper-parameter tuning in RQ 5.
+I applied and evaluated this method on an autopilot software used in an Unmanned Aerial Vehicle (UAV) system developed by our industry partner, Winnipeg based Micropilot Inc. In addition to that, I further replicated the results on another highly capable and widely used autopilot, Paparazzi \cite{hattenberger2014using}, as well.
+I evaluated the method from two perspectives: how well the model can detect the point in time when a state change happens? (RQs 1 and 3: Change Point Detection (CPD)), and how accurately it can predict which state the system is in, during the execution? (RQs 2 and 4: State Classification). I also explored how and to whaat extent does hyper-parameter tuning affect this method's performance in RQ 5.
 
 
 
-Comparing the proposed approach with state-of-the-art alternatives, the results show that it is better in both change point and state detection. In one case study I observed 88.00\% to 102.20\% improvement in the F1 score of this CPD, compared to traditional CPD techniques. In addition, I saw a 7.35\% to 16.83\% improvement in the F1 score of state detection, compared to traditional classification algorithms on a sliding window, over the data. The same number for the other case study were 12\% to 49\% improvement in CPD and 18\% to 274\% improvement in state detection.
+Comparing the proposed approach with state-of-the-art alternatives, shows that it performs better in both change point and state detection. In MP's case study I observed 88.00\% to 102.20\% improvement in the F1 score of this CPD, compared to traditional CPD techniques. In addition, I saw a 7.35\% to 16.83\% improvement in the F1 score of state detection, compared to traditional classification algorithms on a sliding window, over the data. The same number for the other case study were 12\% to 49\% improvement in CPD and 18\% to 274\% improvement in state detection.
 
 
 The contributions of this thesis can be summarised as:
@@ -43,5 +43,5 @@ Note that I have made all the source code, models, execution scripts, and some o
 
 The rest of this thesis is organized as follows: In chapter~\ref{sec:motivation} I explain further how and in which contexts this research can be beneficial. 
 Then in chapter~\ref{sec:background} I go through some background material and related papers this work is based on. 
-In chapter~\ref{sec:approach}, I present my proposed method and model. The way it was evaluated and the results are explained in chapter~\ref{sec:experiment}. 
+In chapter~\ref{sec:approach}, I present my proposed method and model. The way it was evaluated and the results are presented in chapter~\ref{sec:experiment}. 
 I provide a summary of the paper briefly discuss some paths for future continuation of this work in chapter~\ref{sec:summary}.

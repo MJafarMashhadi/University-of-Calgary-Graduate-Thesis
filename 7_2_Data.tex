@@ -5,8 +5,9 @@ In this section more details on how data was collected from each system will be 
 
 \subsection{MicroPilot Autopilot}
 \subsubsection{About MicroPilot's Design}
-MicroPilot's autopilot is a commercial autopilot with a codebase of 500k lines of C code. 
-The primary control mechanism is a hierarchy of PID loops, as explained both in chapter~\ref{sec:motivation} and \ref{sec:approach}. 
+MicroPilot's autopilot is a commercial autopilot with a codebase of 500k lines of C code. Micropilot is the world-leader in professional UAV autopilot which develops both hardware and software for 1000+ clients (including NASA, Raytheon, and Northrop Grumman) in 85+ countries during the past 20+ years.
+
+The primary control mechanism in the autopilot is a hierarchy of PID loops, as explained both in chapter~\ref{sec:motivation} and \ref{sec:approach}. 
 High level commands are loaded on the autopilot as a flight plan. The flight plan looks like ``takeoff, climb to 300 feet, go to waypoint A, go to waypoint B, land''. 
 These commands determine which PID loops must be activated and what should their `desired values' be. 
 For example, a ``go to waypoint A'' command activates a PID loop that tries to minimize the distance between current location of the aircraft and point A. This is a high level loop that activates other lower-level PID loops to achieve its goal.
@@ -184,7 +185,7 @@ If \verb|--gcs| argument is set, the ground control station window will be opene
 \verb|--no-sim| argument tells tester to not launch the simulator. Its use case can be when a physical autopilot is being used (similar to MicroPilot's HWIL mode), or when for any reason the user chooses to run the simulator manually. 
 \end{enumerate}
 
-\begin{figure}
+\begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{pprz_tester_files/GCS.png}
     \caption{A snapshot of ground control station software (GCS), visualizing the map, waypoints (blue diamonds), the aircraft, its flight history (blue), the intended flight path (green), as well as its state (bottom in green) and some telemetry data (top left). The plan that it is following is one of the automatically generated test scenarios.}
@@ -206,7 +207,7 @@ This test generator is completely compatible with Paparazzi and designed with sp
     \item Action timing
 \end{enumerate}
 
-The test generator can be configured to fuzz all or some of them. I generated 31 tests with fuzzing the last two. Please note that the sequence of actions can have any length between 1 and the number of possible actions (5, in my case). Also for each sequence, $n!$ different permutations can be made that will result in very different outcomes. That makes the number of tests, $5!\times1+4!\times5+\lddots+1!\times5=325$. Also note that these generated tests are made of unique blocks, in other words, a test scenario does not contain plans like ``Do A then B then A again'' while these plans are perfectly valid. In case one wants to have such plans they can write test plans manually.
+The test generator can be configured to fuzz all or some of them. I generated 31 tests with fuzzing the last two. Please note that the sequence of actions can have any length between 1 and the number of possible actions (5, in my case). Also for each sequence, $n!$ different permutations can be made that will result in very different outcomes. That makes the number of tests, $5!\times1+4!\times5+\ldots+1!\times5=325$. Also note that these generated tests are made of unique blocks, in other words, a test scenario does not contain plans like ``Do A then B then A again'' while these plans are perfectly valid. In case one wants to have such plans they can write test plans manually.
 
 The output is a python module that contains a subclass of \verb|PlanBase|, as expected by the automated test executor. These two work together seamlessly and the user can just use them in a plug-and-play manner without touching the code. Though, the generated code is designed to be effortlessly understandable and easily editable it even incorporates some auto-generated comments in the code.
 
