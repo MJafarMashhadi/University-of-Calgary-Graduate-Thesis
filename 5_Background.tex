@@ -21,6 +21,8 @@ Krka et al., performed an empirical study on 4 different categories of model inf
 Papadopoulos et al., proposed an active learning method (with repeated interaction with a user) to model a black-box system and generate test data \cite{Papadopoulos2015}. 
 In \cite{jafar2019interactive} a semi-interactive method for inferring state machines is proposed. It requires instrumenting the source code (white-box) and performs dynamic analysis of the system under study.
 
+The important difference between these approaches and the problem I have in hand is in the input format. All these expect the input data to be in form of a list of ordered events; whereas in my approach I look at a continuous stream of data, and it is my job to detect the events (in form of state transitions) just by looking at the data.
+
 \section{Automated Test Generation}
 Automated testing is widely researched and ubiquitously used in the industry. 
 Software test execution can be automated using the state of practice tools such as JUnit and Pytest. In such automated testing, a developer writes a test code that runs their source code, gives it inputs, and compares its outputs with the expected outputs to verify if the program is behaving correctly. However, in such practices the test generation and design is still manual and only the execution, evaluation and reporting is automated. 
@@ -32,8 +34,7 @@ Model-based testing approaches use specification models (inferred or hand crafte
 Search-based testing approaches, use well-known search algorithms such as evolutionary algorithms to generate test cases and test data. Random testing approaches generate randomized input data for testing.
 For example, evo-suite is a widely used test generation tool that uses evolutionary algorithms under the hood \cite{fraser2011evosuite} to generate unit tests for Java applications. DART and Randoop \cite{Godefroid2005DART, pacheco2007randoop} generate random data to test the software. Feedback-directed random test generation is an step of improvement over naïve random test generation techniques \cite{pacheco2007feedback}.
 Fuzz testing is a similar approach to random test generation. DeepFuzz uses fuzzing to generate syntactically valid C code to catch bugs in C compilers \cite{liu2019deepfuzz}. Fairfuzz \cite{lemieux2018fairfuzz} monitors branch coverage of generated inputs to guide fuzzing in a way that rare branches are also covered adequately.
-
-\hl{In this thesis, I created an automated test generation and execuation tool for }
+\hl{For this thesis, I created an automated test generation and execution tool to have more test data for one of the case studies. This tool is tailored specifically for that software, minding all the invariants, valid input ranges, the protocol and communication format, etc.}
 
 
 \section{Change Point Detection}
