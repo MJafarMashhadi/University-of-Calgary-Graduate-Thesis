@@ -15,34 +15,12 @@ Therefore, to answer this RQ, I change the labels from a Boolean (changed/not ch
 In the first two research question, I evaluate my proposed model inference technique on the data collected from our industry partner, MicroPilot. However, to assess the generalizability of the findings, a replication on a similar software is quite helpful. 
 In this RQ and the next one I want to explore how my method performs on Paparazzi, an open source equivalent to MP\footnote{MicroPilot}'s autopilot.
 
-% I chose Paparazzi autopilot as an open source alternative to MP's autopilot for replication. 
-Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic autopilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source autopilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
-A comparison about how Paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
-In addition to that, after doing a preliminary study, I found out that Paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as explained previously in section~\ref{sec:paparazzi_data_collection}. 
-Furthermore, Paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
-
-
-
 \subsection{RQ 4) Can the results of internal state prediction task (RQ2) be replicated on Paparazzi autopilot?}
-I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi the number of classes are smaller. 
-There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their differences in solving the problem of defining a mission and controlling an automated vehicle (the aircraft) to perform it.
+I fed the data to a number of classic machine learning algorithms as baselines. The problem setting is a multi-class classification, though with Paparazzi, the number of classes are smaller. 
+There are 20 possible states in Paparazzi as opposed to MicroPilot's 25. This is due to their design differences in defining a mission and controlling an automated vehicle (the aircraft) to perform it.
 
 \subsection{RQ 5) How will hyper-parameter tuning affect the results?}
-\hl{In RQs 1 and 2 the hyper-parameters of the neural network model are tuned manually. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameters such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. In the replication (RQs 3 and 4) I opted for existing automated ways for finding better hyper-parameters.}
-
-I designed a model creation and evaluation pipeline that takes hyper-parameters as the input and outputs the model performance scores on test data as its output. The hyper-parameters that I searched over are:
-\begin{itemize}
-    \item Number of GRU cells in the recurrent section: between 32 and 256
-    \item Number of convolutional filters in each layer: between 16 to 64
-    \item The size of convolution kernels and the number of convolutional layers: between 3 to 5 layers with increasing kernel size
-    \item The learning rate of Adam optimizer: from $1\times 10^{-4}$ to $3\times10^{-3}$
-\end{itemize}
-Please refer to figure~\ref{fig:model_arch} for a recap on these hyper-parameters. 
-I performed an exhaustive grid search over these parameters, using Tensor Board for keeping track of the metrics and finding the right balance.
-Tensor Board is a monitoring tool made for TensorFlow \cite{tensorflow2015-whitepaper} that provides great insight for better training TensorFlow models.
-
-
-Note that in the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All that is provided here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights.  Also note that even though I use the source code to label the training set, I still look at the test set as a black-box and do not leak any information.
+This method is sensitive to the choice of hyper parameters. They need to be tuned for each case since the same values that worked well for one case study will not necessarily work well with another one. Hyper-parameters include the number of convolutional layers, number of convolutional filters in each layer, number of recurrent cells, and optimizer parameters such as learning rate. There are no gold standards for the values of these parameters, they need to be tuned for each problem. %In the replication (RQs 3 and 4) I opted for existing automated ways for finding better hyper-parameters.
 
 \section{Evaluation Metrics}
 \subsection{CPD Performance Metrics (RQs 1, 3, and 5)} \label{sec:CPD_metrics}
@@ -79,20 +57,59 @@ $$Precision =\frac{1}{N_s}\sum_{s=1}^{N_s} \frac{|TP_s|}{|P_s|} \quad,\quad Reca
 \subsection{CPD baselines (RQs 1 and 3)} \label{sec:CPD_baseline}
 I used `ruptures' library developed by authors of a recent CPD survey study \cite{Truong2018ChangePointSurvey}. It provides a modular framework for applying several CPD algorithms to univariate and multivariate data. % We did not apply the methods that required knowing the number of change points a priori. 
 As mentioned earlier two main elements of a CPD algorithm in their survey are the search method and the cost function.
+I tried every possible combination of these two.
 
-I used Pelt \cite{killick2012optimal} as the most efficient exact search method. As examples of approximate search methods, I applied bottom-up segmentation and window-based methods using a default window size of 100 \cite{keogh2001online}.
-However, after trying to run Pelt algorithm on MicroPilot's data, I realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so I only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
-Fortunately, for RQ 3 with smaller data set size of Papaarazzi, it was feasible (though still really time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.
+\subsection{Multi-class classification baselines (RQs 2 and 4)}
+I used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''.
+
+
+\section{Experiment Design}
+Reading down to here, you already have a big picture about what experiments I have done and how they were evaluated.
+In this section I provide the details on experiment configurations as well as my rationale on specific design choices that require some more explanation.
+
+\subsection{CPD (RQs 1 and 3)} \label{sec:CPD_baseline}
+There are three search methods implemented in ``ruptures'' library which were suitable to use in my experiments. Pelt \cite{killick2012optimal} is the most efficient exact search method. Two other ones are approximate search methods: bottom-up segmentation and window-based search method. 
+After trying to run Pelt algorithm on MicroPilot's data, I realized that it takes prohibitively longer to run compared to the approximate methods without providing much better results, so I only use the bottom-up and the window-based segmentation methods, as the CPD baselines in RQ1.
+Fortunately, for RQ 3 with smaller data set size of Paparazzi, it was feasible (though still really time-consuming) to try ``Pelt'' as well, making the replication question richer in that sense.
+When using window-based search method, I left the window size parameter with the default size of 100 \cite{keogh2001online}.
 
 For the cost function, I tried ``Least Absolute Deviation'', ``Least Squared Deviation'', ``Gaussian Process Change'', ``Kernelized Mean Change'', ``Linear Model Change'', ``Rank-based Cost Function'', and ``Auto-regressive model change'' as defined in the library. Their parameters were left as default.
 To optimize the number of change points a penalty value (linearly proportionate to the number of detected change points) is added to the cost function, which limits the number of detected change points, the higher the penalty the fewer reported change points. We tried three different ratios (100, 500, and 1000) for the penalty.
 
-\subsection{Multi-class classification baselines (RQs 2 and 4)}
-I used a sliding window of width $w$ over the 10 time-series values and then flattened it to make a vector of size $10w$ as the features. For the labels, I used one-hot encoded state of the system.
+
+\subsection{Multi-class classification (RQs 2 and 4)}
+To prepare the data to be fed to the classification algorithms, I used a sliding window of width $w$ over the 10 time-series values and then flattened it to make a vector of size $10w$ as the features. For the labels, I used one-hot encoded state of the system.
 The window sizes were chosen as same as the sizes of convolutional layers' kernel sizes (3, 5, 10, 15, 20), to make the baselines better comparable with my method. 
-I used Scikit-learn's implementation of the classification algorithms: A ridge classifier (Logistic regression with L2 regularization) and three decision trees. The ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$ in the range of $10^{-6}$ to $10^6$. Each decision tree was regularized by setting ``maximum number of features'' and ``maximum depth''. For ``maximum number of features'' I tried: no limits, $\sqrt{10w}$, and $\log_2{10w}$. To find best ``maximum depth'' I first tried having no upper bound and observed how deep the tree grows; then I tried multiple numbers less than the maximum, until a drop in performance was observed. 
 
-In RQ4, pretty similar to RQ2, I used a ridge classifier and a decision tree classifier with 3 settings for maximum number of features with no limit on their depths. This setting is the same as the MP's case (RQ2), with the only difference being on removing the depth limit. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any, as will be seen in the RQ2's answer later on), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms to answer RQ4. 
+As stated already, the ridge classifier was configured to use the built-in cross validation to automatically chose the best regularization hyper-parameter $\alpha$.
+To regularize the decision trees I tried: no limits, $\sqrt{10w}$, and $\log_2{10w}$ for ``maximum number of features'' regularization parameter. To find best ``maximum depth'' I first tried having no upper bound and observed how deep the tree grows; then I tried multiple numbers less than the maximum, until a drop in performance was observed. 
+
+In RQ4 I used the same configurations and procedures as the MP's case (RQ2), with the only difference being on removing the depth limit from the decision trees. Tuning the depth limit was an arduous and inaccurate task that resulted in minimal improvements (if any, as will be seen in the RQ2's answer later on), so it was not worth the time. Overall, I ran $(1+3)\times6=24$ different settings for classic learning algorithms to answer RQ4. 
+
+\subsection{Hyper-parameter optimization (RQ 5)}
+I designed a model creation and evaluation pipeline that takes hyper-parameters as the input and outputs the model performance scores on test data (a.k.a. tuning data) as its output. The hyper-parameters that I searched over are:
+\begin{itemize}
+    \item Number of GRU cells in the recurrent section: between 32 and 256
+    \item Number of convolutional filters in each layer: between 16 to 64
+    \item The size of convolution kernels and the number of convolutional layers: between 3 to 5 layers with increasing kernel size
+    \item The learning rate of Adam optimizer: from $1\times 10^{-4}$ to $3\times10^{-3}$
+\end{itemize}
+Please refer to figure~\ref{fig:model_arch} for a recap on these hyper-parameters. 
+I performed an exhaustive grid search over these parameters, using Tensor Board for keeping track of the metrics and finding the right balance.
+Tensor Board is a monitoring tool made for TensorFlow that provides great insight for better training TensorFlow models.
 
 
 
+\subsection{Choice of Paparazzi for the case study}
+% I chose Paparazzi autopilot as an open source alternative to MP's autopilot for replication. 
+Paparazzi \cite{hattenberger2014using} project started in 2003 as an academic autopilot and continues to be developed with the state of the art in the autonomous flying vehicle's field. Another major player in open source autopilot software scene is ArduPlane; however I chose to do this study only on Paparazzi for the following reasons:
+Paparazzi is a more capable and well designed solution in general. A detailed comparison about how Paparazzi is superior to ArduPlane can be read at \url{https://wiki.paparazziuav.org/wiki/Paparazzi_vs_X}. 
+In addition to that, after doing a preliminary study, I found out that Paparazzi has a more straightforward and robust protocol for remote controlling and data collection, as will be explained in detail in section~\ref{sec:paparazzi_data_collection}. 
+Furthermore, Paparazzi supports multiple flight dynamic model (FDM) simulators. One of them is JBSim\footnote{\url{http://jsbsim.sourceforge.net/}} which provides an advanced physical model of complex dynamics in air-frames and sensors for an accurate and close to the reality simulation. 
+
+
+\subsection{Experiment Execution Environment} \label{sec:machines_config}
+Training and evaluation of the deep learning model was done on a single node running Ubuntu 18.04 LTS (Linux 5.3.0) equipped with Intel Core i7-9700 CPU, 32 gigabytes of main memory, and 8 gigabytes of GPU memory on a NVIDIA GeForce RTX 2080 graphics card.
+The code was implemented using Keras on TensorFlow 2.0 \cite{tensorflow2015-whitepaper}.
+
+The baseline models could not fit on that machine, so two nodes on Compute Canada's Beluga cluster, one with 6 CPUs and 75GiB of memory and one with 16 CPUs and 64GiB of memory, were used to train and evaluate them.

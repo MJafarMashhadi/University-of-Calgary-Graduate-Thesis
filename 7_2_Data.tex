@@ -1,9 +1,24 @@
 
-
-\section{Data Collection Process}
+\section{Data Collection}
 In this section more details on how data was collected from each system will be presented. 
 
+
 \subsection{MicroPilot Autopilot}
+\subsubsection{About MicroPilot's Design}
+MicroPilot's autopilot is a commercial autopilot with a codebase of 500k lines of C code. 
+The primary control mechanism is a hierarchy of PID loops, as explained both in chapter~\ref{sec:motivation} and \ref{sec:approach}. 
+High level commands are loaded on the autopilot as a flight plan. The flight plan looks like ``takeoff, climb to 300 feet, go to waypoint A, go to waypoint B, land''. 
+These commands determine which PID loops must be activated and what should their `desired values' be. 
+For example, a ``go to waypoint A'' command activates a PID loop that tries to minimize the distance between current location of the aircraft and point A. This is a high level loop that activates other lower-level PID loops to achieve its goal.
+Those lower level loops can be one to maintain the altitude and another loop that keeps the aircraft heading on the straight line from current location to point A.
+This hierarchical chain of `higher-level goals controlling lower level ones' goes on, down to the level that directly controls aerodynamic surfaces of the aircraft.
+
+
+% The output to the heading loop determines `desired values' of other lower level loops that control rudders and ailerons. The altitude loop's outputs also set the `desired values' of those that control the throttle and elevators.
+% The output from these second-level loops are connected to lower level loops that control the servo positions, these values on the lowest level are the outputs of the autopilot which we can see and record.
+% Although I cannot share the exact internal design of MP's PID loops hierarchy, this concept is shared among other autopilots as well. You might find the loop configuration in an open source autopilot's design documents at \url{https://wiki.paparazziuav.org/wiki/Control_Loops} interesting to see.
+
+
 \subsubsection{Instrumentation}
 Control decisions in this software are made in a 5Hz loop, it means that every 200ms all the sensor inputs are read and based on the current state of the aircraft and the system's goal at the moment (e.g. maintaining a constant speed) decisions will be made and output is generated. Considering this, the best way to capture those data is in the end of each iteration of this loop. I inserted instrumentation code there, to log input and output values (listed in Table~\ref{tab:in_outs}) at the exact spot where they are updated. 
 Please note that although it is more convenient to capture the values in this way, it does not give us any special advantage or insight that breaks the black-box condition. In other words, the exact same data could be collected from the compiled binaries without any access to the internals, just with extra steps. Inputs and outputs, after all, are the very least thing available in both black-box and white-box settings.
@@ -44,7 +59,7 @@ Out of the 948 flight logs, I omitted 60 that were either too short or too long 
 
 % As mentioned before each input data item is a multivariate time series with $n=10$ variables (listed in table~\ref{tab:in_outs}). 
 % During the data preprocessing, after the time series data is converted into tensors, all of the shorter $T_i$s were post-padded to the length of the longest one: $L=18000$ time steps.
-The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for training, validation, and testing, where each sample corresponds to one test execution. Note that separate test and validation sets are needed to facilitate proper hyper-parameters tuning, without leaking information. 
+The data was randomly split into three chunks of 90\%, 5\%, and 5\% for training, validation, and testing, where each sample corresponds to one test execution. Note that separate test and validation sets are needed to facilitate proper hyper-parameters tuning, without leaking information. 
 % \subsection{System Under Study} \label{mp_data_collection}
 % Our case study is a state-based system, which is real-time controller for UAVs, developed by
 % our partner
@@ -61,6 +76,7 @@ The dataset was randomly split into three chunks of 90\%, 5\%, and 5\% for train
 The autopilot can be used in SWIL and HWIL modes \cite{melmoth2019true}, which stand for software in the loop and hardware in the loop respectively. I used SWIL mode as it provides what was needed without any of the costs and hassles that come from HWIL mode. 
 
 \subsection{Paparazzi}\label{sec:paparazzi_data_collection}
+
 \subsubsection{Instrumentation}
 Paparazzi provides a rich and flexible API that can be configured to record several different parameters in flight. The aircraft periodically sends data back to the ground station over a wireless link using a protocol called Paparazzi link. Paparazzi link is built over Ivy, a message bus protocol that uses UDP. 
 In Paparazzi's architecture a process called `link' interfaces the wireless link to the aircraft to the computer's network; on one side are the Paparazzi link messages that come and go as UDP datagrams and on its other side is the (often wireless\footnote{A wired connection is used in HWIL test mode as well as some scenarios where the autopilot equipment is used in a autonomous submarine rather than an autonomous unmanned aircraft.}) connection to the aircraft.
@@ -101,12 +117,12 @@ Figure~\ref{fig:paparazzi_test_length} shows the distribution of the test length
     \label{fig:paparazzi_test_length}
 \end{figure}
 
-The training data was split into 3 chunks after shuffling: 70\% of the data was used for training, 20\% was used as the test set for tuning the hyper-parameters, and the remaining 10\% was set aside as the validation data to measure the trained model's performance. 
+The data was split into 3 chunks after shuffling: 70\% of the data was used for training, 20\% was used as the test set for tuning the hyper-parameters, and the remaining 10\% was set aside as the validation data to measure the trained model's performance. 
 
 
-
-
-
+\subsection{Labeling The Data}
+In the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All that is provided here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights. 
+Also note that even though I use the source code to label the training set, I still look at the test set as a black-box and do not leak any information.
 
 
 \subsection{The Testing and Data Processing Tool Set}\label{section:fuzzing_tool}
@@ -215,9 +231,3 @@ Some of the available actions and all the waypoints in this flight plan can be s
 
 
 
-
-\section{Experiment Execution Environment} \label{sec:machines_config}
-Training and evaluation of the deep learning model was done on a single node running Ubuntu 18.04 LTS (Linux 5.3.0) equipped with Intel Core i7-9700 CPU, 32 gigabytes of main memory, and 8 gigabytes of GPU memory on a NVIDIA GeForce RTX 2080 graphics card.
-The code was implemented using Keras on TensorFlow 2.0 \cite{tensorflow2015-whitepaper}.
-
-The baseline models could not fit on that machine, so two nodes on Compute Canada's Beluga cluster, one with 6 CPUs and 75GiB of memory and one with 16 CPUs and 64GiB of memory, were used to train and evaluate them.
