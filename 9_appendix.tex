@@ -12,10 +12,10 @@ UML Diagrams and tables for the developed tools: flight data recorder, automated
     \centering
 \begin{longtable}{llp{.50\columnwidth}}
 \toprule
-\textbf{Message Name }   & \textbf{Sent By }    & \textbf{Use}                                                                     \\ \hline
+\textbf{Message Name }   & \textbf{Sent By }    & \textbf{Use}                                                                     \\ \midrule
 \endhead
 %
-\hline
+\bottomrule
 \endfoot
 %
 \endlastfoot
@@ -54,10 +54,10 @@ JUMP\_TO\_BLOCK & PprzTester & Commands the aircraft to change active block to a
     \centering
 \begin{longtable}{lp{.63\columnwidth}}
 \toprule
-\textbf{Argument}   & \textbf{Description}\\ \hline
+\textbf{Argument}   & \textbf{Description}\\ \midrule
 \endhead
 %
-\hline
+\bottomrule
 \endfoot
 %
 \endlastfoot
@@ -65,17 +65,17 @@ airframe              &  The aircraft to simulate \\
 plan                  &  Plan name to run as a python module in \verb|pprz_tester.generated_plans| \\
 --agent-name          &  Specify unique agent name on ivy bus \\
 -l, --log             &  Log file directory \\
---log-format          &  The format to store and compress logs in, can be hd5 or csv \\ \hline
+--log-format          &  The format to store and compress logs in, can be hd5 or csv \\ \midrule
 -p, --paparazzi-home  &  Directory in which Paparazzi source code is cloned in \\
 -b,--build            &  Build the aircraft before launching the simulation \\
 --gcs                 &  Open GCS window \\
 --no-sim              &  Does not launch the simulator \\
---prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by waypoint (circle) or both. \\ \hline
+--prep-mode           &  The required conditions before starting the flight scenario. It can be waiting for altitude to stabilize (climb) or waiting for a complete circle around stand by waypoint (circle) or both. \\ \midrule
 --fuzz-wps            &  Waypoints to fuzz locations of. Use * to fuzz all \\
 --wp-fuzz-bounds-lat  &  Minimum and maximum latitude (south-north) to fuzz waypoint locations in \\
 --wp-fuzz-bounds-lon  &  Minimum and maximum longitude (east-west) to fuzz waypoint locations in \\
 --wp-fuzz-bounds-alt  &  The boundaries inside which waypoint altitudes are fuzzed \\
--w,--wp-location      &  Fix one or more waypoints' locations (overrides fuzzing) \\ \hline
+-w,--wp-location      &  Fix one or more waypoints' locations (overrides fuzzing) \\ \midrule
 -Dname=value          &  Optional plan arguments. They will be passed to \verb|get_items| as keyword arguments. \\ \bottomrule
 \end{longtable}
 \caption{Test runner command line arguments}
@@ -87,10 +87,10 @@ plan                  &  Plan name to run as a python module in \verb|pprz_teste
     \centering
 \begin{longtable}{lp{.63\columnwidth}}
 \toprule
-\textbf{Argument}   & \textbf{Description}\\ \hline
+\textbf{Argument}   & \textbf{Description}\\ \midrule
 \endhead
 %
-\hline
+\bottomrule
 \endfoot
 %
 \endlastfoot
@@ -98,7 +98,7 @@ airframe              &  The aircraft to generate tests for \\
 output                &  Output file name or the directory to output the generated plans \\
 -i, --include         &  Flight plan blocks to include in the generated plans \\
 -x, --exclude         &  Flight plan blocks to exclude from the generated plans \\ 
--l, --length          &  Number of flight plan blocks to include. \\ \hline
+-l, --length          &  Number of flight plan blocks to include. \\ \midrule
 -p, --paparazzi-home  &  \multirow{6}{*}{Shared with test runner in Table~\ref{tab:test_runner_commandline_args}}\\
 --fuzz-wps            &   \\
 --wp-fuzz-bounds-lat  &   \\
