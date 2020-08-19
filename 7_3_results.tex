@@ -140,14 +140,14 @@ The 100\% recalls are accompanied with a low precision; achieving that is not di
 The setting that got most of the best numbers is Pelt algorithm using an L1 cost function and a high penalty coefficient of 1,000. However, please note that Pelt is a quite slow algorithm that could easily become infeasible to run on larger dataset, as it was the case for the first two RQs. 
 As a matter of fact, running Pelt took more than 14 hours on the same machine that performed all other CPD algorithms in less than 1 hour. What you see in table~\ref{tab:cpd_paparazzi} is the summary of the results of more than 23,800 experiments. 
 
-Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 48.9\%, 26.83\%, and 11.46\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in RQ1. (see the RQ1 results summary box and the paragraph above that). % in section~\ref{sec:results}). 
+Comparing the baseline results with the neural network model's results in the last three rows of the table, you can see improvements of 23.35\%, 26.87\%, and 13.86\% in F1 scores compared to the best numbers in the baselines (for $\tau = 1, 3, 5$ seconds respectively). Although this model still performed better than the baselines, the improvement margin was higher in RQ1. (see the RQ1 results summary box and the paragraph above that). % in section~\ref{sec:results}). 
 However, you can see that the scores that this approach achieved are not low, but the baselines could do a better job on Paparazzi's data compared to MicroPilot's, therefore shrinking the margin of improvement. 
 It can be due to the fact that the new dataset is tiny compared to MP, classic machine learning algorithms can do better so a deep learning model cannot shine here as it could for MP. 
 As a reminder: Paparazzi dataset consists of ~300 tests, each containing up to 2,500 samples vs. ~900 tests in MP with lengths up to 18,000 samples. 
 It is worth mentioning that both in the first two RQs and here, the variation in baselines performances was way higher while my deep learning approach shows a more consistent performance; check the second column (recall with $\tau=1$s) for example. 
 
 \begin{rqanswer}
-The proposed approach was applied on another similar software system with a smaller dataset size and showed a near 49\% improvement over the baselines, confirming that it is a feasible approach even with smaller dataset size. The lower margin of improvement compared to RQ1 is attributed to the baselines performing better on this data, rather than my approach not performing good enough.
+The proposed approach was applied on another similar software system with a smaller dataset size and showed a near 27\% improvement over the baselines (with a 94\% F1 score), confirming that it is a feasible approach even with smaller dataset size. The lower margin of improvement compared to RQ1 is attributed to the baselines performing better on this data, rather than my approach not performing good enough.
 \end{rqanswer}
 
 \begin{sidewaystable}
@@ -169,37 +169,37 @@ The proposed approach was applied on another similar software system with a smal
   \textbf{F1} \\
                                                   &              &   & \multicolumn{3}{c}{$\tau=1$s} & \multicolumn{3}{c}{$\tau=3$s} & \multicolumn{3}{c}{$\tau=5$s} \\  \toprule
 \multirow{3}{*}{\textbf{Autoregressive Model}}
-    & Bottom Up & 500  &       13.65\% &    14.13\% & 18.89\% &        39.73\% &     36.40\% & 36.14\% &        57.11\% &     53.20\% & 50.04\% \\
-    & Pelt & 500  &       13.56\% &    13.85\% & 19.03\% &        39.67\% &     36.17\% & 36.03\% &        56.97\% &     52.89\% & 49.83\% \\
-    & Window Based & 100  &       15.97\% &     7.59\% & 13.54\% &        45.47\% &     20.40\% & 29.56\% &        64.16\% &     30.76\% & 41.20\% \\ \midrule
+    & Bottom Up    & 500  & 13.65\% &    14.13\% & 18.89\% & 39.73\% &     36.40\% & 36.14\% & 57.11\% &     53.20\% & 50.04\% \\
+    & Pelt         & 500  & 13.56\% &    13.85\% & 19.03\% & 39.67\% &     36.17\% & 36.03\% & 56.97\% &     52.89\% & 49.83\% \\
+    & Window Based & 100  & 15.97\% &     7.59\% & 13.54\% & 45.47\% &     20.40\% & 29.56\% & 64.16\% &     30.76\% & 41.20\% \\ \midrule
 \multirow{3}{*}{\textbf{Least Absolute Deviation}}
-    & Window Based & 100  &       24.50\% &    15.92\% & 19.85\% &        56.39\% &     37.24\% & 44.53\% &        68.94\% &     48.20\% & 56.23\% \\
-    & Pelt & 1000 &       \textbf{26.74\%} &    34.08\% & 29.92\% &        \textbf{60.77\%} &     77.32\% & \textbf{67.74\%} &        \textbf{74.73\%} &     93.16\% & \textbf{82.61\%} \\
-    & Bottom Up & 1000 &       26.66\% &\textbf{34.99\%}& 30.35\% &        60.11\% &     78.14\% & 67.61\% &        72.85\% &     92.94\% & 81.30\% \\ \midrule
+    & Window Based & 100  & 24.50\% &    15.92\% & 19.85\% & 56.39\% &     37.24\% & 44.53\% &        68.94\% &     48.20\% & 56.23\% \\
+    & Pelt         & 1000 &\textbf{26.74\%}&34.08\% & 29.92\% &\textbf{60.77\%}&     77.32\% &\textbf{67.74\%}&\textbf{74.73\%}&     93.16\% &\textbf{82.61\%}\\
+    & Bottom Up    & 1000 & 26.66\% &\textbf{34.99\%}& 30.35\% &        60.11\% &     78.14\% & 67.61\% &        72.85\% &     92.94\% & 81.30\% \\ \midrule
 \multirow{3}{*}{\textbf{Least Squared Deviation}}
-    & Window Based & 1000 &       25.01\% &    16.14\% & 20.26\% &        54.58\% &     35.77\% & 42.96\% &        68.73\% &     48.11\% & 56.18\% \\
-    & Pelt & 1000 &       21.28\% &    80.04\% & 33.49\% &        51.05\% &     99.58\% & 67.20\% &        65.36\% & \textbf{99.97\%} & 78.76\% \\
-    & Bottom Up & 1000 &       21.30\% &    81.24\% & \textbf{33.62\%} &        50.98\% &\textbf{99.50\%}& 67.12\% &        65.24\% &\textbf{99.97\%}& 78.66\% \\ \midrule
+    & Window Based & 1000 & 25.01\% &    16.14\% & 20.26\% & 54.58\% &     35.77\% & 42.96\% & 68.73\% &     48.11\% & 56.18\% \\
+    & Pelt         & 1000 & 21.28\% &    80.04\% & 33.49\% & 51.05\% &     99.58\% & 67.20\% & 65.36\% & \textbf{99.97\%} & 78.76\% \\
+    & Bottom Up    & 1000 & 21.30\% &    81.24\% & \textbf{33.62\%}  &     50.98\% &\textbf{99.50\%}& 67.12\% &        65.24\% &\textbf{99.97\%}& 78.66\% \\ \midrule
 \multirow{3}{*}{\textbf{Linear Model Change}}
-    & Bottom Up & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
-    & Window Based & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
-    & Pelt & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\ \midrule
+    & Bottom Up    & 100  &  7.39\% &     0.39\% &  9.98\% & 27.44\% &      1.49\% & 10.27\% & 52.51\% &      2.75\% &  9.90\% \\
+    & Window Based & 100  &  7.39\% &     0.39\% &  9.98\% & 27.44\% &      1.49\% & 10.27\% & 52.51\% &      2.75\% &  9.90\% \\
+    & Pelt         & 100  &  7.39\% &     0.39\% &  9.98\% & 27.44\% &      1.49\% & 10.27\% & 52.51\% &      2.75\% &  9.90\% \\ \midrule
 \multirow{3}{*}{\textbf{Gaussian Process Change}}
-    & Window Based & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
-    & Pelt & 100  &        7.39\% &     0.39\% &  9.98\% &        27.44\% &      1.49\% & 10.27\% &        52.51\% &      2.75\% &  9.90\% \\
-    & Bottom Up & 100  &       12.42\% &   \textbf{100.00\%} & 22.03\% &        33.15\% &    \textbf{100.00\%} & 49.55\% &        49.04\% &    \textbf{100.00\%} & 65.47\% \\ \midrule
+    & Window Based & 100  &  7.39\% &     0.39\% &  9.98\% & 27.44\% &      1.49\% & 10.27\% & 52.51\% &      2.75\% &  9.90\% \\
+    & Pelt         & 100  &  7.39\% &     0.39\% &  9.98\% & 27.44\% &      1.49\% & 10.27\% & 52.51\% &      2.75\% &  9.90\% \\
+    & Bottom Up    & 100  & 12.42\% &\textbf{100.00\%}& 22.03\% &33.15\% &\textbf{100.00\%}& 49.55\% &        49.04\% &    \textbf{100.00\%} & 65.47\% \\ \midrule
 \multirow{2}{*}{\textbf{Rank-based Cost Function}}
-    & Pelt & 100  &       21.11\% &    31.85\% & 25.51\% &        52.29\% &     74.63\% & 61.13\% &        65.88\% &     89.30\% & 75.46\% \\
-    & Bottom Up & 100  &       20.55\% &    31.84\% & 25.17\% &        49.97\% &     73.22\% & 59.04\% &        64.57\% &     89.35\% & 74.61\% \\ \midrule
+    & Pelt         & 100  & 21.11\% &    31.85\% & 25.51\% & 52.29\% &     74.63\% & 61.13\% & 65.88\% &     89.30\% & 75.46\% \\
+    & Bottom Up    & 100  & 20.55\% &    31.84\% & 25.17\% & 49.97\% &     73.22\% & 59.04\% & 64.57\% &     89.35\% & 74.61\% \\ \midrule
 \multirow{3}{*}{\textbf{Kernelized Mean Change}} 
-    & Bottom Up & 100  &       15.66\% &     1.90\% &  9.45\% &        44.23\% &      5.36\% & 12.95\% &        62.37\% &      7.48\% & 15.66\% \\
-    & Pelt & 100  &       14.07\% &     1.64\% &  9.77\% &        42.06\% &      4.74\% & 12.59\% &        60.92\% &      6.67\% & 14.56\% \\
-    & Window Based & 100  &        8.31\% &     0.61\% &  9.97\% &        29.38\% &      2.02\% & 10.60\% &        53.34\% &      3.39\% & 10.79\% \\ \midrule \midrule
+    & Bottom Up    & 100  & 15.66\% &     1.90\% &  9.45\% & 44.23\% &      5.36\% & 12.95\% & 62.37\% &      7.48\% & 15.66\% \\
+    & Pelt         & 100  & 14.07\% &     1.64\% &  9.77\% & 42.06\% &      4.74\% & 12.59\% & 60.92\% &      6.67\% & 14.56\% \\
+    & Window Based & 100  &  8.31\% &     0.61\% &  9.97\% & 29.38\% &      2.02\% & 10.60\% & 53.34\% &      3.39\% & 10.79\% \\ \midrule \midrule
 \multirow{3}{*}{\textbf{My Approach}} 
     & \multirow{3}{*}{\textbf{Dataset:}}  
-         & \textbf{Validation} &  45.63\% &    55.46\% & 50.07\% &   81.39\% &     90.97\% & 85.92\% &   88.38\% &     97.12\% & 92.54\%  \\
-    & {} & \textbf{Test (Tuning)} &  42.65\% &    54.87\% & 47.99\% &   76.73\% &     90.96\% & 83.24\% &   85.18\% &     97.46\% & 90.91\%  \\
-    & {} & \textbf{Training}  &  39.81\% &    51.96\% & 45.08\% &   75.69\% &     90.62\% & 82.49\% &   84.96\% &     97.55\% & 90.82\%  \\
+         & \textbf{Validation}    &  37.81\% &    45.91\% & 41.47\% &   81.58\% &     90.79\% & 85.94\% &   90.53\% &     97.88\% & 94.06\% \\
+    & {} & \textbf{Test (Tuning)} &  39.76\% &    49.35\% & 44.04\% &   77.50\% &     89.70\% & 83.15\% &   86.85\% &     96.99\% & 91.64\% \\
+    & {} & \textbf{Training}      &  39.29\% &    49.74\% & 43.90\% &   75.52\% &     88.97\% & 81.69\% &   84.20\% &     96.33\% & 89.86\% \\
 \bottomrule
 \end{tabular}%
 }
@@ -240,7 +240,7 @@ You can see an $(81.92-68.96)-1=18.79\%$ improvement in F1 score, over the basel
 20 & Decision Tree &            - &      64.72\% &   73.36\% & 68.77\% \\ \midrule
 25 &  Ridge &            - &      62.13\% &   19.66\% & 29.87\% \\
 25 & Decision Tree & $\sqrt{10w}$ &      61.17\% &\textbf{75.18}\% & 67.45\% \\ \midrule \midrule
-   & \multicolumn{2}{l}{Proposed Method} & \textbf{71.13\%} & \textbf{88.69\%} & \textbf{81.92\%} \\
+   & \multicolumn{2}{l}{Proposed Method} & \textbf{72.63\%} & \textbf{87.63\%} & \textbf{79.43\%} \\
 \bottomrule
 \end{tabular}%
 }
@@ -270,17 +270,23 @@ I used Tensor Board to visualize and compare the effects of different hyper-para
 \end{figure}
 
 Filtering the data to find the commonalities of better hyper-parameters shows that the number of GRU cells has a high correlation with both CPD precision and classification precision. 
-It also shows that the kernel sizes and number of convolutional layers does not have an strong correlation with higher precision and recalls. The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
-It makes sense because training larger kernels gets harder and harder and requires more data. Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have many small filters that are easier to train and can learn multiple features of the data.
-Therefore I can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
+First and foremost the learning rate is has the largest correlation (absolute) with the performance metrics. The best configurations all share the lowest learning rate.
+Filtering the other configs out, the next most important factor was the convolutional layer counts. 
+The configurations that did not include the last and largest convolutional layer with kernel size of 20, performed much better than the others. 
+% It also shows that the kernel sizes and number of convolutional layers does not have an strong correlation with higher precision and recalls. 
+% The number of convolutional filters in each layer has a bigger impact on the performance than the size of the kernels does. 
+It makes sense because training larger kernels gets harder and harder and requires more data. 
+Also, based on the previous studies, especially in the field of computer vision, we can say that each filter learns one feature so it is more effective to have small filters that are easier to train and can learn multiple features of the data.
+Therefore I can reduce the size of convolutional section of the model and use more recurrent cells to boost the performance without adding too many parameters. 
+%I performed another set of tests in a smaller search space to further optimize the hyper-parameters.
 
-The new search space includes all combinations of these hyper-parameters:
+%The new search space includes all combinations of these hyper-parameters:
 
-\begin{enumerate}
-    \item Learning rate, options being: $3\times10^{-4}$, $1\times10^{-3}$, and $3\times10^{-3}$
-    \item Number of GRU cells, options: 128, 256, 384, and 512
-    \item Number of convolutional filters in each layer: 32, 64, and 72
-\end{enumerate}
+%\begin{enumerate}
+%    \item Learning rate, options being: $3\times10^{-4}$, $1\times10^{-3}$, and $3\times10^{-3}$
+%    \item Number of GRU cells, options: 128, 256, 384, and 512
+%    \item Number of convolutional filters in each layer: 32, 64, and 72
+%\end{enumerate}
 
 \begin{figure}
     \centering
@@ -288,14 +294,19 @@ The new search space includes all combinations of these hyper-parameters:
     \caption{Parallel coordinates view showing the effects of selected hyper-parameters on the performance measures.}
     \label{fig:precision_recall_parallel_coordinates}
 \end{figure}
-The results of the second iteration of tuning are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. This chart shows 3 + 8 parallel axes, 3 hyper-parameters and 8 metrics. To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
-The green highlighted line is the best configuration tried, with the highest area under the curve. That configuration has the best or close to the best performance in all metrics. The configuration is to use 256 GRU cells, 72 filter per layer, and the lower learning rate of $3\times10^{-4}$.
+%The results of the second iteration of 
+After filtering out some of the worst configurations (such as the ones with lower than 40\% Recall (t=1s)), the better ones are shown in figure~\ref{fig:precision_recall_parallel_coordinates}. 
+This chart shows 3 + 8 parallel axes, 3 hyper-parameters and 8 metrics. 
+% To make it more legible, the results with lower than 70\% precision ($\tau = 5s$) are omitted.
+The green highlighted line is the best configuration tried, with the highest area under the curve. That configuration has the best or close to the best performance in all metrics. 
+The configuration is to use 384 GRU cells in 1 layer, 16 filter per convolutional layer sizes from 5 to 15, and a slower learning rate of $3\times10^{-4}$.
 I used this set of hyper-parameters to train the best model. The stopping criteria on training the model was for the validation loss to plateau, with a `patience' of 10 epochs. The optimizer converged in 54 epochs, after less than 3 minutes of training.
 You can see the performance scores of the tuned model in tables~\ref{tab:rq2-1-results-replicate} and \ref{tab:cpd_paparazzi}.
 % The scores used in the research question 3 and 4 are the evaluation results of this model on the [previously unseen] validation data. 
 
-The sensitivity of this approach to the hyper parameter tuning can be seen clearly here. I started the first iteration with the hyper-parameters that worked best for MP and the values close to them. With that set of hyper-parameters the performance was even worse than the baselines in some cases; see table~\ref{tab:results_no_tuning}.
-In the second iteration, after removing the worst performing configurations and defining a new search space, that set of parameters was discarded. 
+The sensitivity of this approach to the choice of hyper parameters can be seen clearly here. I first started with the hyper-parameters that worked best for MP and the values close to them. With that set of hyper-parameters the performance was even worse than the baselines in some cases; see table~\ref{tab:results_no_tuning}.
+In the second iteration, after removing the worst performing configurations and defining a search space, that set of parameters was discarded. 
+Even though the search space was not very large, the range of 
 This is to emphasize the effect and importance of fine-tuning hyper-params.
 
 \begin{table}[]
@@ -303,18 +314,18 @@ This is to emphasize the effect and importance of fine-tuning hyper-params.
     \begin{tabular}{lcc}
     \toprule
 \textbf{Evaluation Metric} & \textbf{Default Hyper-params} & \textbf{Tuned Hyper-params} \\\midrule
-Precision ($\tau=1s$)      &  28.90\%  &  45.63\% \\
-Recall ($\tau=1s$)         &  37.44\%  &  55.46\% \\
-F1 ($\tau=1s$)             &  32.62\%  &  50.07\% \\ \midrule
-Precision ($\tau=3s$)      &  59.34\%  &  81.39\% \\
-Recall ($\tau=3s$)         &  71.52\%  &  90.97\% \\
-F1 ($\tau=3s$)             &  64.87\%  &  85.92\% \\ \midrule
-Precision ($\tau=5s$)      &  73.85\%  &  88.38\% \\
-Recall ($\tau=5s$)         &  85.18\%  &  97.12\% \\
-F1 ($\tau=5s$)             &  79.11\%  &  92.54\% \\ \midrule
-State Detection Precision  &  57.35\%  &  71.13\% \\
-State Detection Recall     &  78.90\%  &  88.69\% \\
-State Detection F1         &  66.41\%  &  81.92\% \\
+Precision ($\tau=1s$)      &  28.90\%  &  37.81\% \\
+Recall ($\tau=1s$)         &  37.44\%  &  45.91\% \\
+F1 ($\tau=1s$)             &  32.62\%  &  41.47\% \\ \midrule
+Precision ($\tau=3s$)      &  59.34\%  &  81.58\% \\
+Recall ($\tau=3s$)         &  71.52\%  &  90.79\% \\
+F1 ($\tau=3s$)             &  64.87\%  &  85.94\% \\ \midrule
+Precision ($\tau=5s$)      &  73.85\%  &  90.53\% \\
+Recall ($\tau=5s$)         &  85.18\%  &  97.88\% \\
+F1 ($\tau=5s$)             &  79.11\%  &  94.06\% \\ \midrule
+State Detection Precision  &  57.35\%  &  72.63\% \\
+State Detection Recall     &  78.90\%  &  87.63\% \\
+State Detection F1         &  66.41\%  &  79.43\% \\
 \bottomrule
     \end{tabular}
     \caption{The performance results of the model trained on paparazzi before hyper parameter tuning (i.e. using the hyper-parameters that worked best for MP on Paparazzi as well) vs. after fine-tuning hyper-params on Paparazzi's dataset.}

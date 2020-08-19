@@ -90,15 +90,17 @@ In RQ4 I used the same configurations and procedures as the MP's case (RQ2), wit
 \subsection{Hyper-parameter optimization (RQ 5)}
 I designed a model creation and evaluation pipeline that takes hyper-parameters as the input and outputs the model performance scores on test data (a.k.a. tuning data) as its output. The hyper-parameters that I searched over are:
 \begin{itemize}
-    \item Number of GRU cells in the recurrent section: between 32 and 256
-    \item Number of convolutional filters in each layer: between 16 to 64
-    \item The size of convolution kernels and the number of convolutional layers: between 3 to 5 layers with increasing kernel size
-    \item The learning rate of Adam optimizer: from $1\times 10^{-4}$ to $3\times10^{-3}$
+    \item Number of GRU layers: 1 or 2
+    \item Number of GRU cells in the recurrent section: 5 values between 64 and 512
+    \item Number of convolutional filters in each layer: 4 values between 16 to 72
+    \item The size of convolution kernels and the number of convolutional layers: between 3 to 6 layers with increasing kernel size, starting from kernel sizes 3 or 5
+    \item The learning rate of Adam optimizer: 3 values from $3\times 10^{-4}$ to $3\times10^{-3}$
 \end{itemize}
 Please refer to figure~\ref{fig:model_arch} for a recap on these hyper-parameters. 
 I performed a grid search over these parameters, using Tensor Board for keeping track of the metrics and finding the right balance. 
 Tensor Board is a monitoring tool made for TensorFlow that provides great insight for better training TensorFlow models.
-I should note that I did not perform an inefficient exhaustive search there. I first searched over a small grid to see which parameters have the most influence on improving the metrics. Then I refined the search space and performed a second iteration of searching for better set of hyper-params in a smarter way.
+In total, there were 480 configurations that were used to train models on training dataset and evaluated on test (tuning) dataset. 
+% I should note that I did not perform an inefficient exhaustive search there. I first searched over a small grid (of 360 configurations) to see which parameters are most influential on the metrics. Then I refined the search space and performed a second iteration of searching for better set of hyper-params in a smarter way.
 
 \subsection{Choice of Paparazzi for the case study}
 % I chose Paparazzi autopilot as an open source alternative to MP's autopilot for replication. 
