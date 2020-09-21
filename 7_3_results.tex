@@ -211,10 +211,10 @@ The proposed approach was applied on another similar software system with a smal
 In table~\ref{tab:rq2-1-results-replicate} the comparative results of the aforementioned algorithms with my method is presented. 
 To compare with the MP's case, we can see that in all but two settings limiting the maximum number of features did not help improve the model. 
 Another similar observation is that the scores do not vary much with changing the window size, and decision trees almost universally outperform linear classifiers.
-The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% range, which was 32-39\% in RQ2. For decision trees it is in 67-68\% range here while it is in 73-77\% range in RQ 2. 
+The scores themselves are just around the same values as well: Ridge classifier F1 score here is in 21-29\% range, which was 32-39\% in RQ2. For decision trees it is in 67-68\% range here while it is in 73-77\% range in RQ2. 
 
 The deep learning model's performance measures (on validation data) can be found in the last row of the table. 
-You can see an $(82.23/68.96)-1=19.24\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in RQ2 is 16.83\%, not very different from this. This, again provides some evidence on the generalizabilty of the results in the first two RQs.
+You can see an $(82.23/68.96)-1=19.24\%$ improvement in F1 score, over the baselines. It confirms that this method can beat the best performing baselines in classifying input samples into the system's internal states. The improvement in RQ2 is 16.83\%, not very different from this. This, again provides some evidence on the generalizability of the results in the first two RQs.
 
 \begin{table}
 \caption{Precision, recall, and F1 score of ridge classifiers (linear classifiers with L2 regularization) and decision tree classifiers with different sliding window widths ($w$). In this table, I only show the results of the best performing model in each group.}
@@ -247,7 +247,7 @@ You can see an $(82.23/68.96)-1=19.24\%$ improvement in F1 score, over the basel
 \end{table}
 
 %They say a picture is worth a thousand words\footnote{missing citation}, 
-Figure~\ref{fig:paparazzi_predictions} summarizes the prediction results of the deep learning model compared to the ground truth. 
+Figure~\ref{fig:paparazzi_predictions} summarizes the prediction results of the deep learning model compared to the ground truth. You can get a sense of how good does an `82.23\%' F1 score look by examining that chart. To measure this quality it in a more scientific way, it is possible to use this state model in a downstream task and see how that task is performing.
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{RQ3-5_charts/states_chart.png}
@@ -257,7 +257,7 @@ Figure~\ref{fig:paparazzi_predictions} summarizes the prediction results of the 
 
 
 \begin{rqanswer}
-Compared to the baselines, the proposed approach could detect the internal state of system with a 77\% precision and 88\% recall rate, showing a 19\% improvement. Similar results were seen in RQ 2 (which is closely related to this question) confirming generalizabilty of the findings.
+Compared to the baselines, the proposed approach could detect the internal state of system with a 77\% precision and 88\% recall rate, showing a 19\% improvement. Similar results were seen in RQ 2 (which is closely related to this question) confirming generalizability of the findings.
 \end{rqanswer}
 
 \subsection{RQ5 Results: Hyper-parameter Tuning}
@@ -344,5 +344,8 @@ We assume that during the data collection, sampling happens in regular intervals
 %Maybe the CPD baselines could perform better if they were boosted by feature engineering, but the feature engineering task is can quickly become an arduous and inefficient. 
 %It exists so it compensates for inability of traditional non-deep-learning methods in discovering meaningful features in the data. \cite{bengio2013deep}
 
-In terms of construct validity, I am using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, I have used multiple margins and reported all results. In terms of internal validity threats, I reduced the threat by not implementing the CPD baselines by myself and rather reusing existing libraries. In terms of conclusion validity threats, I have used many (888) real test cases from MicroPilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. Finally, in terms of external validity threats, this study suffers from being limited to only two case studies. However, (a) the studies are large-scale real-world systems with many test cases, and (b) they are both from industry and open source to be more representative. In the future one potential extension is to extend this work with more case studies from other domains, to increase its generalizability.
+Although labeling the input/output series for debugging, comprehension, ... purposes is a common task that developers do in the industry and in open source settings, performing the labeling on a large dataset can become arduos; thus making this approach less practical in some settings. However, as will be stated later, there are potential remedies to reduce the amount of required data to train a model. Also, it is worth mentioning that training this model needs to happen once. The labeling task can bee looked at as an investment; after the model is trained, it can be used in the future to automatically label the data without any need to more user input.
+
+In terms of construct validity, I am using standard metrics to evaluate the results. However, the use of tolerance margin should be taken with caution since it is a domain-dependant variable and can change the final results. To alleviate this threats, I have used multiple margins and reported all results. In terms of internal validity threats, I reduced the threat by not implementing the CPD baselines by myself and rather reusing existing libraries. In terms of conclusion validity threats, I have used many (888) real test cases from MicroPilot's test repository and provided a proper train-validation-test split for training, tuning, and evaluation. Finally, in terms of external validity threats, this study suffers from being limited to only two case studies. However, (a) the studies are large-scale real-world systems with many test cases, and (b) they are both from industry and open source to be more representative. In the future one potential extension is to extend this work with more case studies from other domains, to increase its generalizability. Another external validity threat could be in the random split of training and validation tests. There is no straightforward way to make sure the validation dataset is 100\% different from the training data; however thee split was performed randomly as it is common in Machine Learning and there are no repetitive test cases in the dataset, so the chances are high that the validation dataset is different enough from the training data.
+
 

@@ -61,6 +61,9 @@ Out of the 948 flight logs, I omitted 60 that were either too short or too long 
 % As mentioned before each input data item is a multivariate time series with $n=10$ variables (listed in table~\ref{tab:in_outs}). 
 % During the data preprocessing, after the time series data is converted into tensors, all of the shorter $T_i$s were post-padded to the length of the longest one: $L=18000$ time steps.
 The data was randomly split into three chunks of 90\%, 5\%, and 5\% for training, validation, and testing, where each sample corresponds to one test execution. Note that separate test and validation sets are needed to facilitate proper hyper-parameters tuning, without leaking information. 
+
+Please note that these test scenarios are simulated on multiple different airframes with very different aerodynamics and even different types of control surfaces (some do not have a rudder for example); I did not group the data based on the airframe. I did this to reduce the chance of overfitting and increase generalizability of the trained model; however it seems obvious (although it did not try it) that if one does that the resulting models would work better for the specialized airframes they will be trained on.
+
 % \subsection{System Under Study} \label{mp_data_collection}
 % Our case study is a state-based system, which is real-time controller for UAVs, developed by
 % our partner
@@ -125,6 +128,15 @@ The data was split into 3 chunks after shuffling: 70\% of the data was used for 
 In the empirical study to evaluate this approach, I use the source code to collect the exact time a state-change happens and the actual state labels (ground truth). However, in practice, labeling the training set is supposed to be done by the domain expert in a black-box manner. This is not an infeasible task or extra overhead. Monitoring the logs and identifying the current system state is in fact part of the developers/testers regular practice during inspection and debugging. All that is provided here is a tool that given a partial labeling (only on the training set), automatically predict the state labels and the state-change times, for future flights. 
 Also note that even though I use the source code to label the training set, I still look at the test set as a black-box and do not leak any information.
 
+A few examples of what the states might be are: Accelerate
+Take-off rotation,
+Climb,
+Cruise,
+Fixed-altitude Turn to right/left,
+Approach,
+Flare, 
+Decelerate,
+and more.
 
 \subsection{The Testing and Data Processing Tool Set}\label{section:fuzzing_tool}
 I implemented the pipeline of generating tests, running them, and aggregating flight logs in an integrated tool with three components, one for each stage. In the following sections I will explain these components and their role in the system. I also very briefly explain how event-driven programming paradigm was implemented here both to decrease coupling and to make it more resilient to unexpected or buggy behaviour. It is necessary for two reasons: 1. as a testing tool, it is \textit{expected} to encounter bugs in software under test and should be resilient to them 2. the message passing design of Paparazzi architecture, in addition to its ability to support multiple aircraft in flight at the same time left me with no choice but to use an event-driven design.
